@@ -1,9 +1,9 @@
 package com.acrylic.version_1_8.nbt;
 
 import com.acrylic.universal.items.ItemUtils;
-import com.acrylic.universal.nbt.AbstractNBTCompound;
 import com.acrylic.universal.nbt.AbstractNBTItem;
 import com.acrylic.version_1_8.NMSBukkitConverter;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,11 @@ public class NBTItem extends AbstractNBTItem {
             this.compound = new NBTCompound();
         } else {
             this.nmsItem = NMSBukkitConverter.convertToNMSItem(item);
-            this.compound = new NBTCompound(nmsItem.getTag());
+            NBTTagCompound nbtTagCompound = nmsItem.getTag();
+            if (nbtTagCompound == null)
+                nbtTagCompound = new NBTTagCompound();
+            nmsItem.save(nbtTagCompound);
+            this.compound = new NBTCompound(nbtTagCompound);
         }
     }
 

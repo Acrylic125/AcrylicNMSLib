@@ -1,8 +1,7 @@
 package com.acrylic.universal.json;
 
+import com.acrylic.universal.nbt.AbstractNBTItem;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
 
 public interface AbstractJSONComponent {
 
@@ -12,7 +11,7 @@ public interface AbstractJSONComponent {
 
     AbstractJSONComponent suggestCommand(String text);
 
-    AbstractJSONComponent item(ItemStack item);
+    AbstractJSONComponent item(AbstractNBTItem nbtItem);
 
     AbstractJSONComponent link(String text);
 

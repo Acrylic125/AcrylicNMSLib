@@ -1,11 +1,10 @@
 package com.acrylic.universal.json;
 
-import com.acrylic.version_latest.Items.Utils.ItemUtils;
-import com.acrylic.version_latest.Messages.ChatUtils;
+import com.acrylic.universal.items.ItemUtils;
+import com.acrylic.universal.nbt.AbstractNBTCompound;
+import com.acrylic.universal.nbt.AbstractNBTItem;
+import com.acrylic.universal.text.ChatUtils;
 import net.md_5.bungee.api.chat.*;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.inventory.ItemStack;
 
 public final class JSONComponent implements AbstractJSONComponent {
 
@@ -47,14 +46,12 @@ public final class JSONComponent implements AbstractJSONComponent {
     }
 
     @Override
-    public AbstractJSONComponent item(ItemStack item) {
-        if (ItemUtils.isAir(item)) {
+    public AbstractJSONComponent item(AbstractNBTItem nbtItem) {
+        if (ItemUtils.isAir(nbtItem.getOriginalItem()))
             return this;
-        }
-        net.minecraft.server.v1_8_R3.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item);
-        net.minecraft.server.v1_8_R3.NBTTagCompound compound = new NBTTagCompound();
-        nmsItemStack.save(compound);
-        HoverEvent event = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new BaseComponent[]{new TextComponent(compound.toString())});
+        AbstractNBTCompound abstractNBTCompound = nbtItem.getCompound();
+        assert abstractNBTCompound != null;
+        HoverEvent event = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new BaseComponent[]{new TextComponent(abstractNBTCompound.getCompoundString())});
         textComponent.setHoverEvent(event);
         return this;
     }

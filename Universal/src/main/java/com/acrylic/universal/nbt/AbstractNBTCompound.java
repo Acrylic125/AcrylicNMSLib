@@ -85,4 +85,6 @@ public interface AbstractNBTCompound extends Configurable {
         return getInt(s);
     }
 
+    String getCompoundString();
+
 }

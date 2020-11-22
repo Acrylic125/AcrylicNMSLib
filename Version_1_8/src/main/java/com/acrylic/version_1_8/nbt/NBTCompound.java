@@ -179,6 +179,11 @@ public class NBTCompound implements AbstractNBTCompound {
         return new NBTCompound(var, getTagCompound(var), this, true);
     }
 
+    @Override
+    public String getCompoundString() {
+        return tagCompound.toString();
+    }
+
     @NotNull
     public NBTCompound set(@NotNull String s, @NotNull NBTBase var) {
         tagCompound.set(s, var);
