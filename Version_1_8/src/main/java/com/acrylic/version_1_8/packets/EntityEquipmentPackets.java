@@ -22,11 +22,15 @@ public class EntityEquipmentPackets extends PacketSender implements com.acrylic.
             itemsMap.put(i, NMSBukkitConverter.convertToNMSItem(item));
     }
 
-    @Override
-    public void apply(@NotNull Entity entity) {
-        final int entityId = entity.getEntityId();
+    public void apply(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
+        final int entityId = entity.getId();
         packets = new PacketPlayOutEntityEquipment[itemsMap.size()];
         itemsMap.forEach((integer, itemStack) -> packets[integer] = new PacketPlayOutEntityEquipment(entityId, integer, itemStack));
+    }
+
+    @Override
+    public void apply(@NotNull Entity entity) {
+        apply(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 
     @Override
@@ -65,7 +69,7 @@ public class EntityEquipmentPackets extends PacketSender implements com.acrylic.
     }
 
     @Override
-    public Packet<?>[] getPackets() {
+    public PacketPlayOutEntityEquipment[] getPackets() {
         return packets;
     }
 }

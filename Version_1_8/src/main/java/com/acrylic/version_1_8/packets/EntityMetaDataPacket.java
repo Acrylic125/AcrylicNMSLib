@@ -1,24 +1,25 @@
 package com.acrylic.version_1_8.packets;
 
-import net.minecraft.server.v1_8_R3.Packet;
+import com.acrylic.version_1_8.NMSBukkitConverter;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
 import org.bukkit.entity.Entity;
 
-public class EntityMetaDataPacket extends PacketSender implements com.acrylic.universal.packets.EntityMetaDataPacket  {
+public class EntityMetaDataPacket extends SinglePacketSender implements com.acrylic.universal.packets.EntityMetaDataPacket  {
 
+    private PacketPlayOutEntityMetadata packet;
 
+    public void apply(net.minecraft.server.v1_8_R3.Entity entity) {
+        packet = new PacketPlayOutEntityMetadata(entity.getId(), entity.getDataWatcher(), false);
+    }
 
     @Override
     public void apply(Entity entity) {
-
+        apply(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 
     @Override
-    public Object getPacket() {
-        return null;
+    public PacketPlayOutEntityMetadata getPacket() {
+        return packet;
     }
 
-    @Override
-    public Packet<?>[] getPackets() {
-        return new Packet[0];
-    }
 }

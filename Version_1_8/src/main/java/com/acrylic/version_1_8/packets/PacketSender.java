@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class PacketSender implements com.acrylic.universal.packets.PacketSender {

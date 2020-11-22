@@ -2,7 +2,7 @@ package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.packets.EntityDestroyPacket;
-import com.acrylic.universal.packets.EntityDisplayPackets;
+import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.packets.PacketSender;
 import com.acrylic.universal.packets.TeleportPacket;
 import com.acrylic.universal.renderer.PacketRenderer;
@@ -24,7 +24,7 @@ public interface NMSEntityAnimator extends EntityAnimator {
     EntityDestroyPacket getDestroyPacket();
 
     @NotNull
-    EntityDisplayPackets getDisplayPackets();
+    LivingEntityDisplayPackets getDisplayPackets();
 
     default void sendPacketsViaRenderer(PacketSender packetSender) {
         PacketRenderer packetRenderer = getRenderer();
@@ -33,7 +33,7 @@ public interface NMSEntityAnimator extends EntityAnimator {
     }
 
     default void show() {
-        EntityDisplayPackets showPackets = getDisplayPackets();
+        LivingEntityDisplayPackets showPackets = getDisplayPackets();
         showPackets.show(this);
         sendPacketsViaRenderer(showPackets);
     }
