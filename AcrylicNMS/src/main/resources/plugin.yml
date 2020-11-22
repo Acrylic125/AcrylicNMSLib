@@ -1,0 +1,6 @@
+name: AcrylicNMS
+version: ${project.version}
+main: com.acrylic.acrylicnms.AcrylicNMS
+api-version: 1.16
+authors: [ Acrylic ]
+description: The main module.

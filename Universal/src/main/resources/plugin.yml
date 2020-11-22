@@ -1,0 +1,6 @@
+name: Universal
+version: ${project.version}
+main: com.acrylic.universal.Universal
+api-version: 1.16
+authors: [ Acrylic ]
+description: Universal module.
