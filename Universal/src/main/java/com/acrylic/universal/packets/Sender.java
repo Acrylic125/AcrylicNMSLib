@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public interface Renderer {
+public interface Sender {
 
     void sendAll();
 
