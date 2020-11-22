@@ -13,6 +13,10 @@ public final class RGB {
     }
 
     public void set(float red, float green, float blue) {
+        setRaw(red / 255f, green / 255f, blue / 255f);
+    }
+
+    public void setRaw(float red, float green, float blue) {
         this.red = red;
         this.green = green;
         this.blue = blue;

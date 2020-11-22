@@ -19,4 +19,11 @@ public interface RGBParticles extends Particles {
         rgb(rgb);
     }
 
+    default void rainbow() {
+        RGB rgb = getRGB();
+        if (rgb == null)
+            rgb = new RGB();
+        rgb.setRaw(255, 255, 255);
+    }
+
 }
