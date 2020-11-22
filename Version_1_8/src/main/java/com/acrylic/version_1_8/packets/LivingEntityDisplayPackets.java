@@ -1,12 +1,11 @@
 package com.acrylic.version_1_8.packets;
 
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
+import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
+import com.acrylic.universal.exceptions.IncompatibleVersion;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
-import net.minecraft.server.v1_8_R3.EntityLiving;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,12 +30,12 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
                 i++;
                 packets[i] = packetPlayOutEntityEquipment;
             }
-        } else {
+        } else if (equipmentPackets == null) {
             packets = new Packet[] {
                     entityMetaDataPacket.getPacket(),
                     packetPlayOutSpawnEntityLiving
             };
-        }
+        } else throw new IncompatibleVersion(equipmentPackets.getClass(), getClass());
     }
 
     @Override
@@ -45,8 +44,11 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
     }
 
     @Override
-    public void show(@NotNull NMSEntityAnimator nmsEntityAnimator) {
-        show((EntityLiving) nmsEntityAnimator.getNMSEntity(), null);
+    public void show(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
+        if (nmsEntityAnimator instanceof com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) {
+            EntityLiving entity = ((com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) nmsEntityAnimator).getNMSEntity();
+            show(entity, nmsEntityAnimator.getEquipmentPackets());
+        } else throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
     }
 
     @Override

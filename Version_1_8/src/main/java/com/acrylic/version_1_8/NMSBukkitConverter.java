@@ -39,12 +39,16 @@ public final class NMSBukkitConverter {
         return (World) convertToWorldServer(world);
     }
 
-    public static CraftWorld convertToNMSWorld(World world) {
+    public static CraftWorld convertToCraftWorld(World world) {
         return (CraftWorld) world;
     }
 
+    public static net.minecraft.server.v1_8_R3.World convertToNMSWorld(World world) {
+        return convertToCraftWorld(world).getHandle();
+    }
+
     public static TileEntity convertToNMSTileEntity(Block block) {
-        return convertToNMSWorld(block.getWorld()).getTileEntityAt(block.getX(), block.getY(), block.getZ());
+        return convertToCraftWorld(block.getWorld()).getTileEntityAt(block.getX(), block.getY(), block.getZ());
     }
 
     public static Player convertToBukkitPlayer(CraftPlayer player) {

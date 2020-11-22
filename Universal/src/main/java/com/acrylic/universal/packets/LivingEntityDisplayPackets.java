@@ -1,6 +1,7 @@
 package com.acrylic.universal.packets;
 
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
+import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,6 @@ public interface LivingEntityDisplayPackets extends PacketSender {
         show(entity, null);
     }
 
-    void show(@NotNull NMSEntityAnimator nmsEntityAnimator);
+    void show(@NotNull NMSLivingEntityAnimator nmsEntityAnimator);
 
 }

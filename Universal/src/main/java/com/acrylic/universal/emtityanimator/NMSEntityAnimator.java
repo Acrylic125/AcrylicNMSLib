@@ -1,10 +1,7 @@
 package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.entityanimations.EntityAnimator;
-import com.acrylic.universal.packets.EntityDestroyPacket;
-import com.acrylic.universal.packets.LivingEntityDisplayPackets;
-import com.acrylic.universal.packets.PacketSender;
-import com.acrylic.universal.packets.TeleportPacket;
+import com.acrylic.universal.packets.*;
 import com.acrylic.universal.renderer.PacketRenderer;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +13,8 @@ public interface NMSEntityAnimator extends EntityAnimator {
     PacketRenderer getRenderer();
 
     void setRenderer(PacketRenderer packetRenderer);
+
+    void show();
 
     @NotNull
     TeleportPacket getTeleportPacket();
@@ -30,12 +29,6 @@ public interface NMSEntityAnimator extends EntityAnimator {
         PacketRenderer packetRenderer = getRenderer();
         if (packetRenderer == null) packetSender.sendAll();
         else getRenderer().send(packetSender);
-    }
-
-    default void show() {
-        LivingEntityDisplayPackets showPackets = getDisplayPackets();
-        showPackets.show(this);
-        sendPacketsViaRenderer(showPackets);
     }
 
     @Override
