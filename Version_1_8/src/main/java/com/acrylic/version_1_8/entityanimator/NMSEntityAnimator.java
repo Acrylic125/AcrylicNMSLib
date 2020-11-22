@@ -6,6 +6,7 @@ import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
 import com.acrylic.version_1_8.packets.TeleportPacket;
 import net.minecraft.server.v1_8_R3.Entity;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class NMSEntityAnimator implements com.acrylic.universal.emtityanimator.NMSEntityAnimator {
@@ -14,6 +15,8 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
     private final LivingEntityDisplayPackets displayPackets = new LivingEntityDisplayPackets();
     private final TeleportPacket teleportPacket = new TeleportPacket();
     private PacketRenderer packetRenderer;
+
+    public NMSEntityAnimator(@NotNull Location location) {}
 
     @Override
     public abstract Entity getNMSEntity();

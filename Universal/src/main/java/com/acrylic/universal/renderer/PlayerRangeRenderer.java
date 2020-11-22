@@ -9,11 +9,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class PlayerRangeRenderer implements PacketRenderer {
 
     private float range = 32;
     private ArrayList<UUID> storedIds = new ArrayList<>();
+    private Consumer<Player> deleteAction;
+
+    public Consumer<Player> getDeleteAction() {
+        return deleteAction;
+    }
+
+    public void setDeleteAction(Consumer<Player> deleteAction) {
+        this.deleteAction = deleteAction;
+    }
 
     public float getRange() {
         return range;
@@ -21,6 +31,23 @@ public class PlayerRangeRenderer implements PacketRenderer {
 
     public void setRange(float range) {
         this.range = range;
+    }
+
+    public synchronized void check(@NotNull final Location location) {
+        checkRemoval(location);
+        checkUsers(location);
+    }
+
+    public void checkRemoval(@NotNull final Location location) {
+        final float radius = getRange() * getRange();
+        storedIds.iterator().forEachRemaining(uuid -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (!checkUser(player, radius, location)) {
+                if (player != null && deleteAction != null)
+                    deleteAction.accept(player);
+                storedIds.remove(uuid);
+            }
+        });
     }
 
     public void checkUsers(@NotNull final Location location) {

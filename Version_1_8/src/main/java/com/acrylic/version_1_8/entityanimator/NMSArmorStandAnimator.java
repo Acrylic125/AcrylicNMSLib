@@ -1,7 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.entityanimations.entities.AbstractArmorStandAnimator;
-import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.Vector3f;
@@ -9,13 +8,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements AbstractArmorStandAnimator {
 
     private final EntityArmorStand nmsEntity;
 
-    public NMSArmorStandAnimator(Location location) {
+    public NMSArmorStandAnimator(@NotNull Location location) {
+        super(location);
         nmsEntity = new EntityArmorStand(NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
         nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
     }
