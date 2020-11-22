@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
@@ -47,7 +49,7 @@ public final class JSON implements AbstractJSON {
     }
 
     @Override
-    public void send(Player player) {
+    public void send(@NotNull Player player) {
         player.spigot().sendMessage(textComponent);
     }
 
@@ -61,6 +63,12 @@ public final class JSON implements AbstractJSON {
     public void send(@NotNull Location location, float radius) {
         float d = radius * radius;
         send(player -> player.getLocation().distanceSquared(location) <= d);
+    }
+
+    @Override
+    public void send(@NotNull Collection<? extends Player> players) {
+        for (Player player : players)
+            send(player);
     }
 
     @Override

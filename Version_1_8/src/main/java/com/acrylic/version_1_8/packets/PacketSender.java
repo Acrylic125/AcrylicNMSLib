@@ -8,19 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class PacketSender implements com.acrylic.universal.packets.PacketSender {
 
     @Override
     public abstract Packet<?>[] getPackets();
-
-    @Override
-    public void sendAll() {
-        Packet<?>[] packets = getPackets();
-        for (Player player : Bukkit.getOnlinePlayers())
-            sendPacket(player, packets);
-    }
 
     @Override
     public void send(@NotNull Player player) {
@@ -47,6 +42,13 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
         for (Player player : Bukkit.getOnlinePlayers())
             if (condition.test(player))
                 sendPacket(player, packets);
+    }
+
+    @Override
+    public void send(@NotNull Collection<? extends Player> players) {
+        Packet<?>[] packets = getPackets();
+        for (Player player : players)
+            sendPacket(player, packets);
     }
 
     public static PlayerConnection getPlayerConnection(@NotNull Player player) {
