@@ -41,6 +41,12 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
             throw new IncompatibleVersion(equipmentPackets.getClass(), getClass());
     }
 
+    @NotNull
+    @Override
+    public EntityMetaDataPacket getEntityMetaDataPacket() {
+        return entityMetaDataPacket;
+    }
+
     @Override
     public void show(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets) {
          show((EntityLiving) NMSBukkitConverter.convertToNMSEntity(entity), equipmentPackets);

@@ -18,6 +18,11 @@ public class EntityHeadRotationPacket
 
     @Override
     public void apply(@NotNull Entity entity) {
-        packet = new PacketPlayOutEntityHeadRotation(NMSBukkitConverter.convertToNMSEntity(entity), (byte) ((entity.getLocation().getYaw() * 256f) / 360f));
+        apply(NMSBukkitConverter.convertToNMSEntity(entity));
     }
+
+    public void apply(net.minecraft.server.v1_8_R3.Entity entity) {
+        packet = new PacketPlayOutEntityHeadRotation(entity, (byte) ((entity.getBukkitEntity().getLocation().getYaw() * 256f) / 360f));
+    }
+
 }

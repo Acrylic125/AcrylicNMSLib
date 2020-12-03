@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class NMSEntityAnimator implements com.acrylic.universal.emtityanimator.NMSEntityAnimator {
 
     private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
-    private final com.acrylic.universal.packets.LivingEntityDisplayPackets displayPackets;
+    private final LivingEntityDisplayPackets displayPackets;
     private final TeleportPacket teleportPacket = new TeleportPacket();
     private PacketRenderer packetRenderer;
 
@@ -22,7 +22,7 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
         this(new LivingEntityDisplayPackets());
     }
 
-    public NMSEntityAnimator(@NotNull com.acrylic.universal.packets.LivingEntityDisplayPackets livingEntityDisplayPackets) {
+    public NMSEntityAnimator(@NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
         displayPackets = livingEntityDisplayPackets;
     }
 
@@ -63,7 +63,7 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
 
     @NotNull
     @Override
-    public com.acrylic.universal.packets.LivingEntityDisplayPackets getDisplayPackets() {
+    public LivingEntityDisplayPackets getDisplayPackets() {
         return displayPackets;
     }
 }

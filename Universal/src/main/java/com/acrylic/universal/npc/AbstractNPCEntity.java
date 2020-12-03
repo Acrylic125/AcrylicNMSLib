@@ -1,14 +1,10 @@
 package com.acrylic.universal.npc;
 
-import com.acrylic.universal.Universal;
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.packets.EntityHeadRotationPacket;
-import org.bukkit.scheduler.BukkitRunnable;
+import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import org.jetbrains.annotations.NotNull;
 
-public interface AbstractNPCEntity {
-
-    EntityHeadRotationPacket getEntityHeadRotationPacket();
+public interface AbstractNPCEntity extends NMSLivingEntityAnimator {
 
     void setSkin(@NotNull String texture, @NotNull String signature);
 

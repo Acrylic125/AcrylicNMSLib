@@ -1,13 +1,10 @@
 package com.acrylic.version_1_8;
 
-import com.acrylic.universal.Universal;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
@@ -18,12 +15,7 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.UUID;
 
 public final class Version_1_8 {
@@ -34,7 +26,7 @@ public final class Version_1_8 {
                 .filter(AbstractCommandExecuted::isPlayer)
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
-                    PlayerNPC npc = new PlayerNPC(sender.getLocation(), "&eHello");
+                    PlayerNPC npc = new PlayerNPC(sender.getLocation(), "");
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
                             .setChestplate(ItemBuilder.of(Material.DIAMOND_CHESTPLATE).build())
@@ -43,9 +35,8 @@ public final class Version_1_8 {
                             .setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build())
                     );
                     npc.setSkin(sender.getName());
-                    npc.show();
                     npc.addToWorld(sender.getWorld());
-
+                    npc.show();
                     // createNPC("Test", sender.getWorld(), sender.getLocation());
                 });
     }

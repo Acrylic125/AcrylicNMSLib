@@ -9,7 +9,11 @@ public class EntityMetaDataPacket extends SinglePacketSender implements com.acry
     private PacketPlayOutEntityMetadata packet;
 
     public void apply(net.minecraft.server.v1_8_R3.Entity entity) {
-        packet = new PacketPlayOutEntityMetadata(entity.getId(), entity.getDataWatcher(), false);
+        apply(entity, false);
+    }
+
+    public void apply(net.minecraft.server.v1_8_R3.Entity entity, boolean b) {
+        packet = new PacketPlayOutEntityMetadata(entity.getId(), entity.getDataWatcher(), b);
     }
 
     @Override
