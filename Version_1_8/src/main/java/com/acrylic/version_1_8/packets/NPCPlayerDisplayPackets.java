@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implements NPCDisplayPackets {
 
     private final EntityHeadRotationPacket headRotationPacket = new EntityHeadRotationPacket();
-    private Packet<?>[] packets;
 
     public void show(@NotNull EntityPlayer entity, @Nullable EntityEquipmentPackets equipmentPackets) {
         PacketPlayOutPlayerInfo playerInfoAdd = new PacketPlayOutPlayerInfo(
@@ -23,7 +22,7 @@ public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implemen
         dataWatcher.watch(10, (byte) 127); //Displays the skin second layer.
         EntityMetaDataPacket entityMetaDataPacket = getEntityMetaDataPacket();
         entityMetaDataPacket.apply(entity, true);
-        //PacketPlayOutPlayerInfo playerInfoRemove = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entity);
+        headRotationPacket.apply(entity);
         if (equipmentPackets instanceof com.acrylic.version_1_8.packets.EntityEquipmentPackets) {
             com.acrylic.version_1_8.packets.EntityEquipmentPackets entityEquipmentPackets = (com.acrylic.version_1_8.packets.EntityEquipmentPackets) equipmentPackets;
             entityEquipmentPackets.apply(entity);
@@ -61,11 +60,6 @@ public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implemen
                 show((EntityPlayer) entity, nmsEntityAnimator.getEquipmentPackets());
         } else
             throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
-    }
-
-    @Override
-    public Packet<?>[] getPackets() {
-        return packets;
     }
 
     @Override

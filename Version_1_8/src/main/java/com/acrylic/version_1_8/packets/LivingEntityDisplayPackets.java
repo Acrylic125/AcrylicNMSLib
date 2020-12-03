@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class LivingEntityDisplayPackets extends PacketSender implements com.acrylic.universal.packets.LivingEntityDisplayPackets {
 
     private final EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
-    private Packet<?>[] packets;
+    protected Packet<?>[] packets;
 
     public void show(@NotNull EntityLiving entity, @Nullable EntityEquipmentPackets equipmentPackets) {
         entityMetaDataPacket.apply(entity);

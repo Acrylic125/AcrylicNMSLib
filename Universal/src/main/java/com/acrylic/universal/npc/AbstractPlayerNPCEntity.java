@@ -4,7 +4,7 @@ import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import org.jetbrains.annotations.NotNull;
 
-public interface AbstractNPCEntity extends NMSLivingEntityAnimator {
+public interface AbstractPlayerNPCEntity extends NMSLivingEntityAnimator {
 
     void setSkin(@NotNull String texture, @NotNull String signature);
 

@@ -9,12 +9,53 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public abstract class PacketSender implements com.acrylic.universal.packets.PacketSender {
 
     @Override
     public abstract Packet<?>[] getPackets();
+
+    @Override
+    public void sendWithAction(@NotNull Player player, @NotNull Consumer<Player> sendWithAction) {
+        send(player);
+        sendWithAction.accept(player);
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Consumer<Player> sendWithAction, Player... players) {
+        Packet<?>[] packets = getPackets();
+        for (Player player : players) {
+            sendPacket(player, packets);
+            sendWithAction.accept(player);
+        }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Predicate<Player> condition, @NotNull Consumer<Player> sendWithAction) {
+        Packet<?>[] packets = getPackets();
+        for (Player player : Bukkit.getOnlinePlayers())
+            if (condition.test(player)) {
+                sendPacket(player, packets);
+                sendWithAction.accept(player);
+            }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Location location, float radius, @NotNull Consumer<Player> sendWithAction) {
+        float d = radius * radius;
+        sendWithAction(player -> player.getLocation().distanceSquared(location) <= d, sendWithAction);
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Collection<? extends Player> players, @NotNull Consumer<Player> sendWithAction) {
+        Packet<?>[] packets = getPackets();
+        for (Player player : players) {
+            sendPacket(player, packets);
+            sendWithAction.accept(player);
+        }
+    }
 
     @Override
     public void send(@NotNull Player player) {

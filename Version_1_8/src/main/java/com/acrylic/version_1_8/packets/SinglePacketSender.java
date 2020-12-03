@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public abstract class SinglePacketSender extends PacketSender implements com.acrylic.universal.packets.SinglePacketSender {
@@ -16,6 +17,34 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
     @Override
     public Packet<?>[] getPackets() {
         return new Packet<?>[] { getPacket() };
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Consumer<Player> sendWithAction, Player... players) {
+        Packet<?> packets = getPacket();
+        for (Player player : players) {
+            sendPacket(player, packets);
+            sendWithAction.accept(player);
+        }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Predicate<Player> condition, @NotNull Consumer<Player> sendWithAction) {
+        Packet<?> packets = getPacket();
+        for (Player player : Bukkit.getOnlinePlayers())
+            if (condition.test(player)) {
+                sendPacket(player, packets);
+                sendWithAction.accept(player);
+            }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Collection<? extends Player> players, @NotNull Consumer<Player> sendWithAction) {
+        Packet<?> packets = getPacket();
+        for (Player player : players) {
+            sendPacket(player, packets);
+            sendWithAction.accept(player);
+        }
     }
 
     @Override

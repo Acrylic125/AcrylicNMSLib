@@ -1,7 +1,7 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.npc.AbstractNPCEntity;
+import com.acrylic.universal.npc.AbstractPlayerNPCEntity;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -18,15 +18,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PlayerNPC extends NMSLivingEntityAnimator implements AbstractNPCEntity {
+public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayerNPCEntity {
 
     private final EntityPlayer entityPlayer;
 
-    public PlayerNPC(@NotNull Location location, @Nullable String name) {
+    public PlayerPlayerNPC(@NotNull Location location, @Nullable String name) {
         this(NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
     }
 
-    private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
+    private PlayerPlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
         entityPlayer = new EntityPlayer(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         new PlayerConnection(server, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), entityPlayer);

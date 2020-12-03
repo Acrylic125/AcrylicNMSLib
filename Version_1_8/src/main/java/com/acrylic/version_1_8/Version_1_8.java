@@ -4,7 +4,7 @@ import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
-import com.acrylic.version_1_8.npc.PlayerNPC;
+import com.acrylic.version_1_8.npc.PlayerPlayerNPC;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ public final class Version_1_8 {
                 .filter(AbstractCommandExecuted::isPlayer)
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
-                    PlayerNPC npc = new PlayerNPC(sender.getLocation(), "");
+                    PlayerPlayerNPC npc = new PlayerPlayerNPC(sender.getLocation(), "");
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
                             .setChestplate(ItemBuilder.of(Material.DIAMOND_CHESTPLATE).build())

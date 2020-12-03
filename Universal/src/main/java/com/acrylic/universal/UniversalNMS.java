@@ -7,6 +7,10 @@ public final class UniversalNMS {
 
     private static final SimpleNPCHandler npcHandler = new SimpleNPCHandler();
 
+    public static void setup() {
+
+    }
+
     public static SimpleNPCHandler getNpcHandler() {
         return npcHandler;
     }
@@ -14,4 +18,6 @@ public final class UniversalNMS {
     public static SimpleNPCSkinMap getSkinMap() {
         return npcHandler.getSkinMap();
     }
+
+
 }
