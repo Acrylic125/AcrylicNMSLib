@@ -1,6 +1,7 @@
 package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
+import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.Location;
@@ -12,6 +13,10 @@ public abstract class NMSLivingEntityAnimator extends NMSEntityAnimator implemen
 
     public NMSLivingEntityAnimator(@NotNull Location location) {
         super(location);
+    }
+
+    public NMSLivingEntityAnimator(@NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
+        super(livingEntityDisplayPackets);
     }
 
     @Override

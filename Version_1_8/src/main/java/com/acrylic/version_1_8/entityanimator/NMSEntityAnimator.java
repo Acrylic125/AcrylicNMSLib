@@ -1,22 +1,31 @@
 package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.renderer.PacketRenderer;
+import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.packets.EntityDestroyPacket;
-import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
 import com.acrylic.version_1_8.packets.TeleportPacket;
 import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.WorldServer;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class NMSEntityAnimator implements com.acrylic.universal.emtityanimator.NMSEntityAnimator {
 
     private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
-    private final LivingEntityDisplayPackets displayPackets = new LivingEntityDisplayPackets();
+    private final com.acrylic.universal.packets.LivingEntityDisplayPackets displayPackets;
     private final TeleportPacket teleportPacket = new TeleportPacket();
     private PacketRenderer packetRenderer;
 
-    public NMSEntityAnimator(@NotNull Location location) {}
+    public NMSEntityAnimator(@NotNull Location location) {
+        this(new LivingEntityDisplayPackets());
+    }
+
+    public NMSEntityAnimator(@NotNull com.acrylic.universal.packets.LivingEntityDisplayPackets livingEntityDisplayPackets) {
+        displayPackets = livingEntityDisplayPackets;
+    }
+
 
     @Override
     public abstract Entity getNMSEntity();
@@ -29,6 +38,15 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
     @Override
     public void setRenderer(PacketRenderer packetRenderer) {
         this.packetRenderer = packetRenderer;
+    }
+
+    public void addToWorld(@NotNull WorldServer worldServer) {
+        worldServer.addEntity(getNMSEntity());
+    }
+
+    @Override
+    public void addToWorld(@NotNull World world) {
+        addToWorld(NMSBukkitConverter.convertToWorldServer(world));
     }
 
     @NotNull
@@ -45,7 +63,7 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
 
     @NotNull
     @Override
-    public LivingEntityDisplayPackets getDisplayPackets() {
+    public com.acrylic.universal.packets.LivingEntityDisplayPackets getDisplayPackets() {
         return displayPackets;
     }
 }

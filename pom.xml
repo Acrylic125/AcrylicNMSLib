@@ -126,7 +126,7 @@
         <dependency>
             <groupId>com.github.Acrylic125</groupId>
             <artifactId>AcrylicMinecraftLib</artifactId>
-            <version>v1.0a</version>
+            <version>v1.0d</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

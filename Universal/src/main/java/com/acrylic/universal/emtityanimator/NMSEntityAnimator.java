@@ -4,6 +4,7 @@ import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.packets.*;
 import com.acrylic.universal.renderer.PacketRenderer;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 public interface NMSEntityAnimator extends EntityAnimator {
@@ -13,6 +14,8 @@ public interface NMSEntityAnimator extends EntityAnimator {
     PacketRenderer getRenderer();
 
     void setRenderer(PacketRenderer packetRenderer);
+
+    void addToWorld(@NotNull World world);
 
     void show();
 
@@ -24,6 +27,10 @@ public interface NMSEntityAnimator extends EntityAnimator {
 
     @NotNull
     LivingEntityDisplayPackets getDisplayPackets();
+
+    default Location getLocation() {
+        return getBukkitEntity().getLocation();
+    }
 
     default void sendPacketsViaRenderer(PacketSender packetSender) {
         PacketRenderer packetRenderer = getRenderer();
