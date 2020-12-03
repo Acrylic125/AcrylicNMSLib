@@ -14,7 +14,7 @@ public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implemen
 
     private final EntityHeadRotationPacket headRotationPacket = new EntityHeadRotationPacket();
 
-    public void show(@NotNull EntityPlayer entity, @Nullable EntityEquipmentPackets equipmentPackets) {
+    public void setupDisplayPackets(@NotNull EntityPlayer entity, @Nullable EntityEquipmentPackets equipmentPackets) {
         PacketPlayOutPlayerInfo playerInfoAdd = new PacketPlayOutPlayerInfo(
                 PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entity);
         PacketPlayOutNamedEntitySpawn namedEntitySpawn = new PacketPlayOutNamedEntitySpawn(entity);
@@ -46,18 +46,18 @@ public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implemen
     }
 
     @Override
-    public void show(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets) {
+    public void setupDisplayPackets(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets) {
         Entity livingEntity = NMSBukkitConverter.convertToNMSEntity(entity);
         if (livingEntity instanceof EntityPlayer)
-            show((EntityPlayer) livingEntity, equipmentPackets);
+            setupDisplayPackets((EntityPlayer) livingEntity, equipmentPackets);
     }
 
     @Override
-    public void show(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
+    public void setupDisplayPackets(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
         if (nmsEntityAnimator instanceof com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) {
             EntityLiving entity = ((com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) nmsEntityAnimator).getNMSEntity();
             if (entity instanceof EntityPlayer)
-                show((EntityPlayer) entity, nmsEntityAnimator.getEquipmentPackets());
+                setupDisplayPackets((EntityPlayer) entity, nmsEntityAnimator.getEquipmentPackets());
         } else
             throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
     }

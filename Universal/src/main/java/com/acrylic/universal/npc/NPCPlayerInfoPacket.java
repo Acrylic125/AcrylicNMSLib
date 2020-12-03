@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface NPCPlayerInfoPacket extends SinglePacketSender {
 
-    @Getter
     enum EnumPlayerInfoAction {
         ADD_PLAYER("ADD_PLAYER"),
         UPDATE_GAME_MODE("UPDATE_GAME_MODE"),
@@ -19,6 +18,10 @@ public interface NPCPlayerInfoPacket extends SinglePacketSender {
 
         EnumPlayerInfoAction(String identifier) {
             this.identifier = identifier;
+        }
+
+        public String getIdentifier() {
+            return identifier;
         }
     }
 

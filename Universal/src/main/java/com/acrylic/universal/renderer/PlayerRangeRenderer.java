@@ -72,4 +72,13 @@ public class PlayerRangeRenderer implements PacketRenderer {
                 packetSender.send(player);
         }
     }
+
+    @Override
+    public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
+        for (UUID uuid : storedIds) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null)
+                packetSender.sendWithAction(player, sendWithAction);
+        }
+    }
 }

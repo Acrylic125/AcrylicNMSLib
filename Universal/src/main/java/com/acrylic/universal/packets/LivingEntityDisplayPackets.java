@@ -10,12 +10,12 @@ public interface LivingEntityDisplayPackets extends PacketSender {
     @NotNull
     EntityMetaDataPacket getEntityMetaDataPacket();
 
-    void show(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets);
+    void setupDisplayPackets(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets);
 
-    default void show(@NotNull LivingEntity entity) {
-        show(entity, null);
+    default void setupDisplayPackets(@NotNull LivingEntity entity) {
+        setupDisplayPackets(entity, null);
     }
 
-    void show(@NotNull NMSLivingEntityAnimator nmsEntityAnimator);
+    void setupDisplayPackets(@NotNull NMSLivingEntityAnimator nmsEntityAnimator);
 
 }

@@ -13,6 +13,10 @@ public abstract class PlayerEntry {
         this.player = player;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     public abstract void execute();
 
 }

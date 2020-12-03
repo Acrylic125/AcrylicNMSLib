@@ -2,6 +2,10 @@ package com.acrylic.universal.renderer;
 
 import com.acrylic.universal.packets.PacketSender;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public class RangeRenderer implements PacketRenderer {
 
@@ -28,6 +32,12 @@ public class RangeRenderer implements PacketRenderer {
     public void send(PacketSender packetSender) {
         if (location != null)
            packetSender.send(location, range);
+    }
+
+    @Override
+    public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
+        if (location != null)
+            packetSender.sendWithAction(location, range, sendWithAction);
     }
 
 }

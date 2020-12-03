@@ -17,7 +17,7 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
     private final EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
     protected Packet<?>[] packets;
 
-    public void show(@NotNull EntityLiving entity, @Nullable EntityEquipmentPackets equipmentPackets) {
+    public void setupDisplayPackets(@NotNull EntityLiving entity, @Nullable EntityEquipmentPackets equipmentPackets) {
         entityMetaDataPacket.apply(entity);
         PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entity);
         if (equipmentPackets instanceof com.acrylic.version_1_8.packets.EntityEquipmentPackets) {
@@ -48,15 +48,15 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
     }
 
     @Override
-    public void show(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets) {
-         show((EntityLiving) NMSBukkitConverter.convertToNMSEntity(entity), equipmentPackets);
+    public void setupDisplayPackets(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets) {
+        setupDisplayPackets((EntityLiving) NMSBukkitConverter.convertToNMSEntity(entity), equipmentPackets);
     }
 
     @Override
-    public void show(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
+    public void setupDisplayPackets(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
         if (nmsEntityAnimator instanceof com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) {
             EntityLiving entity = ((com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) nmsEntityAnimator).getNMSEntity();
-            show(entity, nmsEntityAnimator.getEquipmentPackets());
+            setupDisplayPackets(entity, nmsEntityAnimator.getEquipmentPackets());
         } else
             throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
     }

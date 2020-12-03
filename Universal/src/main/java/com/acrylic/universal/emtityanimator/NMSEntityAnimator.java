@@ -5,7 +5,10 @@ import com.acrylic.universal.packets.*;
 import com.acrylic.universal.renderer.PacketRenderer;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public interface NMSEntityAnimator extends EntityAnimator {
 
@@ -16,6 +19,10 @@ public interface NMSEntityAnimator extends EntityAnimator {
     void setRenderer(PacketRenderer packetRenderer);
 
     void addToWorld(@NotNull World world);
+
+    default void addToWorld() {
+        addToWorld(getBukkitEntity().getWorld());
+    }
 
     void show();
 
@@ -32,10 +39,16 @@ public interface NMSEntityAnimator extends EntityAnimator {
         return getBukkitEntity().getLocation();
     }
 
-    default void sendPacketsViaRenderer(PacketSender packetSender) {
+    default void sendPacketsViaRenderer(@NotNull PacketSender packetSender) {
         PacketRenderer packetRenderer = getRenderer();
         if (packetRenderer == null) packetSender.sendAll();
         else getRenderer().send(packetSender);
+    }
+
+    default void sendPacketsViaRendererWithAction(@NotNull PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
+        PacketRenderer packetRenderer = getRenderer();
+        if (packetRenderer == null) packetSender.sendAll(sendWithAction);
+        else getRenderer().sendWithAction(packetSender, sendWithAction);
     }
 
     @Override

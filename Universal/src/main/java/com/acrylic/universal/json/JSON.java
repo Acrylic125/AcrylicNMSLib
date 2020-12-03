@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -47,6 +48,43 @@ public final class JSON implements AbstractJSON {
     public void sendAll() {
         for (Player player : Bukkit.getOnlinePlayers())
             send(player);
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Player player, @NotNull Consumer<Player> sendWithAction) {
+        send(player);
+        sendWithAction.accept(player);
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Consumer<Player> sendWithAction, Player... players) {
+        for (Player player : players) {
+            send(player);
+            sendWithAction.accept(player);
+        }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Predicate<Player> condition, @NotNull Consumer<Player> sendWithAction) {
+        for (Player player : Bukkit.getOnlinePlayers())
+            if (condition.test(player)) {
+                send(player);
+                sendWithAction.accept(player);
+            }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Location location, float radius, @NotNull Consumer<Player> sendWithAction) {
+        float d = radius * radius;
+        sendWithAction(player -> player.getLocation().distanceSquared(location) <= d, sendWithAction);
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Collection<? extends Player> players, @NotNull Consumer<Player> sendWithAction) {
+        for (Player player : players) {
+            send(player);
+            sendWithAction.accept(player);
+        }
     }
 
     @Override

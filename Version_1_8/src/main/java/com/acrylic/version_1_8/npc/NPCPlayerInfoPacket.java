@@ -7,7 +7,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerNPCInfoPacket
+public class NPCPlayerInfoPacket
         extends SinglePacketSender
         implements com.acrylic.universal.npc.NPCPlayerInfoPacket {
 
@@ -19,7 +19,7 @@ public class PlayerNPCInfoPacket
     }
 
     public void apply(@NotNull EntityPlayer entityPlayer, @NotNull EnumPlayerInfoAction action) {
-        packet = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer);
+        packet = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.valueOf(action.getIdentifier()), entityPlayer);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.acrylic.universal.npc;
 
 import com.acrylic.universal.Universal;
-import com.acrylic.universal.UniversalNMS;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;

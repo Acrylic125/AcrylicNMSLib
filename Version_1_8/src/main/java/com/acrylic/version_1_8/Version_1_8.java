@@ -3,6 +3,7 @@ package com.acrylic.version_1_8;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
+import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerPlayerNPC;
 import com.mojang.authlib.GameProfile;
@@ -26,6 +27,7 @@ public final class Version_1_8 {
                 .filter(AbstractCommandExecuted::isPlayer)
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
+
                     PlayerPlayerNPC npc = new PlayerPlayerNPC(sender.getLocation(), "");
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
@@ -35,7 +37,7 @@ public final class Version_1_8 {
                             .setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build())
                     );
                     npc.setSkin(sender.getName());
-                    npc.addToWorld(sender.getWorld());
+                    npc.addToWorld();
                     npc.show();
                     // createNPC("Test", sender.getWorld(), sender.getLocation());
                 });

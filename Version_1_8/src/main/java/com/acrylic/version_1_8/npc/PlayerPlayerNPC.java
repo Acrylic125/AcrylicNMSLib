@@ -2,6 +2,7 @@ package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.npc.AbstractPlayerNPCEntity;
+import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -11,6 +12,7 @@ import com.acrylic.version_1_8.packets.NPCPlayerDisplayPackets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayerNPCEntity {
 
     private final EntityPlayer entityPlayer;
+    private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
 
     public PlayerPlayerNPC(@NotNull Location location, @Nullable String name) {
         this(NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
@@ -32,6 +35,7 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
         new PlayerConnection(server, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), entityPlayer);
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         UniversalNMS.getNpcHandler().addNPC(this);
+        removeFromTabPacket.apply(entityPlayer, com.acrylic.universal.npc.NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
     }
 
     @Override
@@ -69,5 +73,14 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     public void setSkin(@NotNull String texture, @NotNull String signature) {
         GameProfile gameProfile = entityPlayer.getProfile();
         gameProfile.getProperties().put("textures", new Property("textures", texture, signature));
+    }
+
+    @Override
+    public void show() {
+        super.showWithAction(player -> {
+            UniversalNMS.getNpcHandler()
+                    .getNPCTabRemoverEntries()
+                    .add(new NPCTabRemoverEntry(player, removeFromTabPacket));
+        });
     }
 }
