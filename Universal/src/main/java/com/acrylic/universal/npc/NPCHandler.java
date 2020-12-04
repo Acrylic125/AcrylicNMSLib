@@ -10,15 +10,15 @@ public interface NPCHandler {
 
     NPCSkinMap<?> getSkinMap();
 
-    Map<UUID, AbstractPlayerNPCEntity> getNPCs();
+    Map<Integer, AbstractPlayerNPCEntity> getNPCs();
 
     List<NPCTabRemoverEntry> getNPCTabRemoverEntries();
 
     default void addNPC(AbstractPlayerNPCEntity npc) {
-        getNPCs().put(npc.getBukkitEntity().getUniqueId(), npc);
+        getNPCs().put(npc.getBukkitEntity().getEntityId(), npc);
     }
 
-    default AbstractPlayerNPCEntity getNPC(@NotNull UUID id) {
+    default AbstractPlayerNPCEntity getNPC(@NotNull int id) {
         return getNPCs().get(id);
     }
 

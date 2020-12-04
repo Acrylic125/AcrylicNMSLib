@@ -2,24 +2,18 @@ package com.acrylic.version_1_8;
 
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
+import com.acrylic.universal.events.EventBuilder;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
-import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerPlayerNPC;
-import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 public final class Version_1_8 {
+
 
     public static CommandBuilder getArgumentComponent() {
         return CommandBuilder
@@ -27,8 +21,7 @@ public final class Version_1_8 {
                 .filter(AbstractCommandExecuted::isPlayer)
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
-
-                    PlayerPlayerNPC npc = new PlayerPlayerNPC(sender.getLocation(), "");
+                    PlayerPlayerNPC npc = new PlayerPlayerNPC(sender.getLocation(), sender.getName());
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
                             .setChestplate(ItemBuilder.of(Material.DIAMOND_CHESTPLATE).build())
@@ -39,40 +32,9 @@ public final class Version_1_8 {
                     npc.setSkin(sender.getName());
                     npc.addToWorld();
                     npc.show();
-                    // createNPC("Test", sender.getWorld(), sender.getLocation());
+                    Bukkit.broadcastMessage(sender.getMetadata("selected") + "");
                 });
     }
 
-    public static EntityPlayer createNPC(String name, World world, Location location) {
-        MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer nmsWorld = ((CraftWorld) world).getHandle();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), name);
-        PlayerInteractManager interactManager = new PlayerInteractManager(nmsWorld);
-
-        EntityPlayer entityPlayer = new EntityPlayer(nmsServer, nmsWorld, profile, interactManager);
-        new PlayerConnection(nmsServer, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), entityPlayer);
-
-        entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(),
-                location.getPitch());
-
-        nmsWorld.addEntity(entityPlayer);
-
-        PacketPlayOutPlayerInfo playerInfoAdd = new PacketPlayOutPlayerInfo(
-                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer);
-        PacketPlayOutNamedEntitySpawn namedEntitySpawn = new PacketPlayOutNamedEntitySpawn(entityPlayer);
-        PacketPlayOutEntityHeadRotation headRotation = new PacketPlayOutEntityHeadRotation(entityPlayer,
-                (byte) ((location.getYaw() * 256f) / 360f));
-        PacketPlayOutPlayerInfo playerInfoRemove = new PacketPlayOutPlayerInfo(
-                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer);
-
-        for (Player player : Bukkit.getOnlinePlayers()){
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(playerInfoAdd);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(namedEntitySpawn);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(headRotation);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(playerInfoRemove);
-
-        }
-        return entityPlayer;
-    }
 
 }

@@ -12,7 +12,6 @@ import com.acrylic.version_1_8.packets.NPCPlayerDisplayPackets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +31,7 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     private PlayerPlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
         entityPlayer = new EntityPlayer(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
-        new PlayerConnection(server, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), entityPlayer);
+        new PlayerConnection(server, new NetworkManager(EnumProtocolDirection.SERVERBOUND), entityPlayer);
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         UniversalNMS.getNpcHandler().addNPC(this);
         removeFromTabPacket.apply(entityPlayer, com.acrylic.universal.npc.NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
@@ -67,6 +66,31 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     @Override
     public LivingEntity getBukkitEntity() {
         return entityPlayer.getBukkitEntity();
+    }
+
+    @Override
+    public void setSneaking(boolean flag) {
+        entityPlayer.setSneaking(flag);
+    }
+
+    @Override
+    public void setSprinting(boolean flag) {
+        entityPlayer.setSprinting(flag);
+    }
+
+    @Override
+    public void setVisible(boolean flag) {
+        entityPlayer.setInvisible(!flag);
+    }
+
+    @Override
+    public void setDataWatcher(int index, byte bitMask) {
+        entityPlayer.getDataWatcher().watch(index, bitMask);
+    }
+
+    @Override
+    public byte getDataWatcherEntityAnimation() {
+        return entityPlayer.getDataWatcher().getByte(0);
     }
 
     @Override
