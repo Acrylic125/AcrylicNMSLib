@@ -20,6 +20,14 @@ public interface AbstractPlayerNPCEntity extends NMSLivingEntityAnimator {
 
     void setVisible(boolean flag);
 
+    default void setSleeping(boolean flag) {
+        setDataWatcherEntityAnimation((byte) 14, flag);
+    }
+
+    default void setBowFoodUse(boolean flag) {
+        setDataWatcherEntityAnimation((byte) 16, flag);
+    }
+
     default void setOnFire(boolean flag) {
         setDataWatcherEntityAnimation((byte) 0x01, flag);
     }

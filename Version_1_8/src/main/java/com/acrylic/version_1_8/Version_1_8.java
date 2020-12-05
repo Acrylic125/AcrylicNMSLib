@@ -7,6 +7,7 @@ import com.acrylic.universal.players.Gamemode;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerPlayerNPC;
+import com.acrylic.version_1_8.packets.EntityAnimationPackets;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,20 +27,18 @@ public final class Version_1_8 {
                             .setChestplate(ItemBuilder.of(Material.DIAMOND_CHESTPLATE).build())
                             .setLeggings(ItemBuilder.of(Material.DIAMOND_LEGGINGS).build())
                             .setBoots(ItemBuilder.of(Material.DIAMOND_BOOTS).build())
-                            .setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build())
+                            .setItemInHand(ItemBuilder.of(Material.BOW).build())
                     );
                     npc.setSkin(sender.getName());
                     npc.addToWorld();
                     npc.setGamemode(Gamemode.SURVIVAL);
                     npc.nameVisible(false);
+                    npc.setSleeping(true);
                     npc.show();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            npc.damage(sender);
-                        }
-                    }.runTaskTimer(Universal.getPlugin(), 20, 20);
-                    Bukkit.broadcastMessage(sender.getMetadata("selected") + "");
+                    EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
+                    entityAnimationPackets.apply(npc.getNMSEntity(), com.acrylic.universal.packets.EntityAnimationPackets.Animation.SLEEP);
+                    entityAnimationPackets.sendAll();
+                    Bukkit.broadcastMessage("");
                 });
     }
 

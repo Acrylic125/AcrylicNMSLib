@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
@@ -9,6 +10,7 @@ import net.citizensnpcs.util.PlayerAnimation;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EntityEquipment;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class NMSLivingEntityAnimator extends NMSEntityAnimator implements com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator {
@@ -31,6 +33,7 @@ public abstract class NMSLivingEntityAnimator extends NMSEntityAnimator implemen
         if (equipmentPackets == null)
             this.equipmentPackets = new EntityEquipmentPackets();
         this.equipmentPackets.adapt(entityEquipment);
+        entityEquipment.apply(getBukkitEntity());
     }
 
     @Override

@@ -1,9 +1,10 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.players.Gamemode;
+import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.npc.AbstractPlayerNPCEntity;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
+import com.acrylic.universal.players.Gamemode;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -35,6 +36,11 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
+    }
+
+    @Override
+    public void setEquipment(AbstractEntityEquipmentBuilder entityEquipment) {
+        super.setEquipment(entityEquipment);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.acrylic.version_1_8.particles;
 
 import com.acrylic.universal.particles.RGB;
-import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 
 public class RGBParticles

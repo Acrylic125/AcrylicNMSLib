@@ -30,7 +30,7 @@ public interface EntityEquipmentPackets extends PacketSender {
                 .setBoots(abstractEntityEquipmentBuilder.getBoots())
                 .setItemInHand(abstractEntityEquipmentBuilder.getItemInHand());
         if (!Universal.getVersionStore().isLegacyVersion()) {
-            //TODO: Add .setItemInOffhand support.
+            setItemInOffhand(abstractEntityEquipmentBuilder.getItemInOffHand());
         }
     }
 
