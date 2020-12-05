@@ -1,6 +1,6 @@
-name: Universal
+name: AcrylicNMS
 version: ${project.version}
-main: com.acrylic.universal.Universal
+main: com.acrylic.acrylicnms.AcrylicNMS
 api-version: 1.16
 authors: [ Acrylic ]
 description: Universal module.

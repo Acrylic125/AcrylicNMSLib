@@ -1,6 +1,6 @@
 name: Version_1_8
 version: ${project.version}
-main: com.acrylic.version_1_8.Version_1_8
+main: com.acrylic.acrylicnms.AcrylicNMS
 api-version: 1.16
 authors: [ Acrylic ]
 description: 1.8 Module.

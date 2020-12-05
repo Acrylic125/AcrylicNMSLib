@@ -3,10 +3,16 @@ package com.acrylic.universal.npc;
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
+import com.acrylic.universal.players.Gamemode;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public interface AbstractPlayerNPCEntity extends NMSLivingEntityAnimator {
+
+    void attack(@NotNull LivingEntity victim);
+
+    void setGamemode(@NotNull Gamemode gamemode);
 
     void setSneaking(boolean flag);
 

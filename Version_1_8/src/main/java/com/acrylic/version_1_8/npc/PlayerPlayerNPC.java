@@ -1,6 +1,7 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.players.Gamemode;
 import com.acrylic.universal.npc.AbstractPlayerNPCEntity;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.text.ChatUtils;
@@ -31,10 +32,9 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     private PlayerPlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
         entityPlayer = new EntityPlayer(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
-        new PlayerConnection(server, new NetworkManager(EnumProtocolDirection.SERVERBOUND), entityPlayer);
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
-        removeFromTabPacket.apply(entityPlayer, com.acrylic.universal.npc.NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
     }
 
     @Override
@@ -69,6 +69,16 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     }
 
     @Override
+    public void attack(@NotNull LivingEntity victim) {
+        entityPlayer.attack(NMSBukkitConverter.convertToNMSEntity(victim));
+    }
+
+    @Override
+    public void setGamemode(@NotNull Gamemode gamemode) {
+        entityPlayer.playerInteractManager.b(WorldSettings.EnumGamemode.valueOf(gamemode.getIdentifier()));
+    }
+
+    @Override
     public void setSneaking(boolean flag) {
         entityPlayer.setSneaking(flag);
     }
@@ -97,6 +107,17 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     public void setSkin(@NotNull String texture, @NotNull String signature) {
         GameProfile gameProfile = entityPlayer.getProfile();
         gameProfile.getProperties().put("textures", new Property("textures", texture, signature));
+    }
+
+    @Override
+    public void addToWorld(@NotNull WorldServer worldServer) {
+        NetworkManager com = new NetworkManager(EnumProtocolDirection.CLIENTBOUND);
+        PlayerConnection playerConnection = new PlayerConnection(NMSBukkitConverter.getMCServer(), com, entityPlayer);
+        com.a(playerConnection);
+        /** PlayerList playerList = ((CraftServer) Bukkit.getServer()).getHandle();
+        * playerList.players.add(entityPlayer);
+        * playerList.a(entityPlayer, worldServer);**/
+        super.addToWorld(worldServer);
     }
 
     @Override
