@@ -1,4 +1,4 @@
-package com.acrylic.universal.players;
+package com.acrylic.universal.enums;
 
 import org.jetbrains.annotations.NotNull;
 

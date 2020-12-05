@@ -3,7 +3,7 @@ package com.acrylic.universal.npc;
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
-import com.acrylic.universal.players.Gamemode;
+import com.acrylic.universal.enums.Gamemode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -19,10 +19,6 @@ public interface AbstractPlayerNPCEntity extends NMSLivingEntityAnimator {
     void setSprinting(boolean flag);
 
     void setVisible(boolean flag);
-
-    default void setSleeping(boolean flag) {
-        setDataWatcherEntityAnimation((byte) 14, flag);
-    }
 
     default void setBowFoodUse(boolean flag) {
         setDataWatcherEntityAnimation((byte) 16, flag);

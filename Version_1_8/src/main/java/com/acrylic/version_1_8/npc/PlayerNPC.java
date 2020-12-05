@@ -2,9 +2,10 @@ package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
+import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.npc.AbstractPlayerNPCEntity;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
-import com.acrylic.universal.players.Gamemode;
+import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -21,16 +22,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayerNPCEntity {
+public class PlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayerNPCEntity {
 
     private final EntityPlayer entityPlayer;
     private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
 
-    public PlayerPlayerNPC(@NotNull Location location, @Nullable String name) {
+    public PlayerNPC(@NotNull Location location, @Nullable String name) {
         this(NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
     }
 
-    private PlayerPlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
+    private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
         entityPlayer = new EntityPlayer(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
@@ -77,6 +78,7 @@ public class PlayerPlayerNPC extends NMSLivingEntityAnimator implements Abstract
     @Override
     public void attack(@NotNull LivingEntity victim) {
         entityPlayer.attack(NMSBukkitConverter.convertToNMSEntity(victim));
+        animate(EntityAnimationEnum.ARM_SWING);
     }
 
     @Override

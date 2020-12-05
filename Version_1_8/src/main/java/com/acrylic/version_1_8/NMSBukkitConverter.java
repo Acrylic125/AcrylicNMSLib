@@ -1,9 +1,6 @@
 package com.acrylic.version_1_8;
 
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.TileEntity;
-import net.minecraft.server.v1_8_R3.WorldServer;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -14,6 +11,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +38,12 @@ public final class NMSBukkitConverter {
         return entity.getHandle().getBukkitEntity();
     }
 
-    public static net.minecraft.server.v1_8_R3.Entity convertToNMSEntity(Entity entity) {
+    public static net.minecraft.server.v1_8_R3.Entity convertToNMSEntity(@NotNull Entity entity) {
         return ((CraftEntity) entity).getHandle();
+    }
+
+    public static EntityLiving convertToNMSEntity(@NotNull LivingEntity entity) {
+        return (EntityLiving) convertToNMSEntity((Entity) entity);
     }
 
     public static TileEntity convertToNMSTileEntity(Block block) {

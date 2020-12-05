@@ -1,12 +1,13 @@
 package com.acrylic.version_1_8.packets;
 
+import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.exceptions.IncompatibleEntityType;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityAnimationPackets
@@ -15,19 +16,10 @@ public class EntityAnimationPackets
 
     private Packet<?>[] packets;
 
-    public void apply(@NotNull net.minecraft.server.v1_8_R3.Entity entity, @NotNull Animation... animation) {
-        this.packets = packetHelper(entity, animation);
-    }
-
-    @Override
-    public void apply(@NotNull Entity entity, @NotNull Animation... animation) {
-        apply(NMSBukkitConverter.convertToNMSEntity(entity), animation);
-    }
-
-    public Packet<?>[] packetHelper(@NotNull net.minecraft.server.v1_8_R3.Entity entity, @NotNull Animation... animation) {
-        Packet<?>[] packets = new Packet[animation.length];
+    public void apply(@NotNull net.minecraft.server.v1_8_R3.Entity entity, @NotNull EntityAnimationEnum... animation) {
+        packets = new Packet[animation.length];
         int i = 0;
-        for (Animation animationType : animation) {
+        for (EntityAnimationEnum animationType : animation) {
             switch (animationType) {
                 case CRIT:
                     packets[i] = generateCritPacket(entity);
@@ -44,10 +36,23 @@ public class EntityAnimationPackets
                 case HURT:
                     packets[i] = generateHurtPacket(entity);
                     break;
+                case STOP_SLEEPING:
+                    packets[i] = generateStopSleepPacket(entity);
+                    break;
+                case SNEAK:
+                    packets[i] = generateSneakPacket(entity);
+                    break;
+                case STOP_SNEAKING:
+                    packets[i] = generateStopSneakingPacket(entity);
+                    break;
             }
             i++;
         }
-        return packets;
+    }
+
+    @Override
+    public void apply(@NotNull Entity entity, @NotNull EntityAnimationEnum... animation) {
+        apply(NMSBukkitConverter.convertToNMSEntity(entity), animation);
     }
 
     public PacketPlayOutAnimation generateArmSwingPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
@@ -77,11 +82,6 @@ public class EntityAnimationPackets
         return generateMagicCritPacket(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 
-    @Override
-    public PacketPlayOutAnimation generateEatFoodPacket(@NotNull Entity entity) {
-        return null;
-    }
-
     public PacketPlayOutAnimation generateHurtPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
         return new PacketPlayOutAnimation(entity, 1);
     }
@@ -92,9 +92,8 @@ public class EntityAnimationPackets
     }
 
     public PacketPlayOutBed generateSleepPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity, @NotNull Location location) {
-        if (!(entity instanceof EntityHuman)) {
+        if (!(entity instanceof EntityHuman))
             throw new IncompatibleEntityType(entity.getBukkitEntity().getType(), EntityType.PLAYER);
-        }
         return new PacketPlayOutBed((EntityHuman) entity, new BlockPosition(location.getX(), location.getY(), location.getZ()));
     }
 
@@ -112,29 +111,41 @@ public class EntityAnimationPackets
         return generateSleepPacket(entity, entity.getLocation());
     }
 
-    @Override
-    public PacketPlayOutBed generateStopSleepPacket(@NotNull Entity entity) {
-         return null;
+    public PacketPlayOutAnimation generateStopSleepPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
+        return new PacketPlayOutAnimation(entity, 2);
     }
 
     @Override
-    public Object generateSneakPacket(@NotNull Entity entity) {
-        return null;
+    public PacketPlayOutAnimation generateStopSleepPacket(@NotNull Entity entity) {
+         return generateStopSleepPacket(NMSBukkitConverter.convertToNMSEntity(entity));
+    }
+
+    public PacketPlayOutEntityMetadata generateSneakPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity, boolean sneaking) {
+        Entity bukkitEntity = entity.getBukkitEntity();
+        if (!(bukkitEntity instanceof Player))
+            throw new IncompatibleEntityType(entity.getBukkitEntity().getType(), EntityType.PLAYER);
+        ((Player) bukkitEntity).setSneaking(sneaking);
+        EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
+        entityMetaDataPacket.apply(entity);
+        return entityMetaDataPacket.getPacket();
+    }
+
+    public PacketPlayOutEntityMetadata generateSneakPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
+        return generateSneakPacket(entity, true);
     }
 
     @Override
-    public Object generateStopSneakingPacket(@NotNull Entity entity) {
-        return null;
+    public PacketPlayOutEntityMetadata generateSneakPacket(@NotNull Entity entity) {
+        return generateSneakPacket(NMSBukkitConverter.convertToNMSEntity(entity));
+    }
+
+    public PacketPlayOutEntityMetadata generateStopSneakingPacket(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
+        return generateSneakPacket(entity, false);
     }
 
     @Override
-    public Object generateStartUseMainHandItemPacket(@NotNull Entity entity) {
-        return null;
-    }
-
-    @Override
-    public Object generateStopUseMainHandItemPacket(@NotNull Entity entity) {
-        return null;
+    public PacketPlayOutEntityMetadata generateStopSneakingPacket(@NotNull Entity entity) {
+        return generateStopSneakingPacket(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 
     @Override
