@@ -19,17 +19,22 @@ public abstract class PathTraverser {
 
     public abstract PathGenerator getPathGenerator();
 
-    public Block getWalkable(Block block) {
+    public Block getWalkableBlock(Block block) {
         Location location = block.getLocation();
         double y = location.getY();
         PathGenerator pathGenerator = getPathGenerator();
+        Block result = null;
+        BlockExaminer.NavigationStyle currentStyle = null;
         for (int i = -pathGenerator.getSearchDownAmount(); i <= pathGenerator.getSearchUpAmount(); i++) {
             location.setY(y + i);
             Block blockCheck = location.getBlock();
-            if (BlockExaminer.isWalkable(blockCheck))
-                return blockCheck;
+            BlockExaminer.NavigationStyle blockStyle = pathGenerator.getBlockExaminer().getNavigationStyle(blockCheck);
+            if (blockStyle != null && !blockStyle.equals(BlockExaminer.NavigationStyle.NONE) && (currentStyle == null || blockStyle.getWeight() < currentStyle.getWeight())) {
+                currentStyle = blockStyle;
+                result = blockCheck;
+            }
         }
-        return null;
+        return result;
     }
 
 }

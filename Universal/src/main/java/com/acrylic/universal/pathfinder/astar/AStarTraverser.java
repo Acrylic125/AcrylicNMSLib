@@ -24,6 +24,7 @@ public final class AStarTraverser extends PathTraverser {
         this.start = addNodeTo(openNodes, new Node(0, start, end, start));
         this.end = new Node(-1, start, end, end);
         this.pathGenerator = pathGenerator;
+        traverse();
     }
 
     private int getID(Location location) {
@@ -66,7 +67,7 @@ public final class AStarTraverser extends PathTraverser {
             Block referenceBlock = closest.getLocation().getBlock();
             removeNodeFrom(openNodes, closest);
             for (BlockFace face : pathGenerator.getLookUpFaces()) {
-                Block block = getWalkable(referenceBlock.getRelative(face));
+                Block block = getWalkableBlock(referenceBlock.getRelative(face));
                 if (block != null) {
                     Node checkNode = getNodeFrom(openNodes, block);
                     Node newNode = new Node(closest, this, block);
@@ -118,11 +119,11 @@ public final class AStarTraverser extends PathTraverser {
 
     public static class Node {
 
-        private Node parent;
         private final float gCost;
         private final float hCost;
         private final Location location;
         private final int index;
+        private Node parent;
 
         public Node(int index, Block start, Block end, Block block) {
             this.index = index;
@@ -160,7 +161,7 @@ public final class AStarTraverser extends PathTraverser {
         }
 
         public float getFCost() {
-            return gCost + hCost;
+            return (gCost + hCost);
         }
 
         public Location getLocation() {

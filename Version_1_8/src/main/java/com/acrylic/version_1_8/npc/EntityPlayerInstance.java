@@ -15,6 +15,6 @@ public class EntityPlayerInstance extends EntityPlayer {
     @Override
     public void t_() {
         super.t_();
-        Bukkit.broadcastMessage("TT");
+      //  Bukkit.broadcastMessage("TT");
     }
 }
