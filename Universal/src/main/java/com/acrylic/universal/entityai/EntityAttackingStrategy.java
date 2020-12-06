@@ -1,17 +1,24 @@
 package com.acrylic.universal.entityai;
 
+import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public interface EntityAttackingStrategy extends EntityStrategy {
+public interface EntityAttackingStrategy<T extends LivingEntityAnimator> extends EntityStrategy<T> {
+
+    EntityAttackingStrategy<T> setAttackCooldown(long attackCooldown);
 
     long getAttackCooldown();
 
-    long getAttackTime();
-
     void setAttackTime(long time);
 
+    long getAttackTime();
+
+    EntityAttackingStrategy<T> setAttackRange(float attackRange);
+
     float getAttackRange();
+
+    EntityAttackingStrategy<T> setNewTargetDistance(float targetDistance);
 
     float getNewTargetDistance();
 

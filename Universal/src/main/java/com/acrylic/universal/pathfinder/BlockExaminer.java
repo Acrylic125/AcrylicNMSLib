@@ -1,4 +1,4 @@
-package com.acrylic.universal.entityai;
+package com.acrylic.universal.pathfinder;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface BlockExaminer {
+
+    enum WalkType {
+        SWIM, WALK;
+    }
 
     boolean shouldClimb();
 

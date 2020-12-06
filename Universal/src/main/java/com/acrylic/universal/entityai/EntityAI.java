@@ -6,8 +6,12 @@ import org.jetbrains.annotations.Nullable;
 
 public interface EntityAI<T extends LivingEntityAnimator> {
 
+    EntityAI<T> setStrategy(@Nullable EntityStrategy<T> strategy);
+
     @Nullable
     EntityStrategy<T> getStrategy();
+
+    EntityPathfinder<T> setPathfinder(@Nullable EntityPathfinder<T> pathfinder);
 
     @Nullable
     EntityPathfinder<T> getPathfinder();

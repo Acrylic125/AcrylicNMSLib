@@ -1,8 +1,8 @@
-package com.acrylic.version_1_8;
+package com.acrylic.universal.pathfinder.astar;
 
 import com.acrylic.universal.pathfinder.BlockExaminer;
-import lombok.Getter;
-import lombok.Setter;
+import com.acrylic.universal.pathfinder.PathGenerator;
+import com.acrylic.universal.pathfinder.PathTraverser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -11,54 +11,49 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
-@Setter @Getter @Deprecated
-public class AStarTest {
+public final class AStarTraverser extends PathTraverser {
 
-    private static final BlockFace[] faces = new BlockFace[] {
-       BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST
-    } ;
+    private final PathGenerator pathGenerator;
+    private final Node start;
+    private final Node end;
+    private final Map<Integer, Node> openNodes = new HashMap<>();
+    private final Map<Integer, Node> closedNodes = new HashMap<>();
 
-    int y1 = -3;
-    int y2 = 3;
-    int maxThreshold = 50;
-    private Node start;
-    private Node end;
-    private Node computed;
-    private Map<Integer, Node> openNodes = new HashMap<>();
-    private Map<Integer, Node> closedNodes = new HashMap<>();
-
-    public AStarTest(Block start, Block end) {
-        this.start = addNodeTo(openNodes, new Node(start, end, start));
-        this.end = new Node(start, end, end);
+    public AStarTraverser(PathGenerator pathGenerator, Block start, Block end) {
+        this.start = addNodeTo(openNodes, new Node(0, start, end, start));
+        this.end = new Node(-1, start, end, end);
+        this.pathGenerator = pathGenerator;
     }
 
-    public Node getStart() {
-        return start;
+    private int getID(Location location) {
+        return location.hashCode();
     }
 
-    public Node getEnd() {
-        return end;
-    }
-
-    private void removeNodeFrom(Map<Integer, Node> map, @NotNull Node node) {
-        map.remove(node.getLocation().hashCode());
+    private void removeNodeFrom(@NotNull Map<Integer, Node> map, @NotNull Node node) {
+        map.remove(getID(node.getLocation()));
     }
 
     @NotNull
-    private Node addNodeTo(Map<Integer, Node> map, @NotNull Node node) {
-        map.put(node.getLocation().hashCode(), node);
+    private Node addNodeTo(@NotNull Map<Integer, Node> map, @NotNull Node node) {
+        map.put(getID(node.getLocation()), node);
         return node;
     }
 
     @Nullable
-    private Node getNodeFrom(Map<Integer, Node> map, Block block) {
-        return map.get(block.getLocation().hashCode());
+    private Node getNodeFrom(@NotNull Map<Integer, Node> map, @NotNull Block block) {
+        return map.get(getID(block.getLocation()));
     }
 
-   public void traverse() {
+    @Override
+    public PathGenerator getPathGenerator() {
+        return pathGenerator;
+    }
+
+    @Override
+    public void traverse() {
         int i = 0;
+        Node computed = null;
         main: do {
             Node closest = getClosestNode();
             if (closest == null)
@@ -70,7 +65,7 @@ public class AStarTest {
             i++;
             Block referenceBlock = closest.getLocation().getBlock();
             removeNodeFrom(openNodes, closest);
-            for (BlockFace face : faces) {
+            for (BlockFace face : pathGenerator.getLookUpFaces()) {
                 Block block = getWalkable(referenceBlock.getRelative(face));
                 if (block != null) {
                     Node checkNode = getNodeFrom(openNodes, block);
@@ -88,38 +83,29 @@ public class AStarTest {
                         if (checkNode != null) {
                             if (checkNode.getFCost() > current_cost)
                                 addNodeTo(closedNodes, newNode);
-                        } else {
+                        } else
                             addNodeTo(openNodes, newNode);
-                        }
                     }
                 }
             }
             addNodeTo(closedNodes, closest);
             computed = closest;
-        } while (!openNodes.isEmpty() && i <= maxThreshold);
-   }
-
-    private Block getWalkable(Block block) {
-        Location location = block.getLocation();
-        float y = (float) location.getY();
-        for (int i = y1; i <= y2; i++) {
-            location.setY(y + i);
-            Block blockCheck = location.getBlock();
-            if (BlockExaminer.isWalkable(blockCheck))
-                return blockCheck;
-        }
-        return null;
+        } while (!openNodes.isEmpty() && i <= pathGenerator.getLookUpThreshold());
+        computeLocations(computed);
     }
 
-   public void climb(Consumer<Location> action) {
-        Node node = computed;
-        do {
-            if (node != null) {
-                action.accept(node.getLocation());
-                node = node.getParent();
-            }
-        } while (node != null);
-   }
+    private void computeLocations(@Nullable Node computed) {
+        Location[] computedLocations;
+        if (computed != null) {
+            computedLocations = new Location[computed.getIndex() + 1];
+            do {
+                computedLocations[computed.getIndex()] = computed.getLocation();
+                computed = computed.getParent();
+            } while (computed != null);
+        } else
+            computedLocations = new Location[0];
+        setComputedLocations(computedLocations);
+    }
 
     private Node getClosestNode() {
         Node currentNode = null;
@@ -136,22 +122,29 @@ public class AStarTest {
         private final float gCost;
         private final float hCost;
         private final Location location;
+        private final int index;
 
-        public Node(Block start, Block end, Block block) {
+        public Node(int index, Block start, Block end, Block block) {
+            this.index = index;
             this.location = block.getLocation();
             this.gCost = (float) start.getLocation().distanceSquared(location);
             this.hCost = (float) end.getLocation().distanceSquared(location);
         }
 
-        public Node(AStarTest aStarTest, Block block) {
+        public Node(int index, AStarTraverser aStarTest, Block block) {
+            this.index = index;
             this.location = block.getLocation();
-            this.gCost = (float) aStarTest.getStart().getLocation().distanceSquared(location);
-            this.hCost = (float) aStarTest.getEnd().getLocation().distanceSquared(location);
+            this.gCost = (float) aStarTest.start.getLocation().distanceSquared(location);
+            this.hCost = (float) aStarTest.end.getLocation().distanceSquared(location);
         }
 
-        public Node(Node parent, AStarTest aStarTest, Block location) {
-            this(aStarTest, location);
+        public Node(Node parent, AStarTraverser aStarTest, Block location) {
+            this(parent.getIndex() + 1, aStarTest, location);
             this.parent = parent;
+        }
+
+        public int getIndex() {
+            return index;
         }
 
         public Node getParent() {

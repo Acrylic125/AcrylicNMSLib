@@ -33,7 +33,7 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayer
 
     private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
-        entityPlayer = new EntityPlayer(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
+        entityPlayer = new EntityPlayerInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
