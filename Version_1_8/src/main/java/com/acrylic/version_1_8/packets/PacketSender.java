@@ -105,8 +105,10 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     public static void sendPacket(@NotNull Player player, @NotNull Packet<?>... packets) {
         PlayerConnection playerConnection = getPlayerConnection(player);
-        for (Packet<?> packet : packets)
+        for (Packet<?> packet : packets) {
+            Bukkit.broadcastMessage(packet.getClass() + " GGGGGGGGGGGGGGGGGGGGG " + player.getUniqueId());
             sendPacket(playerConnection, packet);
+        }
     }
 
 }

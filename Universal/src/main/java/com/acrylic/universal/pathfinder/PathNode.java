@@ -18,6 +18,13 @@ public abstract class PathNode {
         return getDistanceSquared(node.getLocation());
     }
 
+    /**
+     * This method makes the assumption that the world of location is
+     * the same as the node location's world.
+     *
+     * @param location The location.
+     * @return The distance.
+     */
     public double getDistanceSquared(@NotNull final Location location) {
         return NumberConversions.square(this.location.getX() - location.getX()) +
                 NumberConversions.square(this.location.getY() - location.getY()) +

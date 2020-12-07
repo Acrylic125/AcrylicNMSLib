@@ -1,12 +1,14 @@
 package com.acrylic.version_1_8;
 
 import com.acrylic.universal.Universal;
+import com.acrylic.universal.animations.rotational.HandRotationAnimation;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
+import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
 import org.bukkit.Bukkit;
@@ -25,7 +27,21 @@ public final class Version_1_8 {
                 .setTimerActive(true)
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
-                    AStarGenerator aStarGenerator = new AStarGenerator();
+
+                    NMSArmorStandAnimator nmsArmorStandAnimator = new NMSArmorStandAnimator(sender.getLocation());
+                    nmsArmorStandAnimator.setEquipment(new EntityEquipmentBuilder().setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build()));
+                    nmsArmorStandAnimator.show();
+
+                    Location location = sender.getLocation();
+                    HandRotationAnimation handRotationAnimation = new HandRotationAnimation(nmsArmorStandAnimator);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            handRotationAnimation.teleport(location);
+                        }
+                    }.runTaskTimer(Universal.getPlugin(), 1, 1);
+
+                    /**AStarGenerator aStarGenerator = new AStarGenerator();
                     aStarGenerator
                             .setLookUpThreshold(30)
                             .setSearchDownAmount(5)
@@ -75,7 +91,7 @@ public final class Version_1_8 {
                             }
                         }
                     }.runTaskTimer(Universal.getPlugin(), 1, 1);
-
+                    **/
                 });
     }
 

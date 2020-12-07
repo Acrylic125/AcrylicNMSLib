@@ -3,35 +3,31 @@ package com.acrylic.version_1_8.entityanimator;
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.version_1_8.NMSBukkitConverter;
-import net.minecraft.server.v1_8_R3.EntityArmorStand;
+import net.minecraft.server.v1_8_R3.EntityGiantZombie;
 import net.minecraft.server.v1_8_R3.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ArmorStandEntityInstance extends EntityArmorStand implements LivingEntityInstance {
+public class GiantEntityInstance extends EntityGiantZombie implements LivingEntityInstance {
 
-    private EntityAI<NMSArmorStandAnimator> entityAI;
-    private NMSArmorStandAnimator armorStandAnimator;
+    private EntityAI<NMSGiantAnimator> entityAI;
+    private NMSGiantAnimator giantAnimator;
 
-    public ArmorStandEntityInstance(org.bukkit.World world) {
+    public GiantEntityInstance(org.bukkit.World world) {
         this(NMSBukkitConverter.convertToNMSWorld(world));
     }
 
-    public ArmorStandEntityInstance(World world) {
+    public GiantEntityInstance(World world) {
         super(world);
-    }
-
-    public ArmorStandEntityInstance(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
     }
 
     @Override
     public void tickingEntity() {
-       // if (this.entityAI != null && armorStandAnimator != null)
-        //    this.entityAI.update(armorStandAnimator);
+        if (this.entityAI != null && giantAnimator != null)
+            this.entityAI.update(giantAnimator);
     }
 
-    public void setAi(@NotNull EntityAI<NMSArmorStandAnimator> ai) {
+    public void setAi(@NotNull EntityAI<NMSGiantAnimator> ai) {
         this.entityAI = ai;
     }
 
@@ -43,7 +39,7 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
             return;
         }
         try {
-            this.entityAI = (EntityAI<NMSArmorStandAnimator>) ai;
+            this.entityAI = (EntityAI<NMSGiantAnimator>) ai;
         } catch (ClassCastException ex) {
             throw new IllegalStateException("THe AI specified must be of " + NMSArmorStandAnimator.class.getName() + ".");
         }
@@ -55,32 +51,32 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
         return this.entityAI;
     }
 
-    public void setAnimator(@Nullable NMSArmorStandAnimator animator) {
-        this.armorStandAnimator = animator;
+    public void setAnimator(@Nullable NMSGiantAnimator animator) {
+        this.giantAnimator = animator;
     }
 
     @Override
     public void setAnimator(@Nullable NMSLivingEntityAnimator animator) {
         if (animator == null) {
-            this.armorStandAnimator = null;
+            this.giantAnimator = null;
             return;
         }
-        if (animator instanceof NMSArmorStandAnimator)
-           this.armorStandAnimator = (NMSArmorStandAnimator) animator;
+        if (animator instanceof NMSGiantAnimator)
+           this.giantAnimator = (NMSGiantAnimator) animator;
         else
-            throw new IllegalStateException("THe Animator specified must be of " + NMSArmorStandAnimator.class.getName() + ".");
+            throw new IllegalStateException("THe Animator specified must be of " + NMSGiantAnimator.class.getName() + ".");
     }
 
 
     @Override
-    public EntityArmorStand getNMSEntity() {
+    public EntityGiantZombie getNMSEntity() {
         return this;
     }
 
     @NotNull
     @Override
-    public NMSArmorStandAnimator getAnimatior() {
-        return armorStandAnimator;
+    public NMSGiantAnimator getAnimatior() {
+        return giantAnimator;
     }
 
     @Override

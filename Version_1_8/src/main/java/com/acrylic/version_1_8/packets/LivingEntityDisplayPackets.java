@@ -8,25 +8,28 @@ import net.minecraft.server.v1_8_R3.EntityLiving;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LivingEntityDisplayPackets extends PacketSender implements com.acrylic.universal.packets.LivingEntityDisplayPackets {
+public class LivingEntityDisplayPackets
+        extends PacketSender
+        implements com.acrylic.universal.packets.LivingEntityDisplayPackets {
 
     private final EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
     protected Packet<?>[] packets;
 
     public void setupDisplayPackets(@NotNull EntityLiving entity, @Nullable EntityEquipmentPackets equipmentPackets) {
-        entityMetaDataPacket.apply(entity);
         PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entity);
+        entityMetaDataPacket.apply(entity);
         if (equipmentPackets instanceof com.acrylic.version_1_8.packets.EntityEquipmentPackets) {
             com.acrylic.version_1_8.packets.EntityEquipmentPackets entityEquipmentPackets = (com.acrylic.version_1_8.packets.EntityEquipmentPackets) equipmentPackets;
             entityEquipmentPackets.apply(entity);
             PacketPlayOutEntityEquipment[] equipment = entityEquipmentPackets.getPackets();
             packets = new Packet[equipment.length + 2];
-            packets[0] = entityMetaDataPacket.getPacket();
-            packets[1] = packetPlayOutSpawnEntityLiving;
+            packets[0] = packetPlayOutSpawnEntityLiving;
+            packets[1] = entityMetaDataPacket.getPacket();
             short i = 1;
             for (PacketPlayOutEntityEquipment packetPlayOutEntityEquipment : equipment) {
                 i++;
@@ -34,8 +37,8 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
             }
         } else if (equipmentPackets == null) {
             packets = new Packet[] {
+                    packetPlayOutSpawnEntityLiving,
                     entityMetaDataPacket.getPacket(),
-                    packetPlayOutSpawnEntityLiving
             };
         } else
             throw new IncompatibleVersion(equipmentPackets.getClass(), getClass());
@@ -49,7 +52,7 @@ public class LivingEntityDisplayPackets extends PacketSender implements com.acry
 
     @Override
     public void setupDisplayPackets(@NotNull LivingEntity entity, @Nullable EntityEquipmentPackets equipmentPackets) {
-        setupDisplayPackets((EntityLiving) NMSBukkitConverter.convertToNMSEntity(entity), equipmentPackets);
+        setupDisplayPackets(NMSBukkitConverter.convertToNMSEntity(entity), equipmentPackets);
     }
 
     @Override

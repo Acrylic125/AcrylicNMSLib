@@ -3,6 +3,7 @@ package com.acrylic.universal.emtityanimator;
 import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.packets.*;
 import com.acrylic.universal.renderer.PacketRenderer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -45,7 +46,8 @@ public interface NMSEntityAnimator extends EntityAnimator {
 
     default void sendPacketsViaRenderer(@NotNull PacketSender packetSender) {
         PacketRenderer packetRenderer = getRenderer();
-        if (packetRenderer == null) packetSender.sendAll();
+        if (packetRenderer == null)
+            packetSender.sendAll();
         else getRenderer().send(packetSender);
     }
 

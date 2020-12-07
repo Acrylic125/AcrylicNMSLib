@@ -11,12 +11,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class NMSGiantAnimator extends NMSLivingEntityAnimator implements AbstractGiantAnimator {
 
-    private final EntityGiantZombie nmsEntity;
+    private final GiantEntityInstance nmsEntity;
+
+    public NMSGiantAnimator(@NotNull GiantEntityInstance giantZombie) {
+        super();
+        this.nmsEntity = giantZombie;
+    }
+
+    public NMSGiantAnimator(@NotNull GiantEntityInstance giantZombie, @NotNull Location location) {
+        this(giantZombie);
+        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
+    }
 
     public NMSGiantAnimator(@NotNull Location location) {
-        super(location);
-        nmsEntity = new EntityGiantZombie(NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
-        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
+        this(new GiantEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
     }
 
     @Override
-    public LivingEntityInstance getEntityInstance() {
-        return null;
+    public GiantEntityInstance getEntityInstance() {
+        return nmsEntity;
     }
 }
