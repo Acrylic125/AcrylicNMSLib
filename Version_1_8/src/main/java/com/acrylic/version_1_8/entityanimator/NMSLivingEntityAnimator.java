@@ -18,8 +18,8 @@ public abstract class NMSLivingEntityAnimator
     private EntityEquipmentPackets equipmentPackets;
     private final EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
 
-    public NMSLivingEntityAnimator(@NotNull Location location) {
-        super(location);
+    public NMSLivingEntityAnimator() {
+        super();
     }
 
     public NMSLivingEntityAnimator(@NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
@@ -59,48 +59,8 @@ public abstract class NMSLivingEntityAnimator
     }
 
     @Override
-    public void knockback(@NotNull LivingEntity entity) {
-        knockback(NMSBukkitConverter.convertToNMSEntity(entity));
-    }
-
-    @Override
     public void damageEffect(@NotNull LivingEntity attacker) {
         animate(EntityAnimationEnum.HURT);
-    }
-
-    private void damage(EntityLiving victim, EntityLiving nmsLivingAttacker, float baseDamage) {
-        boolean flag = victim.damageEntity(DamageSource.mobAttack(nmsLivingAttacker), baseDamage);
-        if (flag) {
-            int fireAspectLevel = EnchantmentManager.getFireAspectEnchantmentLevel(nmsLivingAttacker);
-            if (fireAspectLevel > 0)
-                victim.setOnFire(fireAspectLevel * 4);
-        }
-    }
-
-
-    @Override
-    public void damage(@NotNull LivingEntity attacker, float amount) {
-        damage(getNMSEntity(), NMSBukkitConverter.convertToNMSEntity(attacker), amount);
-    }
-
-    @Override
-    public void damage(@NotNull LivingEntity attacker) {
-        EntityLiving nmsAttacker = NMSBukkitConverter.convertToNMSEntity(attacker);
-        EntityLiving victim = getNMSEntity();
-        if (nmsAttacker instanceof EntityPlayer) {
-            EntityPlayer entityLiving = (EntityPlayer) nmsAttacker;
-            entityLiving.attack(victim);
-        } else {
-            AttributeInstance attackDamage = nmsAttacker.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE);
-            float baseDamage = (float) (attackDamage == null ? 1.0f : attackDamage.getValue());
-            baseDamage += EnchantmentManager.a(nmsAttacker.bA(), victim.getMonsterType());
-            damage(victim, nmsAttacker, baseDamage);
-        }
-    }
-
-    @Override
-    public void damage(float damage) {
-        getNMSEntity().damageEntity(DamageSource.GENERIC, damage);
     }
 
     @Override

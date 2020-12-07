@@ -73,7 +73,9 @@ public abstract class AbstractPathGenerator implements PathGenerator {
 
     @Override
     public Location[] traverseAndCompute(@NotNull Location start, @NotNull Location end) {
-        return getPathTraverser(start, end).getComputedLocations();
+        PathTraverser traverser = getPathTraverser(start, end);
+        traverser.traverse();
+        return traverser.getComputedLocations();
     }
 
     @NotNull

@@ -19,7 +19,7 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
     private final TeleportPacket teleportPacket = new TeleportPacket();
     private PacketRenderer packetRenderer;
 
-    public NMSEntityAnimator(@NotNull Location location) {
+    public NMSEntityAnimator() {
         this(new LivingEntityDisplayPackets());
     }
 
@@ -50,6 +50,15 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
         addToWorld(NMSBukkitConverter.convertToWorldServer(world));
     }
 
+    public void removeFromWorld(@NotNull WorldServer worldServer) {
+        worldServer.removeEntity(getNMSEntity());
+    }
+
+    @Override
+    public void removeFromWorld(@NotNull World world) {
+        removeFromWorld(NMSBukkitConverter.convertToWorldServer(world));
+    }
+
     @NotNull
     @Override
     public TeleportPacket getTeleportPacket() {
@@ -67,4 +76,5 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
     public LivingEntityDisplayPackets getDisplayPackets() {
         return displayPackets;
     }
+
 }

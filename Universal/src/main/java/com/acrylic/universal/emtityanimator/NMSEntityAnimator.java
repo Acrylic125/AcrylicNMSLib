@@ -14,11 +14,15 @@ public interface NMSEntityAnimator extends EntityAnimator {
 
     Object getNMSEntity();
 
+    EntityInstance getEntityInstance();
+
     PacketRenderer getRenderer();
 
     void setRenderer(PacketRenderer packetRenderer);
 
     void addToWorld(@NotNull World world);
+
+    void removeFromWorld(@NotNull World world);
 
     default void addToWorld() {
         addToWorld(getBukkitEntity().getWorld());
@@ -63,5 +67,6 @@ public interface NMSEntityAnimator extends EntityAnimator {
         EntityDestroyPacket destroyPacket = getDestroyPacket();
         destroyPacket.delete(getBukkitEntity());
         sendPacketsViaRenderer(destroyPacket);
+        removeFromWorld(getBukkitEntity().getWorld());
     }
 }

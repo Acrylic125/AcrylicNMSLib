@@ -8,7 +8,7 @@ import java.util.*;
 public class SimpleNPCHandler implements NPCHandler {
 
     private final SimpleNPCSkinMap npcSkinMap = new SimpleNPCSkinMap();
-    private final Map<Integer, AbstractPlayerNPCEntity> NPCs = new HashMap<>();
+    private final Map<Integer, PlayerNPCEntity> NPCs = new HashMap<>();
     private final List<NPCTabRemoverEntry> entries = new LinkedList<>();
 
     public SimpleNPCHandler() {
@@ -32,7 +32,7 @@ public class SimpleNPCHandler implements NPCHandler {
     }
 
     @Override
-    public Map<Integer, AbstractPlayerNPCEntity> getNPCs() {
+    public Map<Integer, PlayerNPCEntity> getNPCs() {
         return NPCs;
     }
 

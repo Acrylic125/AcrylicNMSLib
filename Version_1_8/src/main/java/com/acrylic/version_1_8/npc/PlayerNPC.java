@@ -1,9 +1,10 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.enums.EntityAnimationEnum;
-import com.acrylic.universal.npc.AbstractPlayerNPCEntity;
+import com.acrylic.universal.npc.PlayerNPCEntity;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.text.ChatUtils;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayerNPCEntity {
+public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntity {
 
     private final EntityPlayer entityPlayer;
     private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
@@ -37,6 +38,7 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayer
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
+       // entityPlayer.noclip = true;
     }
 
     @Override
@@ -126,6 +128,17 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements AbstractPlayer
         * playerList.players.add(entityPlayer);
         * playerList.a(entityPlayer, worldServer);**/
         super.addToWorld(worldServer);
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+        entityPlayer.die();
+    }
+
+    @Override
+    public LivingEntityInstance getEntityInstance() {
+        return null;
     }
 
     @Override

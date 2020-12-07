@@ -29,7 +29,7 @@ public interface BlockExaminer {
 
     boolean isFenceGate(@NotNull Block block);
 
-    boolean isTransparent(@NotNull Block block);
+    boolean isTraversable(@NotNull Block block);
 
     boolean isLiquid(@NotNull Block block);
 

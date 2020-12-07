@@ -1,6 +1,5 @@
 package com.acrylic.universal.pathfinder;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -12,6 +11,7 @@ public class SimpleBlockExaminer implements BlockExaminer {
     public boolean isDoor(@NotNull Block block) {
         switch (block.getType()) {
             case WOOD_DOOR:
+            case WOODEN_DOOR:
             case BIRCH_DOOR:
             case SPRUCE_DOOR:
             case JUNGLE_DOOR:
@@ -40,7 +40,7 @@ public class SimpleBlockExaminer implements BlockExaminer {
     }
 
     @Override
-    public boolean isTransparent(@NotNull Block block) {
+    public boolean isTraversable(@NotNull Block block) {
         Material type = block.getType();
         return BlockExaminer.isAir(type) || !type.isSolid() || isDoor(block) || isFenceGate(block);
     }
@@ -58,10 +58,9 @@ public class SimpleBlockExaminer implements BlockExaminer {
     @Override
     public NavigationStyle getNavigationStyle(@NotNull Block block) {
         Block up = block.getRelative(BlockFace.UP);
-        if (isTransparent(up) && isTransparent(block)) {
-            if (isLiquid(block)) {
+        if (isTraversable(up) && isTraversable(block)) {
+            if (isLiquid(block))
                 return isLiquid(up) ? NavigationStyle.SWIM : NavigationStyle.CASUAL_SWIM;
-            }
             else if (isClimbable(block))
                 return NavigationStyle.CLIMB;
             else if (block.getRelative(BlockFace.DOWN).getType().isSolid())
@@ -72,7 +71,7 @@ public class SimpleBlockExaminer implements BlockExaminer {
 
     @Override
     public boolean canPassThrough(@NotNull Block block) {
-        return isTransparent(block.getRelative(BlockFace.UP)) && isTransparent(block);
+        return isTraversable(block.getRelative(BlockFace.UP)) && isTraversable(block);
     }
 
 

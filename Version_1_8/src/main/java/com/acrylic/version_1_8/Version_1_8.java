@@ -4,7 +4,7 @@ import com.acrylic.universal.Universal;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.enums.Gamemode;
-import com.acrylic.universal.pathfinder.SimpleBlockExaminer;
+import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
@@ -44,37 +44,34 @@ public final class Version_1_8 {
                     npc.setGamemode(Gamemode.SURVIVAL);
                     npc.show();
                     npc.setSprinting(true);
-                    Location[] locations = aStarGenerator.traverseAndCompute(sender.getLocation(), sender.getLocation().add(30, 0, 30));
-                    new BukkitRunnable() {
-                        float s = 5f;
-                        int i = 0;
-                        int h = 0;
-                        int b4i2 = 0;
+                     new BukkitRunnable() {
+                         Location[] locations = aStarGenerator.traverseAndCompute(npc.getLocation(), sender.getLocation());
+                         final float s = 4f;
+                        float i = 0;
                         @Override
                         public void run() {
-                            int i2 = (int) Math.floor(i / s);
-                            if (i2 >= locations.length - 1) {
-                                cancel();
+                            if (i >= locations.length - 1) {
+                                locations = aStarGenerator.traverseAndCompute(npc.getLocation(), sender.getLocation());
+                                //npc.delete();
+                                i = 0;
+                                //cancel();
                             } else {
-                                if (i2 > 0) {
-                                    // sender.sendBlockChange(locations[i2], Material.GOLD_BLOCK, (byte) 0);
-                                    if (b4i2 != i2) {
-                                        b4i2 = i2;
-                                        h = 0;
-                                    }
-                                    Location before = locations[i2 - 1];
-                                    Location now = locations[i2];
-                                    h++;
-                                    Vector dV = now.toVector().add(before.toVector().multiply(-1));
-                                    if (dV.getY() > 0) {
-                                        npc.setVelocity(0, 0.5, 0);
-                                    } else {
-                                        npc.setVelocity(0, -0.5, 0);
-                                    }
-                                    dV.multiply(h / s);
-                                    npc.teleport(before.clone().add(dV));
+                                Location now = locations[(int) Math.floor(i)];
+                                Location loc = npc.getLocation();
+                                Vector dV = now.toVector().add(loc.toVector().multiply(-1));
+                                loc.setDirection(dV.clone().normalize());
+                                npc.teleport(loc);
+                                if (dV.getY() > 0 || (BlockExaminer.isLiquid(loc.getBlock().getType()))) {
+                                    dV.setY(dV.getY() + ((BlockExaminer.isLiquid(loc.getBlock().getType())) ? 0.1f : 1));
+                                } else if (!npc.getNMSEntity().onGround) {
+                                    dV.setY(dV.getY() - 1f);
                                 }
-                                i++;
+                                npc.attack(sender);
+                                dV.multiply(1f / s);
+                                npc.getNMSEntity().noclip = now.getBlock().getType().equals(Material.WOODEN_DOOR);
+                                npc.setVelocity(dV);
+                                i += 1f / s;
+                              //  Bukkit.broadcastMessage(npc.getNMSEntity().onGround + "");
                             }
                         }
                     }.runTaskTimer(Universal.getPlugin(), 1, 1);

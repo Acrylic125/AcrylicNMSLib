@@ -8,7 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public interface AbstractPlayerNPCEntity extends NMSLivingEntityAnimator {
+public interface PlayerNPCEntity extends NMSLivingEntityAnimator {
 
     void attack(@NotNull LivingEntity victim);
 

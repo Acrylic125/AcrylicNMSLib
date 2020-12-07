@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.universal.entityanimations.entities.AbstractGiantAnimator;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityGiantZombie;
@@ -32,5 +33,10 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
     @Override
     public Giant getBukkitEntity() {
         return (Giant) nmsEntity.getBukkitEntity();
+    }
+
+    @Override
+    public LivingEntityInstance getEntityInstance() {
+        return null;
     }
 }

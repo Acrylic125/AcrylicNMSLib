@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.universal.entityanimations.entities.AbstractArmorStandAnimator;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
@@ -13,10 +14,18 @@ public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements Ab
 
     private final EntityArmorStand nmsEntity;
 
-    public NMSArmorStandAnimator(@NotNull Location location) {
-        super(location);
-        nmsEntity = new EntityArmorStand(NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
+    public NMSArmorStandAnimator(@NotNull EntityArmorStand armorStand) {
+        super();
+        this.nmsEntity = armorStand;
+    }
+
+    public NMSArmorStandAnimator(@NotNull EntityArmorStand armorStand, @NotNull Location location) {
+        this(armorStand);
         nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
+    }
+
+    public NMSArmorStandAnimator(@NotNull Location location) {
+        this(new EntityArmorStand(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
     }
 
     private Vector3f toVector3f(@NotNull EulerAngle eulerAngle) {
@@ -97,5 +106,10 @@ public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements Ab
     @Override
     public ArmorStand getBukkitEntity() {
         return (ArmorStand) getNMSEntity().getBukkitEntity();
+    }
+
+    @Override
+    public LivingEntityInstance getEntityInstance() {
+        return null;
     }
 }

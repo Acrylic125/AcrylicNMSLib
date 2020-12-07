@@ -20,17 +20,12 @@ public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntity
         setVelocity(velocity.getX(), velocity.getY(), velocity.getZ());
     }
 
-    void knockback(@NotNull LivingEntity entity);
+    @Override
+    LivingEntityInstance getEntityInstance();
 
     EntityAnimationPackets getAnimationPackets();
 
     void damageEffect(@NotNull LivingEntity attacker);
-
-    void damage(@NotNull LivingEntity attacker);
-
-    void damage(@NotNull LivingEntity attacker, float amount);
-
-    void damage(float damage);
 
     EntityEquipmentPackets getEquipmentPackets();
 
