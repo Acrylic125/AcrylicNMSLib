@@ -1,10 +1,13 @@
 package com.acrylic.acrylicnms;
 
 import com.acrylic.universal.Universal;
+import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.text.ChatUtils;
+import com.acrylic.version_1_8.EntityRegistry;
 import com.acrylic.version_1_8.Version_1_8;
+import com.acrylic.version_1_8.entityanimator.ArmorStandEntityInstance;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AcrylicNMS extends JavaPlugin {
@@ -12,6 +15,8 @@ public final class AcrylicNMS extends JavaPlugin {
     @Override
     public void onEnable() {
         registerTestCommand();
+        UniversalNMS.setEntityRegistry(new EntityRegistry());
+        UniversalNMS.getEntityRegistry().setupDefaults();
     }
 
     @Override

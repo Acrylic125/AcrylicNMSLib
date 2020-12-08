@@ -1,13 +1,13 @@
 package com.acrylic.version_1_8.entityanimator;
 
-import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.universal.entityanimations.entities.AbstractGiantAnimator;
+import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
-import net.minecraft.server.v1_8_R3.EntityGiantZombie;
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.Location;
 import org.bukkit.entity.Giant;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class NMSGiantAnimator extends NMSLivingEntityAnimator implements AbstractGiantAnimator {
 
@@ -28,8 +28,27 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
     }
 
     @Override
-    public AbstractGiantAnimator ai(boolean b) {
+    public NMSGiantAnimator ai(boolean b) {
         nmsEntity.ai = b;
+        return this;
+    }
+
+    @Override
+    public NMSGiantAnimator visible(boolean b) {
+        nmsEntity.setInvisible(!b);
+        return this;
+    }
+
+    @Override
+    public NMSGiantAnimator name(@Nullable String name) {
+        if (name != null)
+            nmsEntity.setCustomName(ChatUtils.get(name));
+        return this;
+    }
+
+    @Override
+    public NMSGiantAnimator nameVisible(boolean b) {
+        nmsEntity.setCustomNameVisible(b);
         return this;
     }
 

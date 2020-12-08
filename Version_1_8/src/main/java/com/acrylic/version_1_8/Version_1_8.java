@@ -9,6 +9,7 @@ import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
+import com.acrylic.version_1_8.entityanimator.NMSGiantAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
 import org.bukkit.Bukkit;
@@ -28,12 +29,12 @@ public final class Version_1_8 {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
 
-                    NMSArmorStandAnimator nmsArmorStandAnimator = new NMSArmorStandAnimator(sender.getLocation());
-                    nmsArmorStandAnimator.setEquipment(new EntityEquipmentBuilder().setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build()));
-                    nmsArmorStandAnimator.show();
+                    NMSGiantAnimator nmsArmorStandAnimator = new NMSGiantAnimator(sender.getLocation());
+                    nmsArmorStandAnimator.upsideDown(true).asAnimator().setEquipment(new EntityEquipmentBuilder().setItemInHand(ItemBuilder.of(Material.ENDER_CHEST).build()));
 
                     Location location = sender.getLocation();
                     HandRotationAnimation handRotationAnimation = new HandRotationAnimation(nmsArmorStandAnimator);
+                    nmsArmorStandAnimator.show();
                     new BukkitRunnable() {
                         @Override
                         public void run() {

@@ -7,10 +7,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-@CustomEntity(name = "Test",
-        entityType = EntityType.ARMOR_STAND,
-        thisClass = PlayerEntry.class,
-        entityTypeNMSClass = PlayerEntry.class)
 public abstract class PlayerEntry {
 
     private final Player player;

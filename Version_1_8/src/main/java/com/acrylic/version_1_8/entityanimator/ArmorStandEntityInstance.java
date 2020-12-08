@@ -2,12 +2,17 @@ package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.loaders.CustomEntity;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.World;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@CustomEntity(name = "ArmorStandInstance",
+        entityType = EntityType.ARMOR_STAND,
+        entityTypeNMSClass = EntityArmorStand.class)
 public class ArmorStandEntityInstance extends EntityArmorStand implements LivingEntityInstance {
 
     private EntityAI<NMSArmorStandAnimator> entityAI;
@@ -27,8 +32,8 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
 
     @Override
     public void tickingEntity() {
-       // if (this.entityAI != null && armorStandAnimator != null)
-        //    this.entityAI.update(armorStandAnimator);
+        if (this.entityAI != null && armorStandAnimator != null)
+            this.entityAI.update(armorStandAnimator);
     }
 
     public void setAi(@NotNull EntityAI<NMSArmorStandAnimator> ai) {

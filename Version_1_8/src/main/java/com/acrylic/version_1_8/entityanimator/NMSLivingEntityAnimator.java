@@ -2,12 +2,10 @@ package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.enums.EntityAnimationEnum;
-import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.packets.EntityAnimationPackets;
 import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Location;
+import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,17 +43,6 @@ public abstract class NMSLivingEntityAnimator
     @Override
     public EntityAnimationPackets getAnimationPackets() {
         return entityAnimationPackets;
-    }
-
-    public void knockback(EntityLiving nmsLivingAttacker) {
-        int knockback = 1;
-        knockback += EnchantmentManager.a(nmsLivingAttacker);
-        if (knockback > 0) {
-            float x = (float) (-Math.sin(Math.toRadians(nmsLivingAttacker.yaw)) * knockback * 0.5f * 0.6f);
-            float y = 0.1f;
-            float z = (float) (Math.cos(Math.toRadians(nmsLivingAttacker.yaw)) * knockback * 0.5f * 0.6f);
-            setVelocity(x, y, z);
-        }
     }
 
     @Override

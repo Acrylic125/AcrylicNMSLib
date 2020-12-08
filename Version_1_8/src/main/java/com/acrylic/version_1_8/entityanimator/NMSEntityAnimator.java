@@ -27,7 +27,6 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
         displayPackets = livingEntityDisplayPackets;
     }
 
-
     @Override
     public abstract Entity getNMSEntity();
 

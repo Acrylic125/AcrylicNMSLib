@@ -2,12 +2,18 @@ package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.loaders.CustomEntity;
 import com.acrylic.version_1_8.NMSBukkitConverter;
+import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.EntityGiantZombie;
 import net.minecraft.server.v1_8_R3.World;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@CustomEntity(name = "GiantInstance",
+        entityType = EntityType.GIANT,
+        entityTypeNMSClass = EntityGiantZombie.class)
 public class GiantEntityInstance extends EntityGiantZombie implements LivingEntityInstance {
 
     private EntityAI<NMSGiantAnimator> entityAI;

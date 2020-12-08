@@ -3,6 +3,12 @@ package com.acrylic.universal.loaders;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Custom entities needs to be registered direcctly to Minecraft.
+ *
+ * You may make use of the {@link CustomEntity} annotation to
+ * create custom entities.
+ */
 public interface EntityRegistry {
 
     /**
@@ -28,6 +34,8 @@ public interface EntityRegistry {
         }
     }
 
+    void setupDefaults();
+
     default void registerEntity(Class<?> entityClass) throws InvalidEntityRegistry {
         CustomEntity annotation = entityClass.getAnnotation(CustomEntity.class);
         if (annotation != null) {
@@ -39,7 +47,8 @@ public interface EntityRegistry {
                     throw new InvalidEntityRegistry(entityClass, "The specified class entity id is not supported. Please specify a specific ID.");
             }
             registerEntity(id, annotation.name(), entityType, entityClass, annotation.entityTypeNMSClass());
-        }
+        } else
+            throw new InvalidEntityRegistry(entityClass, "The class does not have the @CustomEntity annotation.");
     }
 
     void registerEntity(int id, String name, EntityType entityType, Class<?> mainClass, Class<?> nmsEntityClass) throws InvalidEntityRegistry;
