@@ -1,10 +1,32 @@
 package com.acrylic.universal.entityai;
 
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface EntityFollowingStrategy<T extends LivingEntityAnimator> extends EntityStrategy<T> {
+import java.util.List;
+
+public interface EntityFollowingStrategy<T extends LivingEntityAnimator>
+        extends EntityStrategy<T> {
+
+    boolean canFollow(@NotNull LivingEntity entity);
+
+    List<LivingEntity> getPossibleTargets(@NotNull Location location);
+
+    void setSearchForNewTargetTime(long time);
+
+    long getSearchForNewTargetTime();
+
+    default boolean shouldSearchForTarget() {
+        return System.currentTimeMillis() > getSearchForNewTargetTime();
+    }
+
+    void setSearchForNewTargetTimeCooldown(long cooldown);
+
+    long getSearchForNewTargetTimeCooldown();
 
     EntityFollowingStrategy<T> setNewTargetDistance(float targetDistance);
 
@@ -14,8 +36,13 @@ public interface EntityFollowingStrategy<T extends LivingEntityAnimator> extends
      */
     float getNewTargetDistance();
 
-    void setTarget(@NotNull LivingEntity entity);
+    EntityFollowingStrategy<T> setDistanceFromTargetToSwitch(float distanceFromTargetToSwitch);
 
+    float getDistanceFromTargetToSwitch();
+
+    void setTarget(@Nullable LivingEntity entity);
+
+    @Nullable
     LivingEntity getTarget();
 
 }

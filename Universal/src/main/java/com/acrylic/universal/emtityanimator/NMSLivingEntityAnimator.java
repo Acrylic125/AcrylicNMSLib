@@ -14,6 +14,15 @@ import java.util.function.Consumer;
 
 public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntityAnimator {
 
+    void setYaw(float yaw);
+
+    void setPitch(float pitch);
+
+    default void setYawAndPitch(float yaw, float pitch) {
+        setYaw(yaw);
+        setPitch(pitch);
+    }
+
     @Override
     LivingEntityInstance getEntityInstance();
 

@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.packets;
 
+import com.acrylic.universal.NMSUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityHeadRotation;
 import org.bukkit.entity.Entity;
@@ -22,7 +23,11 @@ public class EntityHeadRotationPacket
     }
 
     public void apply(net.minecraft.server.v1_8_R3.Entity entity) {
-        packet = new PacketPlayOutEntityHeadRotation(entity, (byte) ((entity.getBukkitEntity().getLocation().getYaw() * 256f) / 360f));
+        apply(entity, entity.getBukkitEntity().getLocation().getYaw());
+    }
+
+    public void apply(net.minecraft.server.v1_8_R3.Entity entity, float angle) {
+        packet = new PacketPlayOutEntityHeadRotation(entity, NMSUtils.getByteAngle(angle));
     }
 
 }

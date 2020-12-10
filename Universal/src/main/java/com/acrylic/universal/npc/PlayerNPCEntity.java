@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 public interface PlayerNPCEntity extends NMSLivingEntityAnimator {
 
+    void updateHeadPose();
+
+    void updateHeadPose(float angle);
+
     void attack(@NotNull LivingEntity victim);
 
     void setGamemode(@NotNull Gamemode gamemode);

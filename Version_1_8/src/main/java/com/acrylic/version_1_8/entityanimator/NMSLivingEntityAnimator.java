@@ -25,6 +25,16 @@ public abstract class NMSLivingEntityAnimator
     }
 
     @Override
+    public void setYaw(float yaw) {
+        getNMSEntity().yaw = yaw;
+    }
+
+    @Override
+    public void setPitch(float pitch) {
+        getNMSEntity().pitch = pitch;
+    }
+
+    @Override
     public abstract EntityLiving getNMSEntity();
 
     @Override

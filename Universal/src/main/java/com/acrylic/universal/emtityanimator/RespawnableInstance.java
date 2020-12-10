@@ -1,6 +1,7 @@
 package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.interfaces.Deletable;
+import org.bukkit.Bukkit;
 
 public interface RespawnableInstance extends Deletable {
 
@@ -9,7 +10,7 @@ public interface RespawnableInstance extends Deletable {
     boolean isDead();
 
     default boolean shouldRespawn() {
-        return getRespawnCooldown() < 0;
+        return getRespawnCooldown() >= 0;
     }
 
     default boolean canRespawn() {

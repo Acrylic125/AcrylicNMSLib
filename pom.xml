@@ -130,7 +130,7 @@
         <dependency>
             <groupId>com.github.Acrylic125</groupId>
             <artifactId>AcrylicMinecraftLib</artifactId>
-            <version>v1.1e</version>
+            <version>v1.1f</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

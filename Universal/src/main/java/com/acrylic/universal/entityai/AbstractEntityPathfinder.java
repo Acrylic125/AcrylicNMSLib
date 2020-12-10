@@ -10,7 +10,7 @@ public abstract class AbstractEntityPathfinder<T extends LivingEntityAnimator>
         implements EntityPathfinder<T> {
 
     private PathGenerator pathGenerator = PathGenerator.A_STAR_GENERATOR;
-    private float speed = 1;
+    private float speed = 0.2f;
     private float distanceToPath = 32;
     private long maximumTraverseTime = 10_000;
     private PathingPhase phase = PathingPhase.RESTING;

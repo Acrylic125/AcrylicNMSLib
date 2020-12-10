@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.minecraft.server.v1_8_R3.WorldServer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,8 +29,9 @@ public class PlayerEntityInstance extends EntityPlayer
 
     @Override
     public void tickingEntity() {
-        if (this.entityAI != null && playerNPC != null)
+        if (this.entityAI != null && playerNPC != null) {
             this.entityAI.update(playerNPC);
+        }
     }
 
     public void setAi(@NotNull EntityAI<PlayerNPC> ai) {
@@ -103,7 +105,7 @@ public class PlayerEntityInstance extends EntityPlayer
 
     @Override
     public boolean isDead() {
-        return dead;
+        return dead || getHealth() <= 0;
     }
 
     @Override
@@ -136,4 +138,7 @@ public class PlayerEntityInstance extends EntityPlayer
         if (playerNPC != null)
             playerNPC.delete();
     }
+
+
+
 }

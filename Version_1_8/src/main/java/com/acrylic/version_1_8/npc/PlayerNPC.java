@@ -35,6 +35,7 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
         super(new NPCPlayerDisplayPackets());
         entityPlayer = new PlayerEntityInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        entityPlayer.setAnimator(this);
         removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
     }
@@ -57,12 +58,7 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
     @Override
     public void teleport(@NotNull Location location) {
         super.teleport(location);
-        LivingEntityDisplayPackets packets = getDisplayPackets();
-        if (packets instanceof NPCPlayerDisplayPackets) {
-            EntityHeadRotationPacket headRotationPacket = ((NPCPlayerDisplayPackets) packets).getHeadRotationPacket();
-            headRotationPacket.apply(entityPlayer);
-            sendPacketsViaRenderer(headRotationPacket);
-        }
+        updateHeadPose();
     }
 
     @Override
@@ -73,6 +69,21 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
     @Override
     public LivingEntity getBukkitEntity() {
         return entityPlayer.getBukkitEntity();
+    }
+
+    @Override
+    public void updateHeadPose() {
+        updateHeadPose(entityPlayer.yaw);
+    }
+
+    @Override
+    public void updateHeadPose(float angle) {
+        LivingEntityDisplayPackets packets = getDisplayPackets();
+        if (packets instanceof NPCPlayerDisplayPackets) {
+            EntityHeadRotationPacket headRotationPacket = ((NPCPlayerDisplayPackets) packets).getHeadRotationPacket();
+            headRotationPacket.apply(entityPlayer, angle);
+            sendPacketsViaRenderer(headRotationPacket);
+        }
     }
 
     @Override
@@ -146,4 +157,7 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
                     .add(new NPCTabRemoverEntry(player, removeFromTabPacket));
         });
     }
+
+
+
 }
