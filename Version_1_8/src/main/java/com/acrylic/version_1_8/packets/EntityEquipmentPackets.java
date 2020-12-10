@@ -1,7 +1,6 @@
 package com.acrylic.version_1_8.packets;
 
 import com.acrylic.version_1_8.NMSBukkitConverter;
-import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -9,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EntityEquipmentPackets extends PacketSender implements com.acrylic.universal.packets.EntityEquipmentPackets {
 
@@ -25,7 +25,10 @@ public class EntityEquipmentPackets extends PacketSender implements com.acrylic.
     public void apply(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
         final int entityId = entity.getId();
         packets = new PacketPlayOutEntityEquipment[itemsMap.size()];
-        itemsMap.forEach((integer, itemStack) -> packets[integer] = new PacketPlayOutEntityEquipment(entityId, integer, itemStack));
+        AtomicInteger index = new AtomicInteger(0);
+        itemsMap.forEach((integer, itemStack) -> {
+            packets[index.addAndGet(1) - 1] = new PacketPlayOutEntityEquipment(entityId, integer, itemStack);
+        });
     }
 
     @Override

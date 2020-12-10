@@ -17,6 +17,9 @@ public interface NMSEntityAnimator extends EntityAnimator {
 
     EntityInstance getEntityInstance();
 
+    @Override
+    void setVelocity(double x, double y, double z);
+
     PacketRenderer getRenderer();
 
     void setRenderer(PacketRenderer packetRenderer);

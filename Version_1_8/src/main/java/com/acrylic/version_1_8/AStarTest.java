@@ -13,6 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * This is only an experimental class. Please do
+ * not use.
+ *
+ * @see com.acrylic.universal.pathfinder.astar.AStarGenerator
+ */
 @Setter @Getter @Deprecated
 public class AStarTest {
 

@@ -5,6 +5,9 @@ import com.acrylic.universal.pathfinder.PathTraverser;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Generates a path with the A* algorithm.
+ */
 public class AStarGenerator extends AbstractPathGenerator {
 
     @NotNull

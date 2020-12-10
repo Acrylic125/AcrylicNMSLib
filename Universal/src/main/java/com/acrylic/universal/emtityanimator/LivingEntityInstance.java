@@ -1,7 +1,6 @@
 package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.entityai.EntityAI;
-import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,4 +27,5 @@ public interface LivingEntityInstance
     @NotNull
     @Override
     NMSLivingEntityAnimator getAnimatior();
+
 }

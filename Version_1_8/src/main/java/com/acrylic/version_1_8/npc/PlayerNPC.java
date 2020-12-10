@@ -1,12 +1,11 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.enums.EntityAnimationEnum;
-import com.acrylic.universal.npc.PlayerNPCEntity;
-import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.enums.Gamemode;
+import com.acrylic.universal.npc.NPCTabRemoverEntry;
+import com.acrylic.universal.npc.PlayerNPCEntity;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -25,7 +24,7 @@ import java.util.UUID;
 
 public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntity {
 
-    private final EntityPlayer entityPlayer;
+    private final PlayerEntityInstance entityPlayer;
     private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
 
     public PlayerNPC(@NotNull Location location, @Nullable String name) {
@@ -34,11 +33,10 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
 
     private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
-        entityPlayer = new EntityPlayerInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
+        entityPlayer = new PlayerEntityInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
-       // entityPlayer.noclip = true;
     }
 
     @Override
@@ -133,12 +131,11 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
     @Override
     public void delete() {
         super.delete();
-        entityPlayer.die();
     }
 
     @Override
-    public LivingEntityInstance getEntityInstance() {
-        return null;
+    public PlayerEntityInstance getEntityInstance() {
+        return entityPlayer;
     }
 
     @Override

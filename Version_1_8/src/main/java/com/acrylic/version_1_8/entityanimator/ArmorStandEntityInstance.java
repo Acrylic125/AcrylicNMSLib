@@ -6,6 +6,7 @@ import com.acrylic.universal.loaders.CustomEntity;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.World;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -91,6 +92,6 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     @Override
     public void t_() {
         super.t_();
-        tickingEntity();
     }
+
 }

@@ -16,7 +16,6 @@ public final class AcrylicNMS extends JavaPlugin {
     public void onEnable() {
         registerTestCommand();
         UniversalNMS.setEntityRegistry(new EntityRegistry());
-        UniversalNMS.getEntityRegistry().setupDefaults();
     }
 
     @Override

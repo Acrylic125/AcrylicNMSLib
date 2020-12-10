@@ -9,7 +9,6 @@ import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
-import com.acrylic.version_1_8.entityanimator.NMSGiantAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
 import org.bukkit.Bukkit;
@@ -29,8 +28,9 @@ public final class Version_1_8 {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
 
-                    NMSGiantAnimator nmsArmorStandAnimator = new NMSGiantAnimator(sender.getLocation());
-                    nmsArmorStandAnimator.upsideDown(true).asAnimator().setEquipment(new EntityEquipmentBuilder().setItemInHand(ItemBuilder.of(Material.ENDER_CHEST).build()));
+                    /**NMSArmorStandAnimator nmsArmorStandAnimator = new NMSArmorStandAnimator(sender.getLocation());
+                    nmsArmorStandAnimator.gravity(false).asAnimator().setEquipment(new EntityEquipmentBuilder().setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build()));
+                    nmsArmorStandAnimator.addToWorld();
 
                     Location location = sender.getLocation();
                     HandRotationAnimation handRotationAnimation = new HandRotationAnimation(nmsArmorStandAnimator);
@@ -41,8 +41,8 @@ public final class Version_1_8 {
                             handRotationAnimation.teleport(location);
                         }
                     }.runTaskTimer(Universal.getPlugin(), 1, 1);
-
-                    /**AStarGenerator aStarGenerator = new AStarGenerator();
+                    **/
+                    AStarGenerator aStarGenerator = new AStarGenerator();
                     aStarGenerator
                             .setLookUpThreshold(30)
                             .setSearchDownAmount(5)
@@ -92,7 +92,6 @@ public final class Version_1_8 {
                             }
                         }
                     }.runTaskTimer(Universal.getPlugin(), 1, 1);
-                    **/
                 });
     }
 

@@ -51,7 +51,8 @@ public abstract class NMSLivingEntityAnimator
     }
 
     @Override
-    public void setVelocity(double x, double y, double z) {
-        getNMSEntity().move(x, y, z);
+    public void delete() {
+        super.delete();
+        getNMSEntity().die();
     }
 }

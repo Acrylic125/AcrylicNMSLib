@@ -28,6 +28,11 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
     }
 
     @Override
+    public void setVelocity(double x, double y, double z) {
+        getNMSEntity().move(x, y, z);
+    }
+
+    @Override
     public abstract Entity getNMSEntity();
 
     @Override

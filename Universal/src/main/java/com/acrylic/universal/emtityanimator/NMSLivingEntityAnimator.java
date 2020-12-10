@@ -14,12 +14,6 @@ import java.util.function.Consumer;
 
 public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntityAnimator {
 
-    void setVelocity(double x, double y, double z);
-
-    default void setVelocity(Vector velocity) {
-        setVelocity(velocity.getX(), velocity.getY(), velocity.getZ());
-    }
-
     @Override
     LivingEntityInstance getEntityInstance();
 

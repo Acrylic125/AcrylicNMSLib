@@ -1,6 +1,5 @@
 package com.acrylic.universal.npc;
 
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

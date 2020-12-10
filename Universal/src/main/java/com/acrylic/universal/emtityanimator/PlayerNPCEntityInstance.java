@@ -4,7 +4,7 @@ import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public interface PlayerNPCEntityInstance extends LivingEntityInstance {
+public interface PlayerNPCEntityInstance extends LivingEntityInstance, RespawnableInstance {
 
     void attack(@NotNull LivingEntity entity);
 

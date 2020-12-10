@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface PathGenerator {
 
+    /** Default path generator(s).**/
     AStarGenerator A_STAR_GENERATOR = new AStarGenerator();
 
     PathGenerator setLookUpFaces(BlockFace... blockFaces);

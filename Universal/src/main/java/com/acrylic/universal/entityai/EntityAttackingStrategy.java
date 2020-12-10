@@ -4,7 +4,7 @@ import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public interface EntityAttackingStrategy<T extends LivingEntityAnimator> extends EntityStrategy<T> {
+public interface EntityAttackingStrategy<T extends LivingEntityAnimator> extends EntityFollowingStrategy<T> {
 
     EntityAttackingStrategy<T> setAttackCooldown(long attackCooldown);
 
@@ -17,14 +17,6 @@ public interface EntityAttackingStrategy<T extends LivingEntityAnimator> extends
     EntityAttackingStrategy<T> setAttackRange(float attackRange);
 
     float getAttackRange();
-
-    EntityAttackingStrategy<T> setNewTargetDistance(float targetDistance);
-
-    float getNewTargetDistance();
-
-    void setTarget(@NotNull LivingEntity entity);
-
-    LivingEntity getTarget();
 
     void attack();
 
