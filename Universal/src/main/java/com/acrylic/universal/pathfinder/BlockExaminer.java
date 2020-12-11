@@ -25,9 +25,7 @@ public interface BlockExaminer {
         }
     }
 
-    boolean isDoor(@NotNull Block block);
-
-    boolean isFenceGate(@NotNull Block block);
+    boolean shouldNoClip(@NotNull Block block);
 
     boolean isTraversable(@NotNull Block block);
 

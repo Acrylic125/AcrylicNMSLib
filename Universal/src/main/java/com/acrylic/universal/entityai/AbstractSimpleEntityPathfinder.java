@@ -1,13 +1,12 @@
 package com.acrylic.universal.entityai;
 
 import com.acrylic.universal.Universal;
-import com.acrylic.universal.npc.PlayerNPCEntity;
+import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleEntityPathfinder<T extends PlayerNPCEntity>
+public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnimator>
         extends AbstractEntityPathfinder<T> {
 
     private float traversingIndex = 0;
@@ -25,6 +24,11 @@ public class SimpleEntityPathfinder<T extends PlayerNPCEntity>
 
     private boolean shouldSwitchPathing() {
         return System.currentTimeMillis() > getLastTimed();
+    }
+
+    public boolean isWithinRangeOfTarget(@NotNull T entityAnimator) {
+        Location target = getTargetLocation();
+        return target != null && target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= 9;
     }
 
     private synchronized void resetTraverser(@NotNull T entityAnimator) {
@@ -55,9 +59,8 @@ public class SimpleEntityPathfinder<T extends PlayerNPCEntity>
         }
     }
 
-    private void handleResting(@NotNull T entityAnimator) {
-        Location target = getTargetLocation();
-        if (shouldSwitchPathing() && target != null && target.distanceSquared(entityAnimator.getLocation()) >= 9) {
+    public void handleResting(@NotNull T entityAnimator) {
+        if (shouldSwitchPathing() && isWithinRangeOfTarget(entityAnimator)) {
             setPathingPhase(PathingPhase.LOOKING_FOR_PATH);
 
             /**
@@ -73,7 +76,7 @@ public class SimpleEntityPathfinder<T extends PlayerNPCEntity>
         }
     }
 
-    private void handleTraversing(@NotNull T entityAnimator) {
+    public void handleTraversing(@NotNull T entityAnimator) {
         final float speed = getSpeed();
         traversingIndex += speed;
         int index = (int) Math.floor(traversingIndex);
@@ -81,33 +84,15 @@ public class SimpleEntityPathfinder<T extends PlayerNPCEntity>
             setPathingPhase(PathingPhase.RESTING);
             setLastTimed(getRestTimeDuration() + System.currentTimeMillis());
         } else {
-            // Vector dV = now.toVector().add(loc.toVector().multiply(-1));
-            //                                loc.setDirection(dV.clone().normalize());
-            //                                npc.teleport(loc);
-            //                                if (dV.getY() > 0 || (BlockExaminer.isLiquid(loc.getBlock().getType()))) {
-            //                                    dV.setY(dV.getY() + ((BlockExaminer.isLiquid(loc.getBlock().getType())) ? 0.1f : 1));
-            //                                } else if (!npc.getNMSEntity().onGround) {
-            //                                    dV.setY(dV.getY() - 1f);
-            //                                }
-            //                                npc.attack(sender);
-            //                                dV.multiply(1f / s);
-            //                                npc.getNMSEntity().noclip = now.getBlock().getType().equals(Material.WOODEN_DOOR);
-            //                                npc.setVelocity(dV);
-            //                                i += 1f / s;
             Location location = locations[index];
-            Vector dV = location.toVector().add(entityAnimator.getBukkitEntity().getLocation().toVector().multiply(-1));
-            double y = dV.getY();
-            if (y > 0)
-                dV.setY(y + 12f);
-            dV.multiply(speed);
-            entityAnimator.setYawAndPitch((float) getYawAngle(dV),  (float) dV.getY() * -1f * 90f);
-            entityAnimator.updateHeadPose();
-            entityAnimator.setVelocity(dV.getX(), dV.getY(), dV.getZ());
+            Location current = entityAnimator.getBukkitEntity().getLocation();
+            moveEntity(entityAnimator, current, location,
+                    (location.getX() - current.getX()) * speed,
+                    (location.getY() - current.getY()) * speed,
+                    (location.getZ() - current.getZ()) * speed);
         }
     }
 
-    private double getYawAngle(Vector vector) {
-        return Math.toDegrees(Math.atan2(vector.getZ(), vector.getX()) - 90f);
-    }
+    public abstract void moveEntity(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z);
 
 }

@@ -25,6 +25,11 @@ public abstract class NMSLivingEntityAnimator
     }
 
     @Override
+    public void setNoClip(boolean b) {
+        getNMSEntity().noclip = b;
+    }
+
+    @Override
     public void setYaw(float yaw) {
         getNMSEntity().yaw = yaw;
     }

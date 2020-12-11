@@ -4,7 +4,7 @@ import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleAttackerStrategy<T extends PlayerNPCEntity>
+public class NPCAttackerStrategy<T extends PlayerNPCEntity>
         extends SimpleFollowerStrategy<T>
         implements EntityAttackingStrategy<T> {
 

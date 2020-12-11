@@ -1,12 +1,15 @@
 package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.entityanimations.EntityAnimator;
-import com.acrylic.universal.packets.*;
+import com.acrylic.universal.packets.EntityDestroyPacket;
+import com.acrylic.universal.packets.LivingEntityDisplayPackets;
+import com.acrylic.universal.packets.PacketSender;
+import com.acrylic.universal.packets.TeleportPacket;
 import com.acrylic.universal.renderer.PacketRenderer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -16,6 +19,11 @@ public interface NMSEntityAnimator extends EntityAnimator {
     Object getNMSEntity();
 
     EntityInstance getEntityInstance();
+
+    @Override
+    default void setVelocity(@NotNull Vector velocity) {
+        setVelocity(velocity.getX(), velocity.getY(), velocity.getZ());
+    }
 
     @Override
     void setVelocity(double x, double y, double z);

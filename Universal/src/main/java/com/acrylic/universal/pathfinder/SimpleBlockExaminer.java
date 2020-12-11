@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class SimpleBlockExaminer implements BlockExaminer {
 
     @Override
-    public boolean isDoor(@NotNull Block block) {
+    public boolean shouldNoClip(@NotNull Block block) {
         switch (block.getType()) {
             case WOOD_DOOR:
             case WOODEN_DOOR:
@@ -18,21 +18,14 @@ public class SimpleBlockExaminer implements BlockExaminer {
             case DARK_OAK_DOOR:
             case ACACIA_DOOR:
             case IRON_DOOR:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    @Override
-    public boolean isFenceGate(@NotNull Block block) {
-        switch (block.getType()) {
             case FENCE_GATE:
             case BIRCH_FENCE_GATE:
             case SPRUCE_FENCE_GATE:
             case JUNGLE_FENCE_GATE:
             case DARK_OAK_FENCE_GATE:
             case ACACIA_FENCE_GATE:
+            case IRON_TRAPDOOR:
+            case TRAP_DOOR:
                 return true;
             default:
                 return false;
@@ -42,7 +35,7 @@ public class SimpleBlockExaminer implements BlockExaminer {
     @Override
     public boolean isTraversable(@NotNull Block block) {
         Material type = block.getType();
-        return BlockExaminer.isAir(type) || !type.isSolid() || isDoor(block) || isFenceGate(block);
+        return BlockExaminer.isAir(type) || !type.isSolid() || shouldNoClip(block);
     }
 
     @Override

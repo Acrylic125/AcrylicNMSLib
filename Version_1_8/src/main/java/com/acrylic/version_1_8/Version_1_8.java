@@ -1,26 +1,18 @@
 package com.acrylic.version_1_8;
 
-import com.acrylic.universal.Universal;
-import com.acrylic.universal.animations.rotational.HandRotationAnimation;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.entityai.EntityAnimatorAI;
-import com.acrylic.universal.entityai.SimpleAttackerStrategy;
-import com.acrylic.universal.entityai.SimpleEntityPathfinder;
+import com.acrylic.universal.entityai.NPCAttackerStrategy;
+import com.acrylic.universal.entityai.NPCEntityPathfinder;
 import com.acrylic.universal.enums.Gamemode;
-import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
-import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
-import com.acrylic.version_1_8.packets.PacketSender;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public final class Version_1_8 {
@@ -55,8 +47,8 @@ public final class Version_1_8 {
                     npc.show();
                     npc.setSprinting(true);
                     EntityAnimatorAI<PlayerNPC> entityAnimatorAI = new EntityAnimatorAI<>();
-                    entityAnimatorAI.setPathfinder(new SimpleEntityPathfinder<>());
-                    entityAnimatorAI.setStrategy(new SimpleAttackerStrategy<>());
+                    entityAnimatorAI.setPathfinder(new NPCEntityPathfinder<>());
+                    entityAnimatorAI.setStrategy(new NPCAttackerStrategy<>());
                     npc.getEntityInstance().setAi(entityAnimatorAI);
                 });
     }

@@ -7,12 +7,13 @@ import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntityAnimator {
+
+    void setNoClip(boolean b);
 
     void setYaw(float yaw);
 
