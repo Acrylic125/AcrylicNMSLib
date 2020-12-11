@@ -5,11 +5,13 @@ import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.entityai.EntityAnimatorAI;
 import com.acrylic.universal.entityai.NPCAttackerStrategy;
 import com.acrylic.universal.entityai.NPCEntityPathfinder;
+import com.acrylic.universal.entityai.SimpleEntityPathQuitter;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -47,8 +49,12 @@ public final class Version_1_8 {
                     npc.show();
                     npc.setSprinting(true);
                     EntityAnimatorAI<PlayerNPC> entityAnimatorAI = new EntityAnimatorAI<>();
-                    entityAnimatorAI.setPathfinder(new NPCEntityPathfinder<>());
-                    entityAnimatorAI.setStrategy(new NPCAttackerStrategy<>());
+                    Bukkit.broadcastMessage("T 1");
+                    entityAnimatorAI
+                            .setEntityQuitter(new SimpleEntityPathQuitter<>())
+                            .setPathfinder(new NPCEntityPathfinder<>())
+                            .setStrategy(new NPCAttackerStrategy<>());
+                    Bukkit.broadcastMessage("T 2");
                     npc.getEntityInstance().setAi(entityAnimatorAI);
                 });
     }

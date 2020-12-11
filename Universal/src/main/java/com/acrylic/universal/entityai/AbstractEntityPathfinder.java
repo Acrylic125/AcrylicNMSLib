@@ -15,8 +15,6 @@ public abstract class AbstractEntityPathfinder<T extends LivingEntityAnimator>
     private float distanceToPath = 32;
     private long maximumTraverseTime = 10_000;
     private long restDuration = 0;
-    private long giveUpDuration = 0;
-    private long giveUpTime = 0;
     private long pathingTime = 0;
     private Location target;
 
@@ -91,27 +89,6 @@ public abstract class AbstractEntityPathfinder<T extends LivingEntityAnimator>
     @Override
     public long getRestTimeDuration() {
         return restDuration;
-    }
-
-
-    @Override
-    public void setGiveUpTime(long time) {
-        this.giveUpTime = time;
-    }
-
-    @Override
-    public long getGiveUpTime() {
-        return giveUpTime;
-    }
-
-    @Override
-    public void setGiveUpTimeDuration(long time) {
-        this.giveUpDuration = time;
-    }
-
-    @Override
-    public long getGiveUpTimeDuration() {
-        return giveUpDuration;
     }
 
     @Override

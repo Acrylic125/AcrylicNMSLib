@@ -9,12 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface EntityPathfinder<T extends LivingEntityAnimator>
-        extends Timed, EntityQuitter<T> {
+        extends Timed, EntityQuirk<T> {
 
     enum PathingPhase {
         RESTING,
         TRAVERSING,
         LOOKING_FOR_PATH
+    }
+
+    void resetTraversing(@NotNull T entityAnimator);
+
+    default void resetResting() {
+        setPathingPhase(PathingPhase.RESTING);
+        setLastTimed(System.currentTimeMillis() + getRestTimeDuration());
     }
 
     void setPathingPhase(@NotNull PathingPhase phase);
@@ -58,7 +65,5 @@ public interface EntityPathfinder<T extends LivingEntityAnimator>
 
     @Nullable
     Location getTargetLocation();
-
-    void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI);
 
 }

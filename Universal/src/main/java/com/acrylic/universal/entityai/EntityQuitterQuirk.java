@@ -1,13 +1,10 @@
 package com.acrylic.universal.entityai;
 
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
-import org.jetbrains.annotations.NotNull;
+import com.acrylic.universal.interfaces.Timed;
 
-public interface EntityQuitter<T extends LivingEntityAnimator> {
-
-    void setGiveUpTime(long time);
-
-    long getGiveUpTime();
+public interface EntityQuitterQuirk<T extends LivingEntityAnimator>
+        extends EntityQuirk<T>, Timed {
 
     void setGiveUpTimeDuration(long time);
 
@@ -18,15 +15,16 @@ public interface EntityQuitter<T extends LivingEntityAnimator> {
      */
     long getGiveUpTimeDuration();
 
+    default void resetGiveUpTime() {
+        setLastTimed(System.currentTimeMillis() + getGiveUpTimeDuration());
+    }
+
     default boolean isGoingToGiveUp() {
-        return getGiveUpTimeDuration() < 0;
+        return getGiveUpTimeDuration() >= 0;
     }
 
     default boolean isReadyToGiveUp() {
-        return isGoingToGiveUp() && System.currentTimeMillis() >= getGiveUpTime();
+        return isGoingToGiveUp() && System.currentTimeMillis() >= getLastTimed();
     }
-
-    void updateGiveUp(@NotNull T entity);
-
 
 }

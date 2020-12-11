@@ -26,12 +26,26 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
         return System.currentTimeMillis() > getLastTimed();
     }
 
-    public boolean isWithinRangeOfTarget(@NotNull T entityAnimator) {
+    public boolean hasTarget(@NotNull T entityAnimator) {
+        return getTargetLocation() != null;
+    }
+
+    public boolean shouldTraverseTarget(@NotNull T entityAnimator) {
         Location target = getTargetLocation();
         return target != null && target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= 9;
     }
 
-    private synchronized void resetTraverser(@NotNull T entityAnimator) {
+    public void updateQuitter(@NotNull T entityAnimator, @NotNull EntityAI<T> ai) {
+        Location target = getTargetLocation();
+        if (target == null || target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) <= 9) {
+            EntityQuitterQuirk<T> quitterQuirk = ai.getEntityQuitter();
+            if (quitterQuirk != null)
+               quitterQuirk.resetGiveUpTime();
+        }
+    }
+
+    @Override
+    public synchronized void resetTraversing(@NotNull T entityAnimator) {
         generateLocations(entityAnimator);
         setLastTimed(System.currentTimeMillis() + getMaximumTraverseTime());
         traversingIndex = 0;
@@ -40,6 +54,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     @Override
     public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
+        updateQuitter(entityAnimator, entityAI);
         PathingPhase phase = getPathingPhase();
         switch (phase) {
             case RESTING:
@@ -50,17 +65,8 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
         }
     }
 
-    @Override
-    public void updateGiveUp(@NotNull T entity) {
-        if (isReadyToGiveUp()) {
-            Location location = getTargetLocation();
-            if (location != null)
-               entity.teleport(location);
-        }
-    }
-
     public void handleResting(@NotNull T entityAnimator) {
-        if (shouldSwitchPathing() && isWithinRangeOfTarget(entityAnimator)) {
+        if (shouldSwitchPathing() && shouldTraverseTarget(entityAnimator)) {
             setPathingPhase(PathingPhase.LOOKING_FOR_PATH);
 
             /**
@@ -70,7 +76,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    resetTraverser(entityAnimator);
+                    resetTraversing(entityAnimator);
                 }
             }.runTaskAsynchronously(Universal.getPlugin());
         }
@@ -81,8 +87,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
         traversingIndex += speed;
         int index = (int) Math.floor(traversingIndex);
         if (index >= locations.length || shouldSwitchPathing()) {
-            setPathingPhase(PathingPhase.RESTING);
-            setLastTimed(getRestTimeDuration() + System.currentTimeMillis());
+            resetResting();
         } else {
             Location location = locations[index];
             Location current = entityAnimator.getBukkitEntity().getLocation();

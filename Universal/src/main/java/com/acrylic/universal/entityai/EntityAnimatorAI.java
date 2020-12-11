@@ -7,6 +7,7 @@ public class EntityAnimatorAI<T extends LivingEntityAnimator> implements EntityA
 
     private EntityStrategy<T> strategy;
     private EntityPathfinder<T> pathfinder;
+    private EntityQuitterQuirk<T> quitter;
 
     @Override
     public EntityAI<T> setStrategy(@Nullable EntityStrategy<T> strategy) {
@@ -21,14 +22,26 @@ public class EntityAnimatorAI<T extends LivingEntityAnimator> implements EntityA
     }
 
     @Override
-    public EntityPathfinder<T> setPathfinder(@Nullable EntityPathfinder<T> pathfinder) {
+    public EntityAnimatorAI<T> setPathfinder(@Nullable EntityPathfinder<T> pathfinder) {
         this.pathfinder = pathfinder;
-        return null;
+        return this;
     }
 
     @Nullable
     @Override
     public EntityPathfinder<T> getPathfinder() {
         return pathfinder;
+    }
+
+    @Override
+    public EntityAI<T> setEntityQuitter(@Nullable EntityQuitterQuirk<T> entityQuitterQuirk) {
+        this.quitter = entityQuitterQuirk;
+        return this;
+    }
+
+    @Nullable
+    @Override
+    public EntityQuitterQuirk<T> getEntityQuitter() {
+        return quitter;
     }
 }
