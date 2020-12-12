@@ -1,6 +1,5 @@
 package com.acrylic.universal.entityai.pathfinder;
 
-import com.acrylic.universal.entityai.EntityAnimatorAI;
 import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.pathfinder.PathGenerator;

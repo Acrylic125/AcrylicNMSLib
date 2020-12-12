@@ -1,6 +1,5 @@
-package com.acrylic.universal.entityai.quitterquirk;
+package com.acrylic.universal.entityai;
 
-import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,5 +1,6 @@
 package com.acrylic.universal.pathfinder;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -35,7 +36,7 @@ public class SimpleBlockExaminer implements BlockExaminer {
     @Override
     public boolean isTraversable(@NotNull Block block) {
         Material type = block.getType();
-        return BlockExaminer.isAir(type) || !type.isSolid() || shouldNoClip(block);
+        return BlockExaminer.isAir(type) || isClimbable(block) || !type.isSolid() || shouldNoClip(block);
     }
 
     @Override

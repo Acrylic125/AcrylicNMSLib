@@ -2,11 +2,10 @@ package com.acrylic.version_1_8;
 
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
-import com.acrylic.universal.entityai.EntityAnimatorAI;
+import com.acrylic.universal.entityai.AttackerAI;
 import com.acrylic.universal.entityai.quitterquirk.NoClipEntityPathQuitter;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
 import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
-import com.acrylic.universal.entityai.quitterquirk.SimpleEntityPathQuitter;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
@@ -42,9 +41,7 @@ public final class Version_1_8 {
                     npc.setSprinting(true);
                     NPCEntityPathfinder<PlayerNPC> entityPathfinder = new NPCEntityPathfinder<>();
                     entityPathfinder.setEntityQuitter(new NoClipEntityPathQuitter<>());
-                    npc.getEntityInstance().setAi(new EntityAnimatorAI<PlayerNPC>()
-                            .setPathfinder(entityPathfinder)
-                            .setStrategy(new NPCAttackerStrategy<>()));
+                    npc.getEntityInstance().setAi(new AttackerAI<>(entityPathfinder, new NPCAttackerStrategy<>()));
                 });
     }
     protected static byte getByteAngle(Vector vector) {

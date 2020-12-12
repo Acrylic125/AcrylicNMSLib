@@ -1,6 +1,7 @@
 package com.acrylic.universal.entityai.quitterquirk;
 
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
@@ -12,17 +13,19 @@ public class SimpleEntityPathQuitter<T extends LivingEntityAnimator>
     private long giveUpDuration = 10_000;
     private transient long giveUpTime = 0;
 
+    public SimpleEntityPathQuitter() {
+        this.giveUpTime = System.currentTimeMillis() + giveUpDuration;
+    }
+
     @Override
     public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
-        if (isReadyToGiveUp()) {
+        if (isReadyToGiveUp() && entityAI instanceof FollowerAI) {
             resetGiveUpTime();
-            EntityPathfinder<T> pathfinder = entityAI.getPathfinder();
-            if (pathfinder != null) {
-                Location target = pathfinder.getTargetLocation();
-                if (target != null) {
-                    entityAnimator.teleport(target);
-                    pathfinder.resetResting();
-                }
+            EntityPathfinder<T> pathfinder = ((FollowerAI<T>) entityAI).getPathfinder();
+            Location target = pathfinder.getTargetLocation();
+            if (target != null) {
+                entityAnimator.teleport(target);
+                pathfinder.resetResting();
             }
         }
     }

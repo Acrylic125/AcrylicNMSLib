@@ -2,6 +2,7 @@ package com.acrylic.universal.entityai.strategy;
 
 import com.acrylic.math.ProbabilityKt;
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
@@ -92,28 +93,28 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
 
     @Override
     public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
-        LivingEntity target = getTarget();
-        if (target != null) {
-            if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
-                setTarget(null);
-                target = null;
-            } else {
-                EntityPathfinder<T> pathfinder = entityAI.getPathfinder();
-                if (pathfinder != null)
+        if (entityAI instanceof FollowerAI) {
+            LivingEntity target = getTarget();
+            EntityPathfinder<T> pathfinder = ((FollowerAI<T>) entityAI).getPathfinder();
+            if (target != null) {
+                if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
+                    setTarget(null);
+                    target = null;
+                } else {
+                    pathfinder.setTargetLocation(target);
+                }
+            }
+            if (shouldSearchForTarget() && target == null) {
+                List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
+                int size = entities.size();
+                if (size > 0) {
+                    setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
+                    target = entities.get(ProbabilityKt.getRandom(0, size - 1));
+                    setTarget(target);
+                }
+                if (target != null)
                     pathfinder.setTargetLocation(target);
             }
-        }
-        if (shouldSearchForTarget() && target == null ) {
-            List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
-            int size = entities.size();
-            if (size > 0) {
-                setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
-                target = entities.get(ProbabilityKt.getRandom(0, size -1));
-                setTarget(target);
-            }
-            EntityPathfinder<T> pathfinder = entityAI.getPathfinder();
-            if (pathfinder != null && target != null)
-                pathfinder.setTargetLocation(target);
         }
     }
 

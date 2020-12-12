@@ -1,7 +1,6 @@
 package com.acrylic.universal.entityai.pathfinder;
 
-import com.acrylic.universal.entityai.EntityAnimatorAI;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuirk;
+import com.acrylic.universal.entityai.EntityQuirk;
 import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.interfaces.Timed;
@@ -74,6 +73,6 @@ public interface EntityPathfinder<T extends LivingEntityAnimator>
     @Nullable
     Location getTargetLocation();
 
-
+    //void update(@NotNull T entityAnimator, @NotNull FollowerAI<T> entityAI);
 
 }

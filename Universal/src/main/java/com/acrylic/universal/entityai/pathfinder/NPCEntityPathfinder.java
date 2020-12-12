@@ -1,5 +1,6 @@
 package com.acrylic.universal.entityai.pathfinder;
 
+import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
 import com.acrylic.universal.entityai.quitterquirk.NoClipEntityPathQuitter;
 import com.acrylic.universal.npc.PlayerNPCEntity;
@@ -18,7 +19,7 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
                 y = 0.05f + 0.5f;
                 break;
             case CASUAL_SWIM:
-                y = 0.02f + 0.5f;
+                y = 0.035f + 0.5f;
                 break;
             default:
                 if (entityAnimator.isUsingGravity() && y > 0)
@@ -37,7 +38,7 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
 
     @Override
     public void updateHeadPose(@NotNull T entityAnimator, double x, double y, double z) {
-        entityAnimator.setYawAndPitch((float) getYawAngle(x, z), (float) (y * -1f * 90f));
+        entityAnimator.setYawAndPitch((float) getYawAngle(x, z), (float) ((1f / Math.sqrt(x * x + y * y + z * z)) * y * -90f));
         entityAnimator.updateHeadPose();
     }
 
