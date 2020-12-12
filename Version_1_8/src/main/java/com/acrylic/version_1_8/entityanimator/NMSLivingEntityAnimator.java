@@ -25,6 +25,11 @@ public abstract class NMSLivingEntityAnimator
     }
 
     @Override
+    public boolean isNoClip() {
+        return getNMSEntity().noclip;
+    }
+
+    @Override
     public void setNoClip(boolean b) {
         getNMSEntity().noclip = b;
     }

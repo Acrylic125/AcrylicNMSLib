@@ -18,7 +18,7 @@ public interface NPCHandler {
         getNPCs().put(npc.getBukkitEntity().getEntityId(), npc);
     }
 
-    default PlayerNPCEntity getNPC(@NotNull int id) {
+    default PlayerNPCEntity getNPC(int id) {
         return getNPCs().get(id);
     }
 

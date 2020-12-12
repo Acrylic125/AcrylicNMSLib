@@ -1,5 +1,6 @@
-package com.acrylic.universal.entityai;
+package com.acrylic.universal.entityai.strategy;
 
+import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -59,5 +60,13 @@ public class NPCAttackerStrategy<T extends PlayerNPCEntity>
             attack(entityAnimator);
             setAttackTime(System.currentTimeMillis() + getAttackCooldown());
         }
+    }
+
+    @Override
+    public NPCAttackerStrategy<T> clone() {
+        NPCAttackerStrategy<T> attackerStrategy = (NPCAttackerStrategy<T>) super.clone();
+        attackerStrategy.setAttackRange(attackDistance);
+        attackerStrategy.setAttackCooldown(attackCooldown);
+        return attackerStrategy;
     }
 }

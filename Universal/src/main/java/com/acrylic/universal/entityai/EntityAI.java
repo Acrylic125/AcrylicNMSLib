@@ -1,11 +1,14 @@
 package com.acrylic.universal.entityai;
 
+import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
+import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
+import com.acrylic.universal.entityai.strategy.EntityStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface EntityAI<T extends LivingEntityAnimator> {
+public interface EntityAI<T extends LivingEntityAnimator>
+        extends Cloneable {
 
     EntityAI<T> setStrategy(@Nullable EntityStrategy<T> strategy);
 
@@ -17,11 +20,6 @@ public interface EntityAI<T extends LivingEntityAnimator> {
     @Nullable
     EntityPathfinder<T> getPathfinder();
 
-    EntityAI<T> setEntityQuitter(@Nullable EntityQuitterQuirk<T> entityQuitterQuirk);
-
-    @Nullable
-    EntityQuitterQuirk<T> getEntityQuitter();
-
     default void update(@NotNull T entityAnimator) {
         EntityStrategy<T> entityStrategy = getStrategy();
         if (entityStrategy != null)
@@ -29,10 +27,6 @@ public interface EntityAI<T extends LivingEntityAnimator> {
         EntityPathfinder<T> entityPathfinder = getPathfinder();
         if (entityPathfinder != null)
             entityPathfinder.update(entityAnimator, this);
-        EntityQuitterQuirk<T> entityQuitterQuirk = getEntityQuitter();
-        if (entityQuitterQuirk != null) {
-            entityQuitterQuirk.update(entityAnimator, this);
-        }
     }
 
 }

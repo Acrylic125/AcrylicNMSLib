@@ -1,6 +1,8 @@
-package com.acrylic.universal.entityai;
+package com.acrylic.universal.entityai.pathfinder;
 
 import com.acrylic.universal.Universal;
+import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -37,10 +39,11 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     public void updateQuitter(@NotNull T entityAnimator, @NotNull EntityAI<T> ai) {
         Location target = getTargetLocation();
-        if (target == null || target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) <= 9) {
-            EntityQuitterQuirk<T> quitterQuirk = ai.getEntityQuitter();
-            if (quitterQuirk != null)
-               quitterQuirk.resetGiveUpTime();
+        EntityQuitterQuirk<T> quitterQuirk = getEntityQuitter();
+        if (quitterQuirk != null) {
+            quitterQuirk.update(entityAnimator, ai);
+            if (target == null || target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) <= 9)
+                quitterQuirk.resetGiveUpTime();
         }
     }
 
@@ -79,6 +82,12 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
                     resetTraversing(entityAnimator);
                 }
             }.runTaskAsynchronously(Universal.getPlugin());
+        } else {
+            Location target = getTargetLocation();
+            if (target != null) {
+                Location current = entityAnimator.getBukkitEntity().getLocation();
+                updateHeadPose(entityAnimator, target.getX() - current.getX(), target.getY() - current.getY(), target.getZ() - current.getZ());
+            }
         }
     }
 
@@ -97,6 +106,8 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
                     (location.getZ() - current.getZ()) * speed);
         }
     }
+
+    public abstract void updateHeadPose(@NotNull T entityAnimator, double x, double y, double z);
 
     public abstract void moveEntity(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z);
 

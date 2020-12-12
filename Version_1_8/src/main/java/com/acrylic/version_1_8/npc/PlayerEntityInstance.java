@@ -10,12 +10,12 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.minecraft.server.v1_8_R3.WorldServer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerEntityInstance extends EntityPlayer
+public class PlayerEntityInstance
+        extends EntityPlayer
         implements PlayerNPCEntityInstance, LivingEntityInstance {
 
     private EntityAI<PlayerNPC> entityAI;
@@ -94,8 +94,10 @@ public class PlayerEntityInstance extends EntityPlayer
     @Override
     public void t_() {
         super.t_();
-        if (!handleRespawn())
+        if (!handleRespawn()) {
             tickingEntity();
+            updateGravity();
+        }
     }
 
     @Override

@@ -22,10 +22,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntity {
+public class PlayerNPC
+        extends NMSLivingEntityAnimator
+        implements PlayerNPCEntity {
 
     private final PlayerEntityInstance entityPlayer;
     private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
+    private boolean gravity = true;
 
     public PlayerNPC(@NotNull Location location, @Nullable String name) {
         this(NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
@@ -69,6 +72,16 @@ public class PlayerNPC extends NMSLivingEntityAnimator implements PlayerNPCEntit
     @Override
     public LivingEntity getBukkitEntity() {
         return entityPlayer.getBukkitEntity();
+    }
+
+    @Override
+    public void setGravity(boolean b) {
+        this.gravity = b;
+    }
+
+    @Override
+    public boolean isUsingGravity() {
+        return gravity;
     }
 
     @Override

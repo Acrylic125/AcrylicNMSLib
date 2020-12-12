@@ -3,15 +3,14 @@ package com.acrylic.version_1_8;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.entityai.EntityAnimatorAI;
-import com.acrylic.universal.entityai.NPCAttackerStrategy;
-import com.acrylic.universal.entityai.NPCEntityPathfinder;
-import com.acrylic.universal.entityai.SimpleEntityPathQuitter;
+import com.acrylic.universal.entityai.quitterquirk.NoClipEntityPathQuitter;
+import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
+import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
+import com.acrylic.universal.entityai.quitterquirk.SimpleEntityPathQuitter;
 import com.acrylic.universal.enums.Gamemode;
-import com.acrylic.universal.pathfinder.astar.AStarGenerator;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,14 +26,7 @@ public final class Version_1_8 {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
 
-                    AStarGenerator aStarGenerator = new AStarGenerator();
-                    aStarGenerator
-                            .setLookUpThreshold(30)
-                            .setSearchDownAmount(5)
-                            .setSearchUpAmount(2);
-
                     Location test = sender.getLocation();
-                    test.setYaw(0);
                     PlayerNPC npc = new PlayerNPC(test, sender.getName());
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
@@ -48,14 +40,11 @@ public final class Version_1_8 {
                     npc.setGamemode(Gamemode.SURVIVAL);
                     npc.show();
                     npc.setSprinting(true);
-                    EntityAnimatorAI<PlayerNPC> entityAnimatorAI = new EntityAnimatorAI<>();
-                    Bukkit.broadcastMessage("T 1");
-                    entityAnimatorAI
-                            .setEntityQuitter(new SimpleEntityPathQuitter<>())
-                            .setPathfinder(new NPCEntityPathfinder<>())
-                            .setStrategy(new NPCAttackerStrategy<>());
-                    Bukkit.broadcastMessage("T 2");
-                    npc.getEntityInstance().setAi(entityAnimatorAI);
+                    NPCEntityPathfinder<PlayerNPC> entityPathfinder = new NPCEntityPathfinder<>();
+                    entityPathfinder.setEntityQuitter(new NoClipEntityPathQuitter<>());
+                    npc.getEntityInstance().setAi(new EntityAnimatorAI<PlayerNPC>()
+                            .setPathfinder(entityPathfinder)
+                            .setStrategy(new NPCAttackerStrategy<>()));
                 });
     }
     protected static byte getByteAngle(Vector vector) {

@@ -13,6 +13,8 @@ import java.util.function.Consumer;
 
 public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntityAnimator {
 
+    boolean isNoClip();
+
     void setNoClip(boolean b);
 
     void setYaw(float yaw);

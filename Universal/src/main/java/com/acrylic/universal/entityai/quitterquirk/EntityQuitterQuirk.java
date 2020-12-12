@@ -1,4 +1,4 @@
-package com.acrylic.universal.entityai;
+package com.acrylic.universal.entityai.quitterquirk;
 
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.interfaces.Timed;

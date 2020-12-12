@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 public interface PlayerNPCEntity extends NMSLivingEntityAnimator {
 
+    void setGravity(boolean b);
+
+    boolean isUsingGravity();
+
     void updateHeadPose();
 
     void updateHeadPose(float angle);
@@ -44,13 +48,18 @@ public interface PlayerNPCEntity extends NMSLivingEntityAnimator {
     void setSkin(@NotNull String texture, @NotNull String signature);
 
     default void setSkin(@NotNull String name) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                SimpleNPCSkin simpleNPCSkin = UniversalNMS.getSkinMap().getAndAddIfNotExist(name);
-                setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());
-            }
-        }.runTaskAsynchronously(Universal.getPlugin());
+        SimpleNPCSkin skin = UniversalNMS.getSkinMap().getSkin(name);
+        if (skin != null)
+            setSkin(skin.getTexture(), skin.getSignature());
+        else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    SimpleNPCSkin simpleNPCSkin = UniversalNMS.getSkinMap().getAndAddIfNotExist(name);
+                    setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());
+                }
+            }.runTaskAsynchronously(Universal.getPlugin());
+        }
     }
 
     default void setSkin(@NotNull SimpleNPCSkin simpleNPCSkin) {

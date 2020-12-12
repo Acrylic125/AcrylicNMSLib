@@ -1,8 +1,9 @@
-package com.acrylic.universal.entityai;
+package com.acrylic.universal.entityai.strategy;
 
 import com.acrylic.math.ProbabilityKt;
+import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -114,5 +115,15 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
             if (pathfinder != null && target != null)
                 pathfinder.setTargetLocation(target);
         }
+    }
+
+    @Override
+    public SimpleFollowerStrategy<T> clone() {
+        SimpleFollowerStrategy<T> followerStrategy = new SimpleFollowerStrategy<>();
+        followerStrategy
+                .setDistanceFromTargetToSwitch(distanceToSwitch)
+                .setNewTargetDistance(distance)
+                .setSearchForNewTargetTime(searchForNewTargetTime);
+        return followerStrategy;
     }
 }

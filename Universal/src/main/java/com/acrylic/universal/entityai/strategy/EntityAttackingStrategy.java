@@ -1,4 +1,4 @@
-package com.acrylic.universal.entityai;
+package com.acrylic.universal.entityai.strategy;
 
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.entity.LivingEntity;
