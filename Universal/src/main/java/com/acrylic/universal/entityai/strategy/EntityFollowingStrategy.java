@@ -1,7 +1,5 @@
 package com.acrylic.universal.entityai.strategy;
 
-import com.acrylic.universal.entityai.EntityAI;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;

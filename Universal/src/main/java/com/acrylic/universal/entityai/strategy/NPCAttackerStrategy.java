@@ -1,6 +1,7 @@
 package com.acrylic.universal.entityai.strategy;
 
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -53,12 +54,15 @@ public class NPCAttackerStrategy<T extends PlayerNPCEntity>
     }
 
     @Override
-    public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
-        super.update(entityAnimator, entityAI);
-        LivingEntity target = getTarget();
-        if (target != null && canAttack(entityAnimator, target)) {
-            attack(entityAnimator);
-            setAttackTime(System.currentTimeMillis() + getAttackCooldown());
+    public void update(@NotNull EntityAI<T> entityAI) {
+        T entityAnimator = entityAI.getAnimator();
+        if (entityAI instanceof FollowerAI) {
+            super.update(entityAnimator, (FollowerAI<T>) entityAI);
+            LivingEntity target = getTarget();
+            if (target != null && canAttack(entityAnimator, target)) {
+                attack(entityAnimator);
+                setAttackTime(System.currentTimeMillis() + getAttackCooldown());
+            }
         }
     }
 

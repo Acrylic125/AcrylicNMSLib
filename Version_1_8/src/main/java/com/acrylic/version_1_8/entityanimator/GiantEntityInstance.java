@@ -30,7 +30,7 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     @Override
     public void tickingEntity() {
         if (this.entityAI != null && giantAnimator != null)
-            this.entityAI.update(giantAnimator);
+            this.entityAI.update();
     }
 
     public void setAi(@NotNull EntityAI<NMSGiantAnimator> ai) {

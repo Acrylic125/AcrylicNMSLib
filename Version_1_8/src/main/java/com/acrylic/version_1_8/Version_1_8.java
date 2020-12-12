@@ -41,7 +41,7 @@ public final class Version_1_8 {
                     npc.setSprinting(true);
                     NPCEntityPathfinder<PlayerNPC> entityPathfinder = new NPCEntityPathfinder<>();
                     entityPathfinder.setEntityQuitter(new NoClipEntityPathQuitter<>());
-                    npc.getEntityInstance().setAi(new AttackerAI<>(entityPathfinder, new NPCAttackerStrategy<>()));
+                    npc.getEntityInstance().setAi(new AttackerAI<>(entityPathfinder, new NPCAttackerStrategy<>(), npc));
                 });
     }
     protected static byte getByteAngle(Vector vector) {

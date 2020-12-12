@@ -34,7 +34,7 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     @Override
     public void tickingEntity() {
         if (this.entityAI != null && armorStandAnimator != null)
-            this.entityAI.update(armorStandAnimator);
+            this.entityAI.update();
     }
 
     public void setAi(@NotNull EntityAI<NMSArmorStandAnimator> ai) {

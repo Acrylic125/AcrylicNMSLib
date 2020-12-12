@@ -30,7 +30,7 @@ public class PlayerEntityInstance
     @Override
     public void tickingEntity() {
         if (this.entityAI != null && playerNPC != null) {
-            this.entityAI.update(playerNPC);
+            this.entityAI.update();
         }
     }
 

@@ -23,10 +23,10 @@ public class NoClipEntityPathQuitter<T extends NMSLivingEntityAnimator>
     }
 
     @Override
-    public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
+    public void update(@NotNull EntityAI<T> ai) {
         if (isReadyToGiveUp())
             noClipTime = System.currentTimeMillis() + noClipDuration;
-        entityAnimator.setNoClip(isNoClipActive());
+        ai.getAnimator().setNoClip(isNoClipActive());
     }
 
     @Override

@@ -10,9 +10,9 @@ public class AttackerAI<T extends LivingEntityAnimator> extends FollowerAI<T> {
 
     private EntityAttackingStrategy<T> attackingStrategy;
 
-    public AttackerAI(EntityPathfinder<T> entityPathfinder, EntityAttackingStrategy<T> entityAttackingStrategy) {
-        super(entityPathfinder);
-        this.attackingStrategy = entityAttackingStrategy;
+    public AttackerAI(@NotNull EntityPathfinder<T> entityPathfinder, @NotNull EntityAttackingStrategy<T> attackingStrategy, T animator) {
+        super(entityPathfinder, animator);
+        this.attackingStrategy = attackingStrategy;
     }
 
     public void setAttackingStrategy(@Nullable EntityAttackingStrategy<T> strategy) {
@@ -25,8 +25,8 @@ public class AttackerAI<T extends LivingEntityAnimator> extends FollowerAI<T> {
     }
 
     @Override
-    public void update(@NotNull T entityAnimator) {
-        attackingStrategy.update(entityAnimator, this);
-        super.update(entityAnimator);
+    public void update() {
+        attackingStrategy.update(this);
+        super.update();
     }
 }

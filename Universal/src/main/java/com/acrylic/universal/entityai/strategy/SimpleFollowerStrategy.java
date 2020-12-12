@@ -92,33 +92,6 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     }
 
     @Override
-    public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
-        if (entityAI instanceof FollowerAI) {
-            LivingEntity target = getTarget();
-            EntityPathfinder<T> pathfinder = ((FollowerAI<T>) entityAI).getPathfinder();
-            if (target != null) {
-                if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
-                    setTarget(null);
-                    target = null;
-                } else {
-                    pathfinder.setTargetLocation(target);
-                }
-            }
-            if (shouldSearchForTarget() && target == null) {
-                List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
-                int size = entities.size();
-                if (size > 0) {
-                    setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
-                    target = entities.get(ProbabilityKt.getRandom(0, size - 1));
-                    setTarget(target);
-                }
-                if (target != null)
-                    pathfinder.setTargetLocation(target);
-            }
-        }
-    }
-
-    @Override
     public SimpleFollowerStrategy<T> clone() {
         SimpleFollowerStrategy<T> followerStrategy = new SimpleFollowerStrategy<>();
         followerStrategy
@@ -126,5 +99,35 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
                 .setNewTargetDistance(distance)
                 .setSearchForNewTargetTime(searchForNewTargetTime);
         return followerStrategy;
+    }
+
+    public void update(@NotNull T entityAnimator, @NotNull FollowerAI<T> entityAI) {
+        LivingEntity target = getTarget();
+        EntityPathfinder<T> pathfinder = entityAI.getPathfinder();
+        if (target != null) {
+            if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
+                setTarget(null);
+                target = null;
+            } else {
+                pathfinder.setTargetLocation(target);
+            }
+        }
+        if (shouldSearchForTarget() && target == null) {
+            List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
+            int size = entities.size();
+            if (size > 0) {
+                setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
+                target = entities.get(ProbabilityKt.getRandom(0, size - 1));
+                setTarget(target);
+            }
+            if (target != null)
+                pathfinder.setTargetLocation(target);
+        }
+    }
+
+    @Override
+    public void update(@NotNull EntityAI<T> ai) {
+        if (ai instanceof FollowerAI)
+            update(ai.getAnimator(), (FollowerAI<T>) ai);
     }
 }

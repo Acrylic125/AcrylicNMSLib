@@ -41,7 +41,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
         Location target = getTargetLocation();
         EntityQuitterQuirk<T> quitterQuirk = getEntityQuitter();
         if (quitterQuirk != null) {
-            quitterQuirk.update(entityAnimator, ai);
+            quitterQuirk.update(ai);
             if (target == null || target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) <= 9)
                 quitterQuirk.resetGiveUpTime();
         }
@@ -56,7 +56,8 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
     }
 
     @Override
-    public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
+    public void update(@NotNull EntityAI<T> entityAI) {
+        T entityAnimator = entityAI.getAnimator();
         updateQuitter(entityAnimator, entityAI);
         PathingPhase phase = getPathingPhase();
         switch (phase) {

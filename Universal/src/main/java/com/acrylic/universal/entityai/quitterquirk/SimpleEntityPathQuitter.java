@@ -11,23 +11,10 @@ public class SimpleEntityPathQuitter<T extends LivingEntityAnimator>
         implements EntityQuitterQuirk<T> {
 
     private long giveUpDuration = 10_000;
-    private transient long giveUpTime = 0;
+    private long giveUpTime;
 
     public SimpleEntityPathQuitter() {
         this.giveUpTime = System.currentTimeMillis() + giveUpDuration;
-    }
-
-    @Override
-    public void update(@NotNull T entityAnimator, @NotNull EntityAI<T> entityAI) {
-        if (isReadyToGiveUp() && entityAI instanceof FollowerAI) {
-            resetGiveUpTime();
-            EntityPathfinder<T> pathfinder = ((FollowerAI<T>) entityAI).getPathfinder();
-            Location target = pathfinder.getTargetLocation();
-            if (target != null) {
-                entityAnimator.teleport(target);
-                pathfinder.resetResting();
-            }
-        }
     }
 
     @Override
@@ -55,5 +42,18 @@ public class SimpleEntityPathQuitter<T extends LivingEntityAnimator>
         SimpleEntityPathQuitter<T> entityPathQuitter = new SimpleEntityPathQuitter<T>();
         entityPathQuitter.setGiveUpTimeDuration(giveUpDuration);
         return entityPathQuitter;
+    }
+
+    @Override
+    public void update(@NotNull EntityAI<T> ai) {
+        if (isReadyToGiveUp() && ai instanceof FollowerAI) {
+            resetGiveUpTime();
+            EntityPathfinder<T> pathfinder = ((FollowerAI<T>) ai).getPathfinder();
+            Location target = pathfinder.getTargetLocation();
+            if (target != null) {
+                ai.getAnimator().teleport(target);
+                pathfinder.resetResting();
+            }
+        }
     }
 }
