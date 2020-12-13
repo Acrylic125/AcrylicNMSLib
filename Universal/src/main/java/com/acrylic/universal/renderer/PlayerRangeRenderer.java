@@ -8,10 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class PlayerRangeRenderer implements PacketRenderer {
+public class PlayerRangeRenderer
+        implements InitializerPacketRenderer, PacketRendererCache {
 
     private float range = 32;
     private ArrayList<UUID> storedIds = new ArrayList<>();
@@ -74,11 +76,51 @@ public class PlayerRangeRenderer implements PacketRenderer {
     }
 
     @Override
+    public void send(PacketSender... packetSender) {
+
+    }
+
+    @Override
     public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
         for (UUID uuid : storedIds) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null)
                 packetSender.sendWithAction(player, sendWithAction);
         }
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Consumer<Player> sendWithAction, PacketSender... packetSender) {
+
+    }
+
+    @Override
+    public boolean hasInitialized(@NotNull UUID uuid) {
+        return false;
+    }
+
+    @Override
+    public void checkTermination() {
+
+    }
+
+    @Override
+    public void terminate(@NotNull Player player) {
+
+    }
+
+    @Override
+    public void checkInitialization() {
+
+    }
+
+    @Override
+    public void initialize(@NotNull Player player) {
+
+    }
+
+    @Override
+    public List<UUID> getCached() {
+        return null;
     }
 }

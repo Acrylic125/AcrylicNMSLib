@@ -12,17 +12,7 @@ public interface BlockExaminer {
     SimpleBlockExaminer SIMPLE_BLOCK_EXAMINER = new SimpleBlockExaminer();
 
     enum NavigationStyle {
-        CASUAL_SWIM(3), SWIM(4), WALK(1), CLIMB(4), NONE(-1);
-
-        private final int weight;
-
-        NavigationStyle(int weight) {
-            this.weight = weight;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
+        CASUAL_SWIM, SWIM, WALK, CLIMB, NONE;
     }
 
     boolean shouldNoClip(@NotNull Block block);

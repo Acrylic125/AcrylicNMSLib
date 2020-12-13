@@ -10,6 +10,7 @@ public abstract class AbstractPathGenerator implements PathGenerator {
             BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST
     } ;
     private static final BlockFace[] BLOCK_FACES_8 = new BlockFace[] {
+            BlockFace.UP, BlockFace.DOWN,
             BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST,
             BlockFace.NORTH_EAST, BlockFace.NORTH_WEST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST
     } ;

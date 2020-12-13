@@ -17,4 +17,5 @@ public final class DefaultRenderer implements PacketRenderer {
     public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
         packetSender.sendAll(sendWithAction);
     }
+
 }

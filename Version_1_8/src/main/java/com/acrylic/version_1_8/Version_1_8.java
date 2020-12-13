@@ -3,10 +3,9 @@ package com.acrylic.version_1_8;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.quitterquirk.NoClipEntityPathQuitter;
+import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
 import com.acrylic.universal.entityai.quitterquirk.SimpleEntityPathQuitter;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
-import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
@@ -14,7 +13,6 @@ import com.acrylic.version_1_8.npc.PlayerNPC;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public final class Version_1_8 {
 
@@ -46,17 +44,6 @@ public final class Version_1_8 {
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
                     npc.getEntityInstance().setAi(ai);
                 });
-    }
-    protected static byte getByteAngle(Vector vector) {
-        return (byte) getCompressedAngle(getAngle(vector));
-    }
-
-    private static float getAngle(Vector vector) {
-        return (float) Math.toDegrees(Math.atan2(vector.getZ(), vector.getX()) - 90f);
-    }
-
-    protected static int getCompressedAngle(float value) {
-        return (int)(value * 256.0F / 360.0F);
     }
 
 }

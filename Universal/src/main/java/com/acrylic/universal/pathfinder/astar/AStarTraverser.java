@@ -2,7 +2,9 @@ package com.acrylic.universal.pathfinder.astar;
 
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;

@@ -6,6 +6,7 @@ import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.npc.PlayerNPCEntity;
+import com.acrylic.universal.renderer.RangeRenderer;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -36,6 +37,7 @@ public class PlayerNPC
 
     private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
+        setRenderer(new RangeRenderer());
         entityPlayer = new PlayerEntityInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         entityPlayer.setAnimator(this);

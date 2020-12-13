@@ -118,6 +118,8 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
         LivingEntity target = getTarget();
         T entityAnimator = ai.getAnimator();
         EntityPathfinder<T> pathfinder = ai.getPathfinder();
+        if (pathfinder == null)
+            return;
         if (target != null) {
             if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
                 setTarget(null);

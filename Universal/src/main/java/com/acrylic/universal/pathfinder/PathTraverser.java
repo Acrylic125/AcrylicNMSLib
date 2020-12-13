@@ -1,6 +1,8 @@
 package com.acrylic.universal.pathfinder;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 public abstract class PathTraverser {
@@ -24,15 +26,12 @@ public abstract class PathTraverser {
         double y = location.getY();
         PathGenerator pathGenerator = getPathGenerator();
         Block result = null;
-        BlockExaminer.NavigationStyle currentStyle = null;
         for (int i = -pathGenerator.getSearchDownAmount(); i <= pathGenerator.getSearchUpAmount(); i++) {
             location.setY(y + i);
             Block blockCheck = location.getBlock();
             BlockExaminer.NavigationStyle blockStyle = pathGenerator.getBlockExaminer().getNavigationStyle(blockCheck);
-            if (blockStyle != null && !blockStyle.equals(BlockExaminer.NavigationStyle.NONE) && (currentStyle == null || blockStyle.getWeight() < currentStyle.getWeight())) {
-                currentStyle = blockStyle;
+            if (blockStyle != null && !blockStyle.equals(BlockExaminer.NavigationStyle.NONE))
                 result = blockCheck;
-            }
         }
         return result;
     }

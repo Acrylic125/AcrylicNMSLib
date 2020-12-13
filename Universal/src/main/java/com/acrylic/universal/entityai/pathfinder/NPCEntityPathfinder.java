@@ -15,21 +15,14 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
         super(ai);
     }
 
-    private double getAdditiveYVelocity(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z) {
+    private void moveTo(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z) {
         BlockExaminer blockExaminer = getPathGenerator().getBlockExaminer();
         BlockExaminer.NavigationStyle navigationStyle = blockExaminer.getNavigationStyle(currentLoc.getBlock());
-        switch (navigationStyle) {
-            case SWIM:
-                y = 0.05f + 0.5f;
-                break;
-            case CASUAL_SWIM:
-                y = 0.035f + 0.5f;
-                break;
-            default:
-                if (entityAnimator.isUsingGravity() && y > 0)
-                    y += 1.5f;
-        }
-        return y;
+        if (navigationStyle == BlockExaminer.NavigationStyle.CLIMB)
+            y = 0.6f;
+        else if (entityAnimator.isUsingGravity() && y > 0)
+            y += 1.5f;
+        entityAnimator.setVelocity(x, y, z);
     }
 
     public void handleNoClip(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation) {
@@ -50,7 +43,7 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
     public void moveEntity(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z) {
         updateHeadPose(entityAnimator, x, y, z);
         handleNoClip(entityAnimator, currentLoc, toLocation);
-        entityAnimator.setVelocity(x, getAdditiveYVelocity(entityAnimator, currentLoc, toLocation, x, y, z), z);
+        moveTo(entityAnimator, currentLoc, toLocation, x, y, z);
     }
 
     private double getYawAngle(double x, double z) {
