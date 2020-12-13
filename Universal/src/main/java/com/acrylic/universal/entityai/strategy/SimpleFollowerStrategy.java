@@ -22,6 +22,12 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     private float distanceToSwitch = 32;
     private long searchForNewTargetTime = 0;
     private long searchForNewTargetCooldown = 0;
+    private final FollowerAI<T> ai;
+
+    public SimpleFollowerStrategy(@NotNull FollowerAI<T> ai) {
+        this.ai = ai;
+        ai.setFollowingStrategy(this);
+    }
 
     @Override
     public boolean canFollow(@NotNull LivingEntity entity) {
@@ -93,7 +99,7 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
 
     @Override
     public SimpleFollowerStrategy<T> clone() {
-        SimpleFollowerStrategy<T> followerStrategy = new SimpleFollowerStrategy<>();
+        SimpleFollowerStrategy<T> followerStrategy = new SimpleFollowerStrategy<>(ai);
         followerStrategy
                 .setDistanceFromTargetToSwitch(distanceToSwitch)
                 .setNewTargetDistance(distance)
@@ -101,9 +107,17 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
         return followerStrategy;
     }
 
-    public void update(@NotNull T entityAnimator, @NotNull FollowerAI<T> entityAI) {
+    @NotNull
+    @Override
+    public FollowerAI<T> getAI() {
+        return ai;
+    }
+
+    @Override
+    public void update() {
         LivingEntity target = getTarget();
-        EntityPathfinder<T> pathfinder = entityAI.getPathfinder();
+        T entityAnimator = ai.getAnimator();
+        EntityPathfinder<T> pathfinder = ai.getPathfinder();
         if (target != null) {
             if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
                 setTarget(null);
@@ -125,9 +139,4 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
         }
     }
 
-    @Override
-    public void update(@NotNull EntityAI<T> ai) {
-        if (ai instanceof FollowerAI)
-            update(ai.getAnimator(), (FollowerAI<T>) ai);
-    }
 }

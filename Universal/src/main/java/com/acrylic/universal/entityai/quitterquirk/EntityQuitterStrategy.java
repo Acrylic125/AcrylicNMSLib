@@ -4,7 +4,7 @@ import com.acrylic.universal.entityai.strategy.EntityStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.interfaces.Timed;
 
-public interface EntityQuitterQuirk<T extends LivingEntityAnimator>
+public interface EntityQuitterStrategy<T extends LivingEntityAnimator>
         extends EntityStrategy<T>, Timed {
 
     void setGiveUpTimeDuration(long time);

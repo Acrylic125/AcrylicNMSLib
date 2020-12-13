@@ -1,6 +1,5 @@
 package com.acrylic.universal.entityai.pathfinder;
 
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import org.bukkit.Location;
@@ -18,18 +17,6 @@ public abstract class AbstractEntityPathfinder<T extends LivingEntityAnimator>
     private long restDuration = 0;
     private long pathingTime = 0;
     private Location target;
-    private EntityQuitterQuirk<T> quitter;
-
-    @Override
-    public void setEntityQuitter(@Nullable EntityQuitterQuirk<T> entityQuitterQuirk) {
-        this.quitter = entityQuitterQuirk;
-    }
-
-    @Nullable
-    @Override
-    public EntityQuitterQuirk<T> getEntityQuitter() {
-        return quitter;
-    }
 
     @Override
     public void setPathingPhase(@NotNull PathingPhase phase) {

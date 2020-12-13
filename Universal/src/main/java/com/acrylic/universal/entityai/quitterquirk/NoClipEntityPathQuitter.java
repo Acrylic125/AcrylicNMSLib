@@ -1,7 +1,7 @@
 package com.acrylic.universal.entityai.quitterquirk;
 
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
-import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.FollowerAI;
 import org.jetbrains.annotations.NotNull;
 
 public class NoClipEntityPathQuitter<T extends NMSLivingEntityAnimator>
@@ -9,6 +9,10 @@ public class NoClipEntityPathQuitter<T extends NMSLivingEntityAnimator>
 
     private long noClipDuration = 5_000;
     private long noClipTime = 0;
+
+    public NoClipEntityPathQuitter(@NotNull FollowerAI<T> ai) {
+        super(ai);
+    }
 
     public void setNoClipDuration(long noClipDuration) {
         this.noClipDuration = noClipDuration;
@@ -23,10 +27,10 @@ public class NoClipEntityPathQuitter<T extends NMSLivingEntityAnimator>
     }
 
     @Override
-    public void update(@NotNull EntityAI<T> ai) {
+    public void update() {
         if (isReadyToGiveUp())
             noClipTime = System.currentTimeMillis() + noClipDuration;
-        ai.getAnimator().setNoClip(isNoClipActive());
+        getAnimator().setNoClip(isNoClipActive());
     }
 
     @Override

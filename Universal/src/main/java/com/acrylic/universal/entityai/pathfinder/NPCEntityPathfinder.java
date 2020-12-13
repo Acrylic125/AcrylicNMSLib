@@ -1,7 +1,7 @@
 package com.acrylic.universal.entityai.pathfinder;
 
 import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
+import com.acrylic.universal.entityai.quitterquirk.EntityQuitterStrategy;
 import com.acrylic.universal.entityai.quitterquirk.NoClipEntityPathQuitter;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import com.acrylic.universal.pathfinder.BlockExaminer;
@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class NPCEntityPathfinder<T extends PlayerNPCEntity>
         extends AbstractSimpleEntityPathfinder<T> {
+
+    public NPCEntityPathfinder(@NotNull FollowerAI<T> ai) {
+        super(ai);
+    }
 
     private double getAdditiveYVelocity(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z) {
         BlockExaminer blockExaminer = getPathGenerator().getBlockExaminer();
@@ -29,7 +33,7 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
     }
 
     public void handleNoClip(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation) {
-        EntityQuitterQuirk<T> quitterQuirk = getEntityQuitter();
+        EntityQuitterStrategy<T> quitterQuirk = getAI().getEntityQuitter();
         if (quitterQuirk instanceof NoClipEntityPathQuitter && ((NoClipEntityPathQuitter<T>) quitterQuirk).isNoClipActive())
             return;
         BlockExaminer blockExaminer = getPathGenerator().getBlockExaminer();
@@ -51,18 +55,6 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
 
     private double getYawAngle(double x, double z) {
         return Math.toDegrees(Math.atan2(z, x) - 90f);
-    }
-
-    @Override
-    public NPCEntityPathfinder<T> clone() {
-        NPCEntityPathfinder<T> pathfinder = new NPCEntityPathfinder<>();
-        pathfinder.setDistanceToPath(getDistanceToPath());
-        pathfinder.setPathGenerator(getPathGenerator());
-        pathfinder.setSpeed(getSpeed());
-        pathfinder.setDistanceToPath(getDistanceToPath());
-        pathfinder.setMaximumTraverseTime(getMaximumTraverseTime());
-        pathfinder.setRestTimeDuration(getRestTimeDuration());
-        return pathfinder;
     }
 
 }

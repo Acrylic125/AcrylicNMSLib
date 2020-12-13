@@ -1,6 +1,5 @@
 package com.acrylic.universal.entityai.strategy;
 
-import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
@@ -13,6 +12,10 @@ public class NPCAttackerStrategy<T extends PlayerNPCEntity>
     private float attackDistance = 3;
     private long attackCooldown = 700;
     private long attackTime = 0;
+
+    public NPCAttackerStrategy(@NotNull FollowerAI<T> ai) {
+        super(ai);
+    }
 
     @Override
     public EntityAttackingStrategy<T> setAttackCooldown(long attackCooldown) {
@@ -54,15 +57,14 @@ public class NPCAttackerStrategy<T extends PlayerNPCEntity>
     }
 
     @Override
-    public void update(@NotNull EntityAI<T> entityAI) {
-        T entityAnimator = entityAI.getAnimator();
-        if (entityAI instanceof FollowerAI) {
-            super.update(entityAnimator, (FollowerAI<T>) entityAI);
-            LivingEntity target = getTarget();
-            if (target != null && canAttack(entityAnimator, target)) {
-                attack(entityAnimator);
-                setAttackTime(System.currentTimeMillis() + getAttackCooldown());
-            }
+    public void update() {
+        FollowerAI<T> ai = getAI();
+        T entityAnimator = ai.getAnimator();
+        super.update();
+        LivingEntity target = getTarget();
+        if (target != null && canAttack(entityAnimator, target)) {
+            attack(entityAnimator);
+            setAttackTime(System.currentTimeMillis() + getAttackCooldown());
         }
     }
 

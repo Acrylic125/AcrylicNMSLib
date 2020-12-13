@@ -2,7 +2,8 @@ package com.acrylic.universal.entityai.pathfinder;
 
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.entityai.EntityAI;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterQuirk;
+import com.acrylic.universal.entityai.FollowerAI;
+import com.acrylic.universal.entityai.quitterquirk.EntityQuitterStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,6 +14,12 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     private float traversingIndex = 0;
     private Location[] locations;
+    private final FollowerAI<T> ai;
+
+    public AbstractSimpleEntityPathfinder(@NotNull FollowerAI<T> ai) {
+        this.ai = ai;
+        ai.setPathfinder(this);
+    }
 
     public void generateLocations(@NotNull T entityAnimator) {
         Location location = getTargetLocation();
@@ -39,9 +46,8 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     public void updateQuitter(@NotNull T entityAnimator, @NotNull EntityAI<T> ai) {
         Location target = getTargetLocation();
-        EntityQuitterQuirk<T> quitterQuirk = getEntityQuitter();
+        EntityQuitterStrategy<T> quitterQuirk = getAI().getEntityQuitter();
         if (quitterQuirk != null) {
-            quitterQuirk.update(ai);
             if (target == null || target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) <= 9)
                 quitterQuirk.resetGiveUpTime();
         }
@@ -56,9 +62,9 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
     }
 
     @Override
-    public void update(@NotNull EntityAI<T> entityAI) {
-        T entityAnimator = entityAI.getAnimator();
-        updateQuitter(entityAnimator, entityAI);
+    public void update() {
+        T entityAnimator = ai.getAnimator();
+        updateQuitter(entityAnimator, ai);
         PathingPhase phase = getPathingPhase();
         switch (phase) {
             case RESTING:
@@ -106,6 +112,12 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
                     (location.getY() - current.getY()) * speed,
                     (location.getZ() - current.getZ()) * speed);
         }
+    }
+
+    @NotNull
+    @Override
+    public FollowerAI<T> getAI() {
+        return ai;
     }
 
     public abstract void updateHeadPose(@NotNull T entityAnimator, double x, double y, double z);
