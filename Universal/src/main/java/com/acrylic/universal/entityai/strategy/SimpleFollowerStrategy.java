@@ -1,10 +1,10 @@
 package com.acrylic.universal.entityai.strategy;
 
 import com.acrylic.math.ProbabilityKt;
-import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,6 +27,16 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     public SimpleFollowerStrategy(@NotNull FollowerAI<T> ai) {
         this.ai = ai;
         ai.setFollowingStrategy(this);
+    }
+
+    @Override
+    public boolean shouldClearFollower(@Nullable LivingEntity entity) {
+        if (entityTarget instanceof Player && !Bukkit.getOnlinePlayers().contains(entityTarget)) {
+            this.entityTarget = null;
+            Bukkit.broadcastMessage("Removed target!");
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -116,10 +126,16 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     @Override
     public void update() {
         LivingEntity target = getTarget();
-        T entityAnimator = ai.getAnimator();
         EntityPathfinder<T> pathfinder = ai.getPathfinder();
         if (pathfinder == null)
             return;
+        if (shouldClearFollower(target)) {
+            Bukkit.broadcastMessage("T");
+            pathfinder.setTargetLocation((Location) null);
+            setTarget(null);
+            target = null;
+        }
+        T entityAnimator = ai.getAnimator();
         if (target != null) {
             if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
                 setTarget(null);

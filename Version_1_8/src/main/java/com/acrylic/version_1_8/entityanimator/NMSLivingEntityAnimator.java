@@ -25,6 +25,16 @@ public abstract class NMSLivingEntityAnimator
     }
 
     @Override
+    public int getMaxDamageCooldown() {
+        return getNMSEntity().maxNoDamageTicks;
+    }
+
+    @Override
+    public void setMaxDamageCooldown(int ticks) {
+        getNMSEntity().maxNoDamageTicks = ticks;
+    }
+
+    @Override
     public boolean isNoClip() {
         return getNMSEntity().noclip;
     }

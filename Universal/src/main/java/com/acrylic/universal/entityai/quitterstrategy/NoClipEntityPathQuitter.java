@@ -1,4 +1,4 @@
-package com.acrylic.universal.entityai.quitterquirk;
+package com.acrylic.universal.entityai.quitterstrategy;
 
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.FollowerAI;

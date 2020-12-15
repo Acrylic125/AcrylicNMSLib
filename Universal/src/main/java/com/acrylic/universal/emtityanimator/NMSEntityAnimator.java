@@ -5,7 +5,8 @@ import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.packets.PacketSender;
 import com.acrylic.universal.packets.TeleportPacket;
-import com.acrylic.universal.renderer.PacketRenderer;
+import com.acrylic.universal.renderer.EntityRenderer;
+import com.acrylic.universal.renderer.InitializerPacketRenderer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -28,9 +29,10 @@ public interface NMSEntityAnimator extends EntityAnimator {
     @Override
     void setVelocity(double x, double y, double z);
 
-    PacketRenderer getRenderer();
+    @NotNull
+    EntityRenderer getRenderer();
 
-    void setRenderer(PacketRenderer packetRenderer);
+    void setRenderer(EntityRenderer packetRenderer);
 
     void addToWorld(@NotNull World world);
 
@@ -39,8 +41,6 @@ public interface NMSEntityAnimator extends EntityAnimator {
     default void addToWorld() {
         addToWorld(getBukkitEntity().getWorld());
     }
-
-    void show();
 
     @NotNull
     TeleportPacket getTeleportPacket();
@@ -56,16 +56,11 @@ public interface NMSEntityAnimator extends EntityAnimator {
     }
 
     default void sendPacketsViaRenderer(@NotNull PacketSender packetSender) {
-        PacketRenderer packetRenderer = getRenderer();
-        if (packetRenderer == null)
-            packetSender.sendAll();
-        else getRenderer().send(packetSender);
+        getRenderer().send(packetSender);
     }
 
     default void sendPacketsViaRendererWithAction(@NotNull PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
-        PacketRenderer packetRenderer = getRenderer();
-        if (packetRenderer == null) packetSender.sendAll(sendWithAction);
-        else getRenderer().sendWithAction(packetSender, sendWithAction);
+        getRenderer().sendWithAction(packetSender, sendWithAction);
     }
 
     @Override
@@ -78,8 +73,8 @@ public interface NMSEntityAnimator extends EntityAnimator {
     @Override
     default void delete() {
         EntityDestroyPacket destroyPacket = getDestroyPacket();
-        destroyPacket.delete(getBukkitEntity());
         sendPacketsViaRenderer(destroyPacket);
         removeFromWorld(getBukkitEntity().getWorld());
     }
+
 }

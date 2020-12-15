@@ -62,7 +62,7 @@ public interface EntityPathfinder<T extends LivingEntityAnimator>
         setTargetLocation(entity.getLocation());
     }
 
-    void setTargetLocation(@NotNull Location location);
+    void setTargetLocation(@Nullable Location location);
 
     @Nullable
     Location getTargetLocation();

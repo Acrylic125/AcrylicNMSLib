@@ -1,5 +1,6 @@
 package com.acrylic.universal.emtityanimator;
 
+import com.acrylic.universal.renderer.InitializerPacketRenderer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,5 +17,12 @@ public interface EntityInstance {
 
     @NotNull
     NMSEntityAnimator getAnimatior();
+
+    default void show() {
+        InitializerPacketRenderer renderer = getAnimatior().getRenderer();
+        if (renderer != null) {
+            renderer.send(getAnimatior().getDisplayPackets());
+        }
+    }
 
 }

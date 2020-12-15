@@ -8,4 +8,6 @@ public interface TeleportPacket extends SinglePacketSender {
 
     void teleport(@NotNull Entity entity, @NotNull Location location);
 
+    void teleport(@NotNull Entity entity);
+
 }

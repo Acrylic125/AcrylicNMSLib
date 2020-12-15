@@ -8,16 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface RangedPacketRenderer {
+public interface RangedPacketRenderer extends LocationalRenderer {
 
     void setRange(float range);
 
     float getRange();
-
-    void setLocation(@NotNull Location location);
-
-    @Nullable
-    Location getLocation();
 
     default float getSquaredRange() {
         float range = getRange();
@@ -33,6 +28,5 @@ public interface RangedPacketRenderer {
     default boolean isPlayerWithinRange(@NotNull UUID uuid) {
         return isPlayerWithinRange(Bukkit.getPlayer(uuid));
     }
-
 
 }

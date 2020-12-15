@@ -3,7 +3,7 @@ package com.acrylic.universal.entityai.pathfinder;
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterStrategy;
+import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;

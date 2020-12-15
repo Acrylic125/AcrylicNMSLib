@@ -1,23 +1,24 @@
 package com.acrylic.version_1_8.entityanimator;
 
-import com.acrylic.universal.renderer.PacketRenderer;
+import com.acrylic.universal.exceptions.NoRendererException;
+import com.acrylic.universal.renderer.EntityRenderer;
+import com.acrylic.universal.renderer.InitializerPacketRenderer;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.packets.EntityDestroyPacket;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
 import com.acrylic.version_1_8.packets.TeleportPacket;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.WorldServer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class NMSEntityAnimator implements com.acrylic.universal.emtityanimator.NMSEntityAnimator {
+public abstract class NMSEntityAnimator
+        implements com.acrylic.universal.emtityanimator.NMSEntityAnimator {
 
     private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
     private final LivingEntityDisplayPackets displayPackets;
     private final TeleportPacket teleportPacket = new TeleportPacket();
-    private PacketRenderer packetRenderer;
+    private EntityRenderer packetRenderer;
 
     public NMSEntityAnimator() {
         this(new LivingEntityDisplayPackets());
@@ -35,13 +36,16 @@ public abstract class NMSEntityAnimator implements com.acrylic.universal.emtitya
     @Override
     public abstract Entity getNMSEntity();
 
+    @NotNull
     @Override
-    public PacketRenderer getRenderer() {
+    public EntityRenderer getRenderer() {
+        if (packetRenderer == null)
+            throw new NoRendererException();
         return packetRenderer;
     }
 
     @Override
-    public void setRenderer(PacketRenderer packetRenderer) {
+    public void setRenderer(EntityRenderer packetRenderer) {
         this.packetRenderer = packetRenderer;
     }
 

@@ -19,6 +19,10 @@ public class EntityDestroyPacket
         return packet;
     }
 
+    public void delete(@NotNull net.minecraft.server.v1_8_R3.Entity entity) {
+        packet = new PacketPlayOutEntityDestroy(entity.getId());
+    }
+
     @Override
     public void delete(@NotNull Entity entity) {
         packet = new PacketPlayOutEntityDestroy(entity.getEntityId());

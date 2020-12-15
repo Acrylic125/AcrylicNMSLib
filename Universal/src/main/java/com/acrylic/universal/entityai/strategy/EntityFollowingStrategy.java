@@ -11,6 +11,8 @@ import java.util.List;
 public interface EntityFollowingStrategy<T extends LivingEntityAnimator>
         extends EntityStrategy<T> {
 
+    boolean shouldClearFollower(@NotNull LivingEntity entity);
+
     boolean canFollow(@NotNull LivingEntity entity);
 
     List<LivingEntity> getPossibleTargets(@NotNull Location location);

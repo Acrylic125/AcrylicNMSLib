@@ -4,9 +4,9 @@ import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.enums.Gamemode;
+import com.acrylic.universal.exceptions.NoRendererException;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.npc.PlayerNPCEntity;
-import com.acrylic.universal.renderer.RangeRenderer;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -37,12 +37,12 @@ public class PlayerNPC
 
     private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(new NPCPlayerDisplayPackets());
-        setRenderer(new RangeRenderer());
         entityPlayer = new PlayerEntityInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         entityPlayer.setAnimator(this);
         removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
+        getDestroyPacket().delete(entityPlayer);
     }
 
     @Override
@@ -74,6 +74,16 @@ public class PlayerNPC
     @Override
     public LivingEntity getBukkitEntity() {
         return entityPlayer.getBukkitEntity();
+    }
+
+    @Override
+    public int getInvulnerableTicks() {
+        return entityPlayer.invulnerableTicks;
+    }
+
+    @Override
+    public void setInvulnerableTicks(int ticks) {
+        entityPlayer.invulnerableTicks = ticks;
     }
 
     @Override
@@ -165,14 +175,11 @@ public class PlayerNPC
     }
 
     @Override
-    public void show() {
-        super.showWithAction(player -> {
+    public void setupShowPackets() throws NoRendererException {
+        super.setupShowPackets(player -> {
             UniversalNMS.getNpcHandler()
                     .getNPCTabRemoverEntries()
                     .add(new NPCTabRemoverEntry(player, removeFromTabPacket));
         });
     }
-
-
-
 }

@@ -18,6 +18,7 @@ public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements Ab
     public NMSArmorStandAnimator(@NotNull ArmorStandEntityInstance armorStand) {
         super();
         this.nmsEntity = armorStand;
+        getDestroyPacket().delete(nmsEntity);
     }
 
     public NMSArmorStandAnimator(@NotNull ArmorStandEntityInstance armorStand, @NotNull Location location) {

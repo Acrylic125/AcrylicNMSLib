@@ -1,7 +1,7 @@
 package com.acrylic.universal.entityai;
 
 import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterStrategy;
+import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityai.strategy.EntityFollowingStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.jetbrains.annotations.Nullable;

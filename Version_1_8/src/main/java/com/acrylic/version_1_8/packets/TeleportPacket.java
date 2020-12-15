@@ -21,6 +21,11 @@ public class TeleportPacket
     @Override
     public void teleport(@NotNull Entity entity, @NotNull Location location) {
         TeleportationUtils.tp(entity, location);
+        teleport(entity);
+    }
+
+    @Override
+    public void teleport(@NotNull Entity entity) {
         packet = new PacketPlayOutEntityTeleport(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 

@@ -102,7 +102,7 @@ public abstract class AbstractEntityPathfinder<T extends LivingEntityAnimator>
     }
 
     @Override
-    public void setTargetLocation(@NotNull Location location) {
+    public void setTargetLocation(@Nullable Location location) {
         this.target = location;
     }
 

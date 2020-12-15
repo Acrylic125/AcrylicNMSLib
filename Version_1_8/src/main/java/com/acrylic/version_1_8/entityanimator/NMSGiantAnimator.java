@@ -16,6 +16,7 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
     public NMSGiantAnimator(@NotNull GiantEntityInstance giantZombie) {
         super();
         this.nmsEntity = giantZombie;
+        getDestroyPacket().delete(nmsEntity);
     }
 
     public NMSGiantAnimator(@NotNull GiantEntityInstance giantZombie, @NotNull Location location) {

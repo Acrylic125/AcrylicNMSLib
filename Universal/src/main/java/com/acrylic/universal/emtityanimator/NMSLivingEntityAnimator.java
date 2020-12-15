@@ -2,16 +2,24 @@ package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.enums.EntityAnimationEnum;
+import com.acrylic.universal.exceptions.NoRendererException;
 import com.acrylic.universal.packets.EntityAnimationPackets;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
+import com.acrylic.universal.packets.TeleportPacket;
+import com.acrylic.universal.renderer.InitializerPacketRenderer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntityAnimator {
+
+    int getMaxDamageCooldown();
+
+    void setMaxDamageCooldown(int ticks);
 
     boolean isNoClip();
 
@@ -41,16 +49,30 @@ public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntity
         sendPacketsViaRenderer(entityAnimationPackets);
     }
 
-    default void show() {
-        LivingEntityDisplayPackets showPackets = getDisplayPackets();
-        showPackets.setupDisplayPackets(this);
-        sendPacketsViaRenderer(showPackets);
+    default void setupShowPackets() throws NoRendererException {
+        setupShowPackets(null);
     }
 
-    default void showWithAction(@NotNull Consumer<Player> sendWithAction) {
+    default void setupShowPackets(@Nullable Consumer<Player> sendWithAction) throws NoRendererException {
         LivingEntityDisplayPackets showPackets = getDisplayPackets();
         showPackets.setupDisplayPackets(this);
-        sendPacketsViaRendererWithAction(showPackets, sendWithAction);
+        InitializerPacketRenderer renderer = getRenderer();
+        renderer.setInitializationAction((sendWithAction == null) ?
+                player -> showPackets.sendWithAction(player, getFixedPositionAction()) :
+                player -> showPackets.sendWithAction(player, receiver -> {
+                    getFixedPositionAction().accept(receiver);
+                    sendWithAction.accept(receiver);
+                }));
+        renderer.setTerminationAction(player -> getDestroyPacket().send(player));
+    }
+
+    @NotNull
+    default Consumer<Player> getFixedPositionAction() {
+        return player -> {
+            TeleportPacket teleportPacket = getTeleportPacket();
+            teleportPacket.teleport(getBukkitEntity());
+            teleportPacket.send(player);
+        };
     }
 
 }

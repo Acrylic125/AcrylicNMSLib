@@ -1,8 +1,8 @@
 package com.acrylic.universal.entityai.pathfinder;
 
 import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.quitterquirk.EntityQuitterStrategy;
-import com.acrylic.universal.entityai.quitterquirk.NoClipEntityPathQuitter;
+import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
+import com.acrylic.universal.entityai.quitterstrategy.NoClipEntityPathQuitter;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import com.acrylic.universal.pathfinder.BlockExaminer;
 import org.bukkit.Location;
