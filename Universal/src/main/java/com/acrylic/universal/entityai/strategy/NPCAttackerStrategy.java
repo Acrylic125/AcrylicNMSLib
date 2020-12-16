@@ -68,11 +68,4 @@ public class NPCAttackerStrategy<T extends PlayerNPCEntity>
         }
     }
 
-    @Override
-    public NPCAttackerStrategy<T> clone() {
-        NPCAttackerStrategy<T> attackerStrategy = (NPCAttackerStrategy<T>) super.clone();
-        attackerStrategy.setAttackRange(attackDistance);
-        attackerStrategy.setAttackCooldown(attackCooldown);
-        return attackerStrategy;
-    }
 }

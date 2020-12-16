@@ -1,6 +1,8 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.entityanimations.entities.AbstractGiantAnimator;
+import com.acrylic.universal.renderer.EntityRenderer;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityLiving;
@@ -13,19 +15,19 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
 
     private final GiantEntityInstance nmsEntity;
 
-    public NMSGiantAnimator(@NotNull GiantEntityInstance giantZombie) {
-        super();
+    public NMSGiantAnimator(@NotNull EntityRenderer entityRenderer, @NotNull GiantEntityInstance giantZombie) {
+        super(entityRenderer);
         this.nmsEntity = giantZombie;
         getDestroyPacket().delete(nmsEntity);
     }
 
-    public NMSGiantAnimator(@NotNull GiantEntityInstance giantZombie, @NotNull Location location) {
-        this(giantZombie);
+    public NMSGiantAnimator(@NotNull EntityRenderer entityRenderer, @NotNull GiantEntityInstance giantZombie, @NotNull Location location) {
+        this(entityRenderer, giantZombie);
         nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
     }
 
-    public NMSGiantAnimator(@NotNull Location location) {
-        this(new GiantEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
+    public NMSGiantAnimator(@NotNull EntityRenderer entityRenderer, @NotNull Location location) {
+        this(entityRenderer, new GiantEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
     }
 
     @Override

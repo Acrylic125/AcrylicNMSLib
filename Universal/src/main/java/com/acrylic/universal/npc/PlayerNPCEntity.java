@@ -4,6 +4,7 @@ import com.acrylic.universal.Universal;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.enums.Gamemode;
+import com.acrylic.universal.threads.Scheduler;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -56,13 +57,12 @@ public interface PlayerNPCEntity extends NMSLivingEntityAnimator {
         if (skin != null)
             setSkin(skin.getTexture(), skin.getSignature());
         else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    SimpleNPCSkin simpleNPCSkin = UniversalNMS.getSkinMap().getAndAddIfNotExist(name);
-                    setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());
-                }
-            }.runTaskAsynchronously(Universal.getPlugin());
+            Scheduler.async()
+                    .handle(task -> {
+                        SimpleNPCSkin simpleNPCSkin = UniversalNMS.getSkinMap().getAndAddIfNotExist(name);
+                        setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());
+                    })
+                    .build();
         }
     }
 

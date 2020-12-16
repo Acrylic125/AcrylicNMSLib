@@ -1,29 +1,33 @@
 package com.acrylic.universal.npc;
 
-import com.acrylic.universal.Universal;
-import org.bukkit.scheduler.BukkitRunnable;
+import com.acrylic.universal.threads.Scheduler;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class SimpleNPCHandler implements NPCHandler {
 
     private final SimpleNPCSkinMap npcSkinMap = new SimpleNPCSkinMap();
-    private final Map<Integer, PlayerNPCEntity> NPCs = new HashMap<>();
+    private final Map<Integer, PlayerNPCEntity> NPCs = new WeakHashMap<>();
     private final List<NPCTabRemoverEntry> entries = new LinkedList<>();
 
     public SimpleNPCHandler() {
-        runRemover();
+        runTabRemover();
     }
 
-    public void runRemover() {
-        new BukkitRunnable() {
-            @Override
-            public synchronized void run() {
-                for (NPCTabRemoverEntry entry : entries)
-                    entry.execute();
-                entries.clear();
-            }
-        }.runTaskTimer(Universal.getPlugin(), 100, 100);
+    public void runTabRemover() {
+        Scheduler.sync()
+                .runRepeatingTask(100, 100)
+                .handle(task -> {
+                    synchronized (entries) {
+                        for (NPCTabRemoverEntry entry : entries)
+                            entry.execute();
+                        entries.clear();
+                    }
+                })
+                .build();
     }
 
     @Override

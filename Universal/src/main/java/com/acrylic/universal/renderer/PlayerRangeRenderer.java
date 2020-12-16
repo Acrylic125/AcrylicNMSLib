@@ -44,7 +44,6 @@ public class PlayerRangeRenderer
                 each.remove();
                 Player player = Bukkit.getPlayer(uuid);
                 if (player != null) {
-                    Bukkit.broadcastMessage("Terminated");
                     terminate(player);
                 }
             }
@@ -72,7 +71,6 @@ public class PlayerRangeRenderer
             UUID id = onlinePlayer.getUniqueId();
             if (!stored.contains(id) && isPlayerWithinRange(onlinePlayer)) {
                 stored.add(id);
-                Bukkit.broadcastMessage("Start");
                 initialize(onlinePlayer);
             }
         }
@@ -130,6 +128,6 @@ public class PlayerRangeRenderer
     @Override
     @SuppressWarnings("all")
     public boolean isPlayerWithinRange(@Nullable Player player) {
-        return location != null && isPlayerOnline(player) && location.distanceSquared(player.getLocation()) <= getSquaredRange();
+        return location != null && isPlayerOnline(player) && (System.currentTimeMillis() - player.getLastPlayed()) >= 3000 && location.distanceSquared(player.getLocation()) <= getSquaredRange();
     }
 }

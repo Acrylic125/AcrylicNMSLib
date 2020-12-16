@@ -7,6 +7,7 @@ import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.exceptions.NoRendererException;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.npc.PlayerNPCEntity;
+import com.acrylic.universal.renderer.EntityRenderer;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -31,12 +32,12 @@ public class PlayerNPC
     private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
     private boolean gravity = true;
 
-    public PlayerNPC(@NotNull Location location, @Nullable String name) {
-        this(NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
+    public PlayerNPC(@NotNull EntityRenderer entityRenderer, @NotNull Location location, @Nullable String name) {
+        this(entityRenderer, NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
     }
 
-    private PlayerNPC(@NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
-        super(new NPCPlayerDisplayPackets());
+    private PlayerNPC(@NotNull EntityRenderer entityRenderer, @NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
+        super(entityRenderer, new NPCPlayerDisplayPackets());
         entityPlayer = new PlayerEntityInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         entityPlayer.setAnimator(this);

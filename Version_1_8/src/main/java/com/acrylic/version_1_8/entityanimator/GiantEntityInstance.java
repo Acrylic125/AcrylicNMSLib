@@ -86,6 +86,11 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     }
 
     @Override
+    public int getTicksLived() {
+        return ticksLived;
+    }
+
+    @Override
     public void t_() {
         super.t_();
         tickingEntity();

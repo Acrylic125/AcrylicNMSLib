@@ -19,7 +19,7 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
 
     private LivingEntity entityTarget;
     private float distance = 32;
-    private float distanceToSwitch = 32;
+    private float maxDistanceFromTarget = 32;
     private long searchForNewTargetTime = 0;
     private long searchForNewTargetCooldown = 0;
     private final FollowerAI<T> ai;
@@ -31,12 +31,7 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
 
     @Override
     public boolean shouldClearFollower(@Nullable LivingEntity entity) {
-        if (entityTarget instanceof Player && !Bukkit.getOnlinePlayers().contains(entityTarget)) {
-            this.entityTarget = null;
-            Bukkit.broadcastMessage("Removed target!");
-            return true;
-        }
-        return false;
+        return entityTarget instanceof Player && !Bukkit.getOnlinePlayers().contains(entityTarget);
     }
 
     @Override
@@ -87,13 +82,13 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
 
     @Override
     public EntityFollowingStrategy<T> setDistanceFromTargetToSwitch(float distanceFromTargetToSwitch) {
-        this.distanceToSwitch = distanceFromTargetToSwitch;
+        this.maxDistanceFromTarget = distanceFromTargetToSwitch;
         return this;
     }
 
     @Override
     public float getDistanceFromTargetToSwitch() {
-        return distanceToSwitch;
+        return maxDistanceFromTarget;
     }
 
     @Override
@@ -105,16 +100,6 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     @Override
     public LivingEntity getTarget() {
         return entityTarget;
-    }
-
-    @Override
-    public SimpleFollowerStrategy<T> clone() {
-        SimpleFollowerStrategy<T> followerStrategy = new SimpleFollowerStrategy<>(ai);
-        followerStrategy
-                .setDistanceFromTargetToSwitch(distanceToSwitch)
-                .setNewTargetDistance(distance)
-                .setSearchForNewTargetTime(searchForNewTargetTime);
-        return followerStrategy;
     }
 
     @NotNull
@@ -130,30 +115,39 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
         if (pathfinder == null)
             return;
         if (shouldClearFollower(target)) {
-            Bukkit.broadcastMessage("T");
-            pathfinder.setTargetLocation((Location) null);
             setTarget(null);
+            pathfinder.setTargetLocation((Location) null);
             target = null;
         }
-        T entityAnimator = ai.getAnimator();
         if (target != null) {
-            if (target.getLocation().distanceSquared(entityAnimator.getBukkitEntity().getLocation()) >= distanceToSwitch * distanceToSwitch) {
+            if (shouldSwitchTarget(target.getLocation())) {
                 setTarget(null);
                 target = null;
             } else {
                 pathfinder.setTargetLocation(target);
             }
         }
-        if (shouldSearchForTarget() && target == null) {
-            List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
-            int size = entities.size();
-            if (size > 0) {
-                setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
-                target = entities.get(ProbabilityKt.getRandom(0, size - 1));
-                setTarget(target);
-            }
-            if (target != null)
-                pathfinder.setTargetLocation(target);
+        if (shouldSearchForTarget() && target == null)
+            searchForTarget();
+    }
+
+    public boolean shouldSwitchTarget(@NotNull Location location) {
+        return location.distanceSquared(getAnimator().getBukkitEntity().getLocation()) >= maxDistanceFromTarget * maxDistanceFromTarget;
+    }
+
+    public void searchForTarget() {
+        T entityAnimator = getAnimator();
+        LivingEntity target = null;
+        List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
+        int size = entities.size();
+        if (size > 0) {
+            setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
+            target = entities.get(ProbabilityKt.getRandom(0, size - 1));
+            setTarget(target);
+        }
+        if (target != null) {
+            assert ai.getPathfinder() != null;
+            ai.getPathfinder().setTargetLocation(target);
         }
     }
 

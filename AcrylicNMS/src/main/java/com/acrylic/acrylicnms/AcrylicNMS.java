@@ -6,8 +6,7 @@ import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.EntityRegistry;
-import com.acrylic.version_1_8.Version_1_8;
-import com.acrylic.version_1_8.entityanimator.ArmorStandEntityInstance;
+import com.acrylic.version_1_8.Version_1_8_Class;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AcrylicNMS extends JavaPlugin {
@@ -30,7 +29,7 @@ public final class AcrylicNMS extends JavaPlugin {
                 .handle(commandExecuted -> {
                     commandExecuted.getSender().sendMessage(ChatUtils.get("&bDeveloped by acrylic."));
                 }).arguments(new AbstractCommandBuilder[] {
-                Version_1_8.getArgumentComponent()
+                Version_1_8_Class.getArgumentComponent()
         }).register();
     }
 

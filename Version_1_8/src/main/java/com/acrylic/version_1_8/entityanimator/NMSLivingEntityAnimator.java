@@ -2,6 +2,7 @@ package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.enums.EntityAnimationEnum;
+import com.acrylic.universal.renderer.EntityRenderer;
 import com.acrylic.version_1_8.packets.EntityAnimationPackets;
 import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
@@ -16,12 +17,12 @@ public abstract class NMSLivingEntityAnimator
     private EntityEquipmentPackets equipmentPackets;
     private final EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
 
-    public NMSLivingEntityAnimator() {
-        super();
+    public NMSLivingEntityAnimator(@NotNull EntityRenderer entityRenderer) {
+        super(entityRenderer);
     }
 
-    public NMSLivingEntityAnimator(@NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
-        super(livingEntityDisplayPackets);
+    public NMSLivingEntityAnimator(@NotNull EntityRenderer entityRenderer, @NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
+        super(entityRenderer, livingEntityDisplayPackets);
     }
 
     @Override

@@ -46,7 +46,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
+                <version>1.4.20</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>com.github.Acrylic125</groupId>
             <artifactId>AcrylicMinecraftLib</artifactId>
-            <version>v1.1f</version>
+            <version>v1.2a</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

@@ -14,7 +14,15 @@ public interface NPCHandler {
 
     List<NPCTabRemoverEntry> getNPCTabRemoverEntries();
 
-    default void addNPC(PlayerNPCEntity npc) {
+    default void removeNPC(int id) {
+        getNPCs().remove(id);
+    }
+
+    default void removeNPC(@NotNull PlayerNPCEntity npc) {
+        removeNPC(npc.getBukkitEntity().getEntityId());
+    }
+
+    default void addNPC(@NotNull PlayerNPCEntity npc) {
         getNPCs().put(npc.getBukkitEntity().getEntityId(), npc);
     }
 

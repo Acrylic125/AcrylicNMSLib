@@ -74,10 +74,14 @@ public class PlayerEntityInstance
             throw new IllegalStateException("THe Animator specified must be of " + PlayerNPC.class.getName() + ".");
     }
 
-
     @Override
     public EntityPlayer getNMSEntity() {
         return this;
+    }
+
+    @Override
+    public int getTicksLived() {
+        return ticksLived;
     }
 
     @Override
@@ -97,6 +101,7 @@ public class PlayerEntityInstance
         if (!handleRespawn()) {
             tickingEntity();
             updateGravity();
+            render();
         }
     }
 

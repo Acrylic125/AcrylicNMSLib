@@ -20,12 +20,13 @@ public abstract class NMSEntityAnimator
     private final TeleportPacket teleportPacket = new TeleportPacket();
     private EntityRenderer packetRenderer;
 
-    public NMSEntityAnimator() {
-        this(new LivingEntityDisplayPackets());
+    public NMSEntityAnimator(@NotNull EntityRenderer entityRenderer) {
+        this(entityRenderer, new LivingEntityDisplayPackets());
     }
 
-    public NMSEntityAnimator(@NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
+    public NMSEntityAnimator(@NotNull EntityRenderer entityRenderer, @NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
         displayPackets = livingEntityDisplayPackets;
+        this.packetRenderer = entityRenderer;
     }
 
     @Override
@@ -39,8 +40,6 @@ public abstract class NMSEntityAnimator
     @NotNull
     @Override
     public EntityRenderer getRenderer() {
-        if (packetRenderer == null)
-            throw new NoRendererException();
         return packetRenderer;
     }
 
