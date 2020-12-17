@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public interface BlockExaminer {
 
     SimpleBlockExaminer SIMPLE_BLOCK_EXAMINER = new SimpleBlockExaminer();
+    SimpleBlockExaminerB SIMPLE_BLOCK_EXAMINER_B = new SimpleBlockExaminerB();
 
     enum NavigationStyle {
         CASUAL_SWIM, SWIM, WALK, CLIMB, NONE;

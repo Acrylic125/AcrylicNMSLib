@@ -1,19 +1,18 @@
 package com.acrylic.universal.pathfinder.newimp;
 
 import com.acrylic.universal.misc.BoundingBoxExaminer;
+import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.PathFace;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class AStarTraverserB extends PathTraverser {
 
@@ -35,6 +34,11 @@ public final class AStarTraverserB extends PathTraverser {
 
     public AStarNodeB getEnd() {
         return end;
+    }
+
+    private void clearNodes() {
+        this.openNodes.clear();
+        this.closedNodes.clear();
     }
 
     /** HELPER METHODS **/
@@ -101,31 +105,33 @@ public final class AStarTraverserB extends PathTraverser {
         BoundingBoxExaminer boundingBoxExaminer = pathGenerator.getBlockExaminer().getBoundingBoxExaminer();
         do {
             AStarNodeB closest = getClosestNode();
-            if (closest == null)
+            if (closest == null) {
+                clearNodes();
                 break;
+            }
             if (closest.equals(end)) {
                 computed = closest;
+                clearNodes();
                 break;
             }
             i++;
-            Location loc = closest.getLocation();
+            Location loc = closest.getLocation().clone();
             loc.setY(loc.getY() - 1);
-            if (boundingBoxExaminer.examine(loc))
-                loc.setY(boundingBoxExaminer.getMaxY());
-            else
-                loc.setY(loc.getY() + 1);
-            //
-            Block referenceBlock = loc.getBlock();
+            loc.setY(boundingBoxExaminer.examine(loc) ? boundingBoxExaminer.getMaxY() : loc.getY() + 1);
+            //Original location x, y, z.
+            double oX = loc.getX(), oY = loc.getY(), oZ = loc.getZ();
             removeNodeFrom(openNodes, closest);
-            int bitMask = 0x000;
+            int conjointBlockerMask = 0x000;
             for (PathFace pathFace : PathFace.PATH_FACES) {
-                if (pathFace.isBlocked(bitMask))
+                if (pathFace.isBlocked(conjointBlockerMask))
                     continue;
-                Block block = getWalkableBlock(referenceBlock.getRelative(pathFace.getFace()));
-                if (block != null)
-                    checkNode(block.getLocation(), closest);
+                BlockFace blockFace = pathFace.getFace();
+                loc.setX(oX + blockFace.getModX()); loc.setY(oY + blockFace.getModY()); loc.setZ(oZ + blockFace.getModZ());
+                Location location = getWalkableLocation(loc);
+                if (location != null)
+                    checkNode(location, closest);
                 else
-                    bitMask = pathFace.addToMask(bitMask);
+                    conjointBlockerMask = pathFace.addToMask(conjointBlockerMask);
             }
             addNodeTo(closedNodes, closest);
             computed = closest;
@@ -144,6 +150,21 @@ public final class AStarTraverserB extends PathTraverser {
         } else
             computedLocations = new Location[0];
         setComputedLocations(computedLocations);
+    }
+
+    public Location getWalkableLocation(Location location) {
+        double y = location.getY() - 1;
+        PathGenerator pathGenerator = getPathGenerator();
+        Location result = null;
+        for (int i = -pathGenerator.getSearchDownAmount(); i <= pathGenerator.getSearchUpAmount(); i++) {
+            location.setY(y + i);
+            Block blockCheck = location.getBlock();
+         //   pathGenerator.getBlockExaminer().canPassThrough();
+            BlockExaminer.NavigationStyle blockStyle = pathGenerator.getBlockExaminer().getNavigationStyle(blockCheck);
+            if (blockStyle != null && !blockStyle.equals(BlockExaminer.NavigationStyle.NONE))
+                result = location.clone();
+        }
+        return result;
     }
 
     private AStarNodeB getClosestNode() {

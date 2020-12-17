@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -77,6 +78,18 @@ public final class NMSBukkitConverter {
 
     public static EntityPlayer convertToNMSPlayer(Player player) {
         return ((CraftPlayer) player).getHandle();
+    }
+
+    public static net.minecraft.server.v1_8_R3.Block convertToNMSBlock(@NotNull org.bukkit.Material material) {
+        return CraftMagicNumbers.getBlock(material);
+    }
+
+    public static net.minecraft.server.v1_8_R3.Block convertToNMSBlock(@NotNull Block block) {
+        return CraftMagicNumbers.getBlock(block);
+    }
+
+    public static net.minecraft.server.v1_8_R3.Block convertToNMSBlock(@NotNull Location location) {
+        return convertToNMSBlock(location.getBlock());
     }
 
     public static BlockPosition getBlockPosition(@NotNull Location location) {

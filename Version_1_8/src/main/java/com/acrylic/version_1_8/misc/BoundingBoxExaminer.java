@@ -2,8 +2,6 @@ package com.acrylic.version_1_8.misc;
 
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.AxisAlignedBB;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -46,10 +44,10 @@ public class BoundingBoxExaminer
 
     @Override
     public boolean examine(@NotNull Location location) {
-        World world = NMSBukkitConverter.convertToNMSWorld(location.getWorld());
-        BlockPosition blockPosition = NMSBukkitConverter.getBlockPosition(location);
-        net.minecraft.server.v1_8_R3.Block nmsBlock = world.getType(blockPosition).getBlock();
-        bb = nmsBlock.a(world, blockPosition, nmsBlock.getBlockData());
+        net.minecraft.server.v1_8_R3.Block nmsBlock = NMSBukkitConverter.convertToNMSBlock(location);
+        bb = nmsBlock.a(NMSBukkitConverter.convertToNMSWorld(location.getWorld()),
+                NMSBukkitConverter.getBlockPosition(location),
+                nmsBlock.getBlockData());
         return bb != null;
     }
 
