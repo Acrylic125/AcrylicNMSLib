@@ -1,36 +1,39 @@
-package com.acrylic.universal.pathfinder.astar;
+package com.acrylic.universal.pathfinder.newimp;
 
 import com.acrylic.universal.misc.BoundingBoxExaminer;
+import com.acrylic.universal.pathfinder.PathFace;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
-public final class AStarTraverser extends PathTraverser {
+public final class AStarTraverserB extends PathTraverser {
 
     private final PathGenerator pathGenerator;
-    private final AStarNode start;
-    private final AStarNode end;
-    private final Map<Integer, AStarNode> openNodes = new HashMap<>();
-    private final Map<Integer, AStarNode> closedNodes = new HashMap<>();
+    private final AStarNodeB start;
+    private final AStarNodeB end;
+    private final Map<Integer, AStarNodeB> openNodes = new HashMap<>();
+    private final Map<Integer, AStarNodeB> closedNodes = new HashMap<>();
 
-    public AStarTraverser(PathGenerator pathGenerator, Block start, Block end) {
-        this.start = addNodeTo(openNodes, new AStarNode(0, start, end, start));
-        this.end = new AStarNode(-1, start, end, end);
+    public AStarTraverserB(PathGenerator pathGenerator, Location start, Location end) {
+        this.start = addNodeTo(openNodes, new AStarNodeB(0, start, end, start));
+        this.end = new AStarNodeB(-1, start, end, end);
         this.pathGenerator = pathGenerator;
     }
 
-    public AStarNode getStart() {
+    public AStarNodeB getStart() {
         return start;
     }
 
-    public AStarNode getEnd() {
+    public AStarNodeB getEnd() {
         return end;
     }
 
@@ -53,19 +56,19 @@ public final class AStarTraverser extends PathTraverser {
         return hash;
     }
 
-    private void removeNodeFrom(@NotNull Map<Integer, AStarNode> map, @NotNull AStarNode node) {
+    private void removeNodeFrom(@NotNull Map<Integer, AStarNodeB> map, @NotNull AStarNodeB node) {
         map.remove(getID(node.getLocation()));
     }
 
     @NotNull
-    private AStarNode addNodeTo(@NotNull Map<Integer, AStarNode> map, @NotNull AStarNode node) {
+    private AStarNodeB addNodeTo(@NotNull Map<Integer, AStarNodeB> map, @NotNull AStarNodeB node) {
         map.put(getID(node.getLocation()), node);
         return node;
     }
 
     @Nullable
-    private AStarNode getNodeFrom(@NotNull Map<Integer, AStarNode> map, @NotNull Block block) {
-        return map.get(getID(block.getLocation()));
+    private AStarNodeB getNodeFrom(@NotNull Map<Integer, AStarNodeB> map, @NotNull Location location) {
+        return map.get(getID(location));
     }
     /** END OF HELPERS **/
 
@@ -74,15 +77,15 @@ public final class AStarTraverser extends PathTraverser {
         return pathGenerator;
     }
 
-    private void checkNode(@NotNull Block block, @NotNull AStarNode parent) {
-        AStarNode checkNode = getNodeFrom(openNodes, block);
-        AStarNode newNode = new AStarNode(parent, this, block);
+    private void checkNode(@NotNull Location location, @NotNull AStarNodeB parent) {
+        AStarNodeB checkNode = getNodeFrom(openNodes, location);
+        AStarNodeB newNode = new AStarNodeB(parent, this, location);
         float current_cost = newNode.getFCost();
         if (checkNode != null) {
             if (checkNode.getFCost() > current_cost)
                 addNodeTo(closedNodes, newNode);
         } else {
-            checkNode = getNodeFrom(closedNodes, block);
+            checkNode = getNodeFrom(closedNodes, location);
             if (checkNode != null) {
                 if (checkNode.getFCost() > current_cost)
                     addNodeTo(closedNodes, newNode);
@@ -94,10 +97,10 @@ public final class AStarTraverser extends PathTraverser {
     @Override
     public void traverse() {
         int i = 0; //Iterations
-        AStarNode computed = null;
+        AStarNodeB computed = null;
         BoundingBoxExaminer boundingBoxExaminer = pathGenerator.getBlockExaminer().getBoundingBoxExaminer();
         do {
-            AStarNode closest = getClosestNode();
+            AStarNodeB closest = getClosestNode();
             if (closest == null)
                 break;
             if (closest.equals(end)) {
@@ -114,11 +117,15 @@ public final class AStarTraverser extends PathTraverser {
             //
             Block referenceBlock = loc.getBlock();
             removeNodeFrom(openNodes, closest);
-            for (BlockFace face : pathGenerator.getLookUpFaces()) {
-                Block block = getWalkableBlock(referenceBlock.getRelative(face));
-                if (block != null) {
-                    checkNode(block, closest);
-                }
+            int bitMask = 0x000;
+            for (PathFace pathFace : PathFace.PATH_FACES) {
+                if (pathFace.isBlocked(bitMask))
+                    continue;
+                Block block = getWalkableBlock(referenceBlock.getRelative(pathFace.getFace()));
+                if (block != null)
+                    checkNode(block.getLocation(), closest);
+                else
+                    bitMask = pathFace.addToMask(bitMask);
             }
             addNodeTo(closedNodes, closest);
             computed = closest;
@@ -126,22 +133,22 @@ public final class AStarTraverser extends PathTraverser {
         computeLocations(computed);
     }
 
-    private void computeLocations(@Nullable AStarNode computed) {
+    private void computeLocations(@Nullable AStarNodeB computed) {
         Location[] computedLocations;
-       if (computed != null) {
+        if (computed != null) {
            computedLocations = new Location[computed.getIndex() + 1];
            do {
                 computedLocations[computed.getIndex()] = computed.getLocation();
                 computed = computed.getParent();
-            } while (computed != null);
+           } while (computed != null);
         } else
             computedLocations = new Location[0];
         setComputedLocations(computedLocations);
     }
 
-    private AStarNode getClosestNode() {
-        AStarNode currentNode = null;
-        for (AStarNode node : openNodes.values()) {
+    private AStarNodeB getClosestNode() {
+        AStarNodeB currentNode = null;
+        for (AStarNodeB node : openNodes.values()) {
             if (currentNode == null || currentNode.getFCost() > node.getFCost())
                 currentNode = node;
         }

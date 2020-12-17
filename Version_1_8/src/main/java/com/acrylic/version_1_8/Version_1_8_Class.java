@@ -9,6 +9,9 @@ import com.acrylic.universal.entityai.quitterstrategy.SimpleEntityPathQuitter;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.misc.BoundingBoxExaminer;
+import com.acrylic.universal.pathfinder.PathFace;
+import com.acrylic.universal.pathfinder.PathGenerator;
+import com.acrylic.universal.pathfinder.newimp.AStarGeneratorB;
 import com.acrylic.universal.renderer.PlayerRangeRenderer;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
@@ -20,8 +23,15 @@ import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public final class Version_1_8_Class {
 
@@ -33,7 +43,11 @@ public final class Version_1_8_Class {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
-                    PlayerRangeRenderer range = new PlayerRangeRenderer();
+                    AStarGeneratorB aStarGeneratorB = new AStarGeneratorB();
+                    for (Location location : aStarGeneratorB.traverseAndCompute(test, test.clone().add(30, 0, 30))) {
+                        sender.sendBlockChange(location, Material.GOLD_BLOCK, (byte) 0);
+                    }
+                    /**PlayerRangeRenderer range = new PlayerRangeRenderer();
                     PlayerNPC npc = new PlayerNPC(range, test, sender.getName());
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
@@ -53,7 +67,7 @@ public final class Version_1_8_Class {
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
                     npc.getEntityInstance().setAi(ai);
                     npc.setInvulnerableTicks(0);
-                    npc.setMaxDamageCooldown(1);
+                    npc.setMaxDamageCooldown(1);**/
                 });
     }
 
