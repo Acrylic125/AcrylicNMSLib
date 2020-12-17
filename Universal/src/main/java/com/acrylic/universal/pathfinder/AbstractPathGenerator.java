@@ -16,7 +16,7 @@ public abstract class AbstractPathGenerator implements PathGenerator {
     } ;
 
     private BlockFace[] blockFaces = BLOCK_FACES_8;
-    private int lookUpThreshold = 50;
+    private int lookUpThreshold = 150;
     private int searchDown = 2;
     private int searchUp = 2;
     private BlockExaminer blockExaminer = BlockExaminer.SIMPLE_BLOCK_EXAMINER;

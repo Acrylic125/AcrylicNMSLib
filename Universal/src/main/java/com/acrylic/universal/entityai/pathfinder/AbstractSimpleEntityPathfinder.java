@@ -1,10 +1,12 @@
 package com.acrylic.universal.entityai.pathfinder;
 
+import com.acrylic.universal.NMSBridge;
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
+import com.acrylic.universal.misc.BoundingBoxExaminer;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;

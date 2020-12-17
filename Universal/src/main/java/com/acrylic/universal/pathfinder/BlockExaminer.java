@@ -1,5 +1,6 @@
 package com.acrylic.universal.pathfinder;
 
+import com.acrylic.universal.misc.BoundingBoxExaminer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +27,8 @@ public interface BlockExaminer {
     NavigationStyle getNavigationStyle(@NotNull Block block);
 
     boolean canPassThrough(@NotNull Block block);
+
+    BoundingBoxExaminer getBoundingBoxExaminer();
 
     static boolean isAir(@Nullable Material material) {
         return material == null || material.equals(Material.AIR);

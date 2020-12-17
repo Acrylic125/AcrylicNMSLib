@@ -1,12 +1,15 @@
 package com.acrylic.universal.pathfinder;
 
-import org.bukkit.Bukkit;
+import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.misc.BoundingBoxExaminer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleBlockExaminer implements BlockExaminer {
+
+    private final BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer();
 
     @Override
     public boolean shouldNoClip(@NotNull Block block) {
@@ -66,6 +69,11 @@ public class SimpleBlockExaminer implements BlockExaminer {
     @Override
     public boolean canPassThrough(@NotNull Block block) {
         return isTraversable(block.getRelative(BlockFace.UP)) && isTraversable(block);
+    }
+
+    @Override
+    public BoundingBoxExaminer getBoundingBoxExaminer() {
+        return boundingBoxExaminer;
     }
 
 

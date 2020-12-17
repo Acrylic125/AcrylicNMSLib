@@ -1,5 +1,6 @@
 package com.acrylic.universal.pathfinder.astar;
 
+import com.acrylic.universal.misc.BoundingBoxExaminer;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
 import org.bukkit.Bukkit;
@@ -96,6 +97,7 @@ public final class AStarTraverser extends PathTraverser {
     public void traverse() {
         int i = 0; //Iterations
         AStarNode computed = null;
+        BoundingBoxExaminer boundingBoxExaminer = pathGenerator.getBlockExaminer().getBoundingBoxExaminer();
         do {
             AStarNode closest = getClosestNode();
             if (closest == null)
@@ -105,7 +107,14 @@ public final class AStarTraverser extends PathTraverser {
                 break;
             }
             i++;
-            Block referenceBlock = closest.getLocation().getBlock();
+            Location loc = closest.getLocation();
+            loc.setY(loc.getY() - 1);
+            if (boundingBoxExaminer.examine(loc))
+                loc.setY(boundingBoxExaminer.getMaxY());
+            else
+                loc.setY(loc.getY() + 1);
+            //
+            Block referenceBlock = loc.getBlock();
             removeNodeFrom(openNodes, closest);
             for (BlockFace face : pathGenerator.getLookUpFaces()) {
                 Block block = getWalkableBlock(referenceBlock.getRelative(face));
@@ -121,9 +130,9 @@ public final class AStarTraverser extends PathTraverser {
 
     private void computeLocations(@Nullable AStarNode computed) {
         Location[] computedLocations;
-        if (computed != null) {
-            computedLocations = new Location[computed.getIndex() + 1];
-            do {
+       if (computed != null) {
+           computedLocations = new Location[computed.getIndex() + 1];
+           do {
                 computedLocations[computed.getIndex()] = computed.getLocation();
                 computed = computed.getParent();
             } while (computed != null);

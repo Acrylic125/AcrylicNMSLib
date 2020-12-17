@@ -2,6 +2,7 @@ package com.acrylic.version_1_8;
 
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -76,6 +77,14 @@ public final class NMSBukkitConverter {
 
     public static EntityPlayer convertToNMSPlayer(Player player) {
         return ((CraftPlayer) player).getHandle();
+    }
+
+    public static BlockPosition getBlockPosition(@NotNull Location location) {
+        return new BlockPosition(location.getX(), location.getY(), location.getZ());
+    }
+
+    public static BlockPosition getBlockPosition(@NotNull Block block) {
+        return getBlockPosition(block.getLocation());
     }
 
 }
