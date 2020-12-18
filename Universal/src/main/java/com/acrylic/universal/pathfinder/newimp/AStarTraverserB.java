@@ -5,9 +5,11 @@ import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.PathFace;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -144,8 +146,8 @@ public final class AStarTraverserB extends PathTraverser {
         if (computed != null) {
            computedLocations = new Location[computed.getIndex() + 1];
            do {
-                computedLocations[computed.getIndex()] = computed.getLocation();
-                computed = computed.getParent();
+               computedLocations[computed.getIndex()] = computed.getLocation();
+               computed = computed.getParent();
            } while (computed != null);
         } else
             computedLocations = new Location[0];
@@ -153,18 +155,15 @@ public final class AStarTraverserB extends PathTraverser {
     }
 
     public Location getWalkableLocation(Location location) {
-        double y = location.getY() - 1;
+        double y = location.getY();
         PathGenerator pathGenerator = getPathGenerator();
-        Location result = null;
         for (int i = -pathGenerator.getSearchDownAmount(); i <= pathGenerator.getSearchUpAmount(); i++) {
             location.setY(y + i);
-            Block blockCheck = location.getBlock();
-         //   pathGenerator.getBlockExaminer().canPassThrough();
-            BlockExaminer.NavigationStyle blockStyle = pathGenerator.getBlockExaminer().getNavigationStyle(blockCheck);
+            BlockExaminer.NavigationStyle blockStyle = pathGenerator.getBlockExaminer().getNavigationStyle(location);
             if (blockStyle != null && !blockStyle.equals(BlockExaminer.NavigationStyle.NONE))
-                result = location.clone();
+                return location.clone();
         }
-        return result;
+        return null;
     }
 
     private AStarNodeB getClosestNode() {

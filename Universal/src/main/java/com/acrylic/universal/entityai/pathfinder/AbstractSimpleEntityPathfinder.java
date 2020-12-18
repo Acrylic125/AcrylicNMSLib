@@ -1,14 +1,11 @@
 package com.acrylic.universal.entityai.pathfinder;
 
-import com.acrylic.universal.NMSBridge;
-import com.acrylic.universal.Universal;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
-import com.acrylic.universal.misc.BoundingBoxExaminer;
+import com.acrylic.universal.threads.Scheduler;
 import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnimator>
@@ -85,12 +82,9 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
              * Traversing is performance heavy therefore it is done in async
              * to preserve performance.
              */
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    resetTraversing(entityAnimator);
-                }
-            }.runTaskAsynchronously(Universal.getPlugin());
+            Scheduler.async().handle(task -> {
+                resetTraversing(entityAnimator);
+            }).build();
         } else {
             Location target = getTargetLocation();
             if (target != null) {

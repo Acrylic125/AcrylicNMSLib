@@ -2,6 +2,7 @@ package com.acrylic.universal.pathfinder;
 
 import com.acrylic.universal.misc.BoundingBoxExaminer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -26,6 +27,8 @@ public interface BlockExaminer {
     boolean isClimbable(@NotNull Block block);
 
     NavigationStyle getNavigationStyle(@NotNull Block block);
+
+    NavigationStyle getNavigationStyle(@NotNull Location location);
 
     boolean canPassThrough(@NotNull Block block);
 

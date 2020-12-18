@@ -1,6 +1,7 @@
 package com.acrylic.universal.pathfinder;
 
 import com.acrylic.universal.pathfinder.astar.AStarGenerator;
+import com.acrylic.universal.pathfinder.newimp.AStarGeneratorB;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public interface PathGenerator {
 
     /** Default path generator(s).**/
-    AStarGenerator A_STAR_GENERATOR = new AStarGenerator();
+    AStarGeneratorB A_STAR_GENERATOR = new AStarGeneratorB();
 
     PathGenerator setLookUpFaces(BlockFace... blockFaces);
 

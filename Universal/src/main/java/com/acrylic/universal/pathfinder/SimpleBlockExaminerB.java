@@ -2,6 +2,7 @@ package com.acrylic.universal.pathfinder;
 
 import com.acrylic.universal.NMSBridge;
 import com.acrylic.universal.misc.BoundingBoxExaminer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class SimpleBlockExaminerB implements BlockExaminer {
 
     private final BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer();
+    private static final float heightReq = 1.8f;
 
     @Override
     public boolean shouldNoClip(@NotNull Block block) {
@@ -37,10 +39,15 @@ public class SimpleBlockExaminerB implements BlockExaminer {
         }
     }
 
+    public boolean isTraversable(@NotNull Block block, @NotNull BoundingBoxExaminer examiner) {
+        Material type = block.getType();
+        return BlockExaminer.isAir(type) || isClimbable(block) || !examiner.canExamine() || shouldNoClip(block);
+    }
+
     @Override
     public boolean isTraversable(@NotNull Block block) {
         Material type = block.getType();
-        return BlockExaminer.isAir(type) || isClimbable(block) || !type.isSolid() || shouldNoClip(block);
+        return BlockExaminer.isAir(type) || isClimbable(block) || shouldNoClip(block);
     }
 
     @Override
@@ -53,14 +60,51 @@ public class SimpleBlockExaminerB implements BlockExaminer {
         return BlockExaminer.isClimbable(block.getType());
     }
 
-    private BoundingBoxExaminer getNewBBExaminer() {
-        return NMSBridge.getBridge().getUtils().getBlockExaminer();
+    private BoundingBoxExaminer getNewBBExaminer(@NotNull Location location) {
+        return NMSBridge.getBridge().getUtils().getBlockExaminer(location);
     }
 
     public NavigationStyle getNavigationStyle(@NotNull Location location) {
-        BoundingBoxExaminer main = getNewBBExaminer();
-        boundingBoxExaminer.examine(location);
-
+        location = location.clone();
+        BoundingBoxExaminer boundingBoxExaminer = getNewBBExaminer(location);
+        double baseY;
+        boolean isSolidBase;
+        if (!isTraversable(location.getBlock()) && boundingBoxExaminer.canExamine()) {
+            baseY = boundingBoxExaminer.getMaxY();
+            isSolidBase = true;
+        } else {
+            boundingBoxExaminer.examine(location.add(0, -1, 0));
+            isSolidBase = !isTraversable(location.getBlock()) && boundingBoxExaminer.canExamine();
+            baseY = (isSolidBase) ? boundingBoxExaminer.getMaxY() : location.getY();
+        }
+        int max = (int) Math.ceil(heightReq);
+        boolean isSwimming = false;
+        boolean isClimbable = false;
+        for (int i = 0; i <= max; i++) {
+            location.setY(baseY + i);
+            boundingBoxExaminer.examine(location);
+            Block block = location.getBlock();
+            boolean canExamine = boundingBoxExaminer.canExamine();
+            boolean canPass = isTraversable(block, boundingBoxExaminer);
+            if (i == 0) {
+                if (isLiquid(block))
+                    isSwimming = true;
+                else if (isClimbable(block))
+                    isClimbable = true;
+            }
+            else if (i == max || !canPass) {
+                double highestY = (canExamine) ? boundingBoxExaminer.getMinY() : block.getY() + 1;
+                boolean canFit = (highestY - baseY) >= heightReq;
+                if (!canFit)
+                    return NavigationStyle.NONE;
+                else if (isSwimming)
+                    return (BlockExaminer.isLiquid(block.getType())) ? NavigationStyle.SWIM : NavigationStyle.CASUAL_SWIM;
+                else if (isSolidBase)
+                    return (isClimbable) ? NavigationStyle.CLIMB : NavigationStyle.WALK;
+                break;
+            }
+        }
+        return NavigationStyle.NONE;
     }
 
     @Override

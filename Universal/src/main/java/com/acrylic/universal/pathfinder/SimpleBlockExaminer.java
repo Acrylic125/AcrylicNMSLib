@@ -2,6 +2,7 @@ package com.acrylic.universal.pathfinder;
 
 import com.acrylic.universal.NMSBridge;
 import com.acrylic.universal.misc.BoundingBoxExaminer;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -64,6 +65,11 @@ public class SimpleBlockExaminer implements BlockExaminer {
                 return NavigationStyle.WALK;
         }
         return NavigationStyle.NONE;
+    }
+
+    @Override
+    public NavigationStyle getNavigationStyle(@NotNull Location location) {
+        return getNavigationStyle(location.getBlock());
     }
 
     @Override

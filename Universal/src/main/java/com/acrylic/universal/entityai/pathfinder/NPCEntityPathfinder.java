@@ -5,6 +5,7 @@ import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityai.quitterstrategy.NoClipEntityPathQuitter;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import com.acrylic.universal.pathfinder.BlockExaminer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,11 +18,12 @@ public class NPCEntityPathfinder<T extends PlayerNPCEntity>
 
     private void moveTo(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation, double x, double y, double z) {
         BlockExaminer blockExaminer = getPathGenerator().getBlockExaminer();
-        BlockExaminer.NavigationStyle navigationStyle = blockExaminer.getNavigationStyle(currentLoc.getBlock());
+        BlockExaminer.NavigationStyle navigationStyle = blockExaminer.getNavigationStyle(currentLoc);
         if (navigationStyle == BlockExaminer.NavigationStyle.CLIMB)
             y = 0.6f;
         else if (entityAnimator.isUsingGravity() && y > 0)
             y += 1.5f;
+        Bukkit.broadcastMessage(toLocation.getX() + " " + toLocation.getY() + " " + toLocation.getZ());
         entityAnimator.setVelocity(x, y, z);
     }
 
