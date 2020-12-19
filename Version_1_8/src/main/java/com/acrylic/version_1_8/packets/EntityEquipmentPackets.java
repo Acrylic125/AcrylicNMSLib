@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EntityEquipmentPackets extends PacketSender implements com.acrylic.universal.packets.EntityEquipmentPackets {
 
     private PacketPlayOutEntityEquipment[] packets;
-    private HashMap<Integer, net.minecraft.server.v1_8_R3.ItemStack> itemsMap = new HashMap<>();
+    private final HashMap<Integer, net.minecraft.server.v1_8_R3.ItemStack> itemsMap = new HashMap<>();
 
     private void addNewEntry(int i, @Nullable ItemStack item) {
         if (item == null)

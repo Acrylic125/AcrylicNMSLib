@@ -8,7 +8,6 @@ import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.packets.TeleportPacket;
 import com.acrylic.universal.renderer.InitializerPacketRenderer;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,8 +38,6 @@ public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntity
 
     EntityAnimationPackets getAnimationPackets();
 
-    void damageEffect(@NotNull LivingEntity attacker);
-
     EntityEquipmentPackets getEquipmentPackets();
 
     default void animate(EntityAnimationEnum... animation) {
@@ -57,12 +54,12 @@ public interface NMSLivingEntityAnimator extends LivingEntityAnimator, NMSEntity
         LivingEntityDisplayPackets showPackets = getDisplayPackets();
         showPackets.setupDisplayPackets(this);
         InitializerPacketRenderer renderer = getRenderer();
-        renderer.setInitializationAction((sendWithAction == null) ?
-                player -> showPackets.sendWithAction(player, getFixedPositionAction()) :
-                player -> showPackets.sendWithAction(player, receiver -> {
-                    getFixedPositionAction().accept(receiver);
-                    sendWithAction.accept(receiver);
-                }));
+        if (sendWithAction != null)
+            renderer.setInitializationAction(
+                    player -> showPackets.sendWithAction(player, receiver -> {
+                        getFixedPositionAction().accept(receiver);
+                        sendWithAction.accept(receiver);
+                    }));
         renderer.setTerminationAction(player -> getDestroyPacket().send(player));
     }
 

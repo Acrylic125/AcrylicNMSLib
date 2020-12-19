@@ -12,6 +12,7 @@ import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 public final class Version_1_8_Class {
@@ -24,6 +25,11 @@ public final class Version_1_8_Class {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
+                    /**Location to = test.clone().add(10, 0, 10);
+                    sender.sendBlockChange(to.clone().add(0, 1, 0), Material.DIAMOND_BLOCK, (byte) 0);
+                    for (Location computedLocation : PathGenerator.A_STAR_GENERATOR.traverseAndCompute(test, to)) {
+                        sender.sendBlockChange(computedLocation, Material.GOLD_BLOCK, (byte) 0);
+                    }**/
                     PlayerRangeRenderer range = new PlayerRangeRenderer();
                     PlayerNPC npc = new PlayerNPC(range, test, sender.getName());
                     npc.setEquipment(new EntityEquipmentBuilder()
@@ -31,7 +37,11 @@ public final class Version_1_8_Class {
                             .setChestplate(ItemBuilder.of(Material.DIAMOND_CHESTPLATE).build())
                             .setLeggings(ItemBuilder.of(Material.DIAMOND_LEGGINGS).build())
                             .setBoots(ItemBuilder.of(Material.DIAMOND_BOOTS).build())
-                            .setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD).build())
+                            .setItemInHand(ItemBuilder.of(Material.DIAMOND_SWORD)
+                                    .enchant(Enchantment.DAMAGE_ALL, 5)
+                                    .enchant(Enchantment.FIRE_ASPECT, 2)
+                                    .enchant(Enchantment.KNOCKBACK, 2)
+                                    .build())
                     );
                     npc.setSkin(sender.getName());
                     npc.addToWorld();
@@ -40,11 +50,11 @@ public final class Version_1_8_Class {
                     npc.setSprinting(true);
                     FollowerAI<PlayerNPC> ai = new FollowerAI<>(npc);
                     //ai.setEntityQuitter(new SimpleEntityPathQuitter<>(ai));
-                    ai.setPathfinder(new NPCEntityPathfinder<>(ai).setSpeed(0.2f));
+                    ai.setPathfinder(new NPCEntityPathfinder<>(ai).setSpeed(0.6f));
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
                     npc.getEntityInstance().setAi(ai);
-                    npc.setInvulnerableTicks(0);
-                    npc.setMaxDamageCooldown(1);
+                    npc.setInvulnerableTicks(1);
+                    npc.setMaxDamageCooldown(20);
                 });
     }
 

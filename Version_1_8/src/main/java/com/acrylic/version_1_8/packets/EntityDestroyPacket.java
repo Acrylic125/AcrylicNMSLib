@@ -24,7 +24,7 @@ public class EntityDestroyPacket
     }
 
     @Override
-    public void delete(@NotNull Entity entity) {
+    public void apply(@NotNull Entity entity) {
         packet = new PacketPlayOutEntityDestroy(entity.getEntityId());
     }
 }

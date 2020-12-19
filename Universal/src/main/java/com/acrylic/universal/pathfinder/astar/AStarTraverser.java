@@ -6,8 +6,11 @@ import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.PathFace;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -98,18 +101,25 @@ public final class AStarTraverser extends PathTraverser {
         }
     }
 
+    private boolean isNearEndNode(AStarNode node) {
+        Location nLoc = node.getLocation();
+        Location endLoc = end.getLocation();
+        return Math.abs(nLoc.getX() - endLoc.getX()) <= 0.5 && Math.abs(nLoc.getZ() - endLoc.getZ()) <= 0.5;
+    }
+
     @Override
     public void traverse() {
         int i = 0; //Iterations
         AStarNode computed = null;
+        AStarNode closest;
         BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer();
         do {
-            AStarNode closest = getClosestNode();
+            closest = getClosestNode();
             if (closest == null) {
                 clearNodes();
                 break;
             }
-            if (closest.equals(end)) {
+            if (isNearEndNode(closest)) {
                 computed = closest;
                 clearNodes();
                 break;
@@ -134,8 +144,9 @@ public final class AStarTraverser extends PathTraverser {
                     conjointBlockerMask = pathFace.addToMask(conjointBlockerMask);
             }
             addNodeTo(closedNodes, closest);
-            computed = closest;
         } while (!openNodes.isEmpty() && i <= pathGenerator.getLookUpThreshold());
+        if (computed == null && closest != null)
+            computed = closest;
         computeLocations(computed);
     }
 

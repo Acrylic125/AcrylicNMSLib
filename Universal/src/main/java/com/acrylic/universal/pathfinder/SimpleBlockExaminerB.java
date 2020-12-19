@@ -63,7 +63,10 @@ public class SimpleBlockExaminerB implements BlockExaminer {
         BoundingBoxExaminer boundingBoxExaminer = getNewBBExaminer(location);
         double baseY;
         boolean isSolidBase;
+        int max = (int) Math.ceil(heightReq);
         if (!isTraversable(location.getBlock()) && boundingBoxExaminer.canExamine()) {
+            if (boundingBoxExaminer.getY() >= 1)
+                return NavigationStyle.NONE;
             baseY = boundingBoxExaminer.getMaxY();
             isSolidBase = true;
         } else {
@@ -71,22 +74,19 @@ public class SimpleBlockExaminerB implements BlockExaminer {
             isSolidBase = !isTraversable(location.getBlock()) && boundingBoxExaminer.canExamine();
             baseY = (isSolidBase) ? boundingBoxExaminer.getMaxY() : location.getY();
         }
-        int max = (int) Math.ceil(heightReq);
-        boolean isSwimming = false;
-        boolean isClimbable = false;
+        boolean isSwimming = false, isClimbable = false;
         for (int i = 0; i <= max; i++) {
             location.setY(baseY + i);
             boundingBoxExaminer.examine(location);
             Block block = location.getBlock();
-            boolean canExamine = boundingBoxExaminer.canExamine();
-            boolean canPass = !boundingBoxExaminer.canExamine() || isTraversable(block);
+            boolean canExamine = boundingBoxExaminer.canExamine(), canPass = !canExamine || isTraversable(block);
             if (i == 0) {
                 if (isLiquid(block))
                     isSwimming = true;
                 else if (isClimbable(block))
                     isClimbable = true;
             } else if (i == max || !canPass) {
-                double highestY = (canExamine) ? boundingBoxExaminer.getMinY() : block.getY() + 1;
+                double highestY = (!canPass) ? boundingBoxExaminer.getMinY() : baseY + i;
                 boolean canFit = (highestY - baseY) >= heightReq;
                 if (!canFit)
                     return NavigationStyle.NONE;

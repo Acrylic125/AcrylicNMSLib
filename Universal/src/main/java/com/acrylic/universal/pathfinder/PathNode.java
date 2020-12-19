@@ -26,9 +26,9 @@ public abstract class PathNode {
      * @return The distance.
      */
     public double getDistanceSquared(@NotNull final Location location) {
-        return NumberConversions.square(this.location.getX() - location.getX()) +
-                NumberConversions.square(this.location.getY() - location.getY()) +
-                NumberConversions.square(this.location.getZ() - location.getZ());
+        return Math.sqrt(NumberConversions.square(this.location.getX() - location.getX()) +
+                        NumberConversions.square(this.location.getY() - location.getY()) +
+                 NumberConversions.square(this.location.getZ() - location.getZ()));
     }
 
 

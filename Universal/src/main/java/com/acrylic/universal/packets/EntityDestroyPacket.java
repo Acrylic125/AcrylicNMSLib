@@ -5,6 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface EntityDestroyPacket extends SinglePacketSender {
 
-    void delete(@NotNull Entity entity);
+    void apply(@NotNull Entity entity);
 
 }
