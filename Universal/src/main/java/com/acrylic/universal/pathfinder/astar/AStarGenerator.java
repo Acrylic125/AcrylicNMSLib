@@ -13,6 +13,6 @@ public class AStarGenerator extends AbstractPathGenerator {
     @NotNull
     @Override
     public PathTraverser getPathTraverser(@NotNull Location start, @NotNull Location end) {
-        return new AStarTraverser(this, start.getBlock(), end.getBlock());
+        return new AStarTraverser(this, start, end);
     }
 }

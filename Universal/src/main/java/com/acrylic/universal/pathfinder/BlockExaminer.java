@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 public interface BlockExaminer {
 
-    SimpleBlockExaminer SIMPLE_BLOCK_EXAMINER = new SimpleBlockExaminer();
     SimpleBlockExaminerB SIMPLE_BLOCK_EXAMINER_B = new SimpleBlockExaminerB();
 
     enum NavigationStyle {
@@ -31,8 +30,6 @@ public interface BlockExaminer {
     NavigationStyle getNavigationStyle(@NotNull Location location);
 
     boolean canPassThrough(@NotNull Block block);
-
-    BoundingBoxExaminer getBoundingBoxExaminer();
 
     static boolean isAir(@Nullable Material material) {
         return material == null || material.equals(Material.AIR);

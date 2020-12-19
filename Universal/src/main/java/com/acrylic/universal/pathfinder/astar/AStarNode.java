@@ -10,19 +10,19 @@ public final class AStarNode extends PathNode {
     private final float hCost;
     private AStarNode parent;
 
-    protected AStarNode(int index, Block start, Block end, Block block) {
-        super(block.getLocation(), index);
-        this.gCost = (float) getDistanceSquared(start.getLocation());
-        this.hCost = (float) getDistanceSquared(end.getLocation());
+    protected AStarNode(int index, Location start, Location end, Location location) {
+        super(location, index);
+        this.gCost = (float) getDistanceSquared(start);
+        this.hCost = (float) getDistanceSquared(end);
     }
 
-    protected AStarNode(int index, AStarTraverser traverser, Block block) {
-        super(block.getLocation(), index);
+    protected AStarNode(int index, AStarTraverser traverser, Location location) {
+        super(location, index);
         this.gCost = (float) getDistanceSquared(traverser.getStart());
         this.hCost = (float) getDistanceSquared(traverser.getEnd());
     }
 
-    protected AStarNode(AStarNode parent, AStarTraverser traverser, Block location) {
+    protected AStarNode(AStarNode parent, AStarTraverser traverser, Location location) {
         this(parent.getIndex() + 1, traverser, location);
         this.parent = parent;
     }

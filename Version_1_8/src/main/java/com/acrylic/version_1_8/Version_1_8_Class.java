@@ -6,15 +6,10 @@ import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
 import com.acrylic.universal.enums.Gamemode;
-import com.acrylic.universal.pathfinder.BlockExaminer;
-import com.acrylic.universal.pathfinder.newimp.AStarGeneratorB;
 import com.acrylic.universal.renderer.PlayerRangeRenderer;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
-import com.acrylic.version_1_8.particles.Particles;
-import net.minecraft.server.v1_8_R3.EnumParticle;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,12 +24,7 @@ public final class Version_1_8_Class {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
-                    AStarGeneratorB aStarGeneratorB = new AStarGeneratorB();
-                    //for (Location location : aStarGeneratorB.traverseAndCompute(test, test.clone().add(30, 0, 30))) {
-                    //    sender.sendBlockChange(location, Material.GOLD_BLOCK, (byte) 0);
-                    //}
-                    Bukkit.broadcastMessage(BlockExaminer.SIMPLE_BLOCK_EXAMINER_B.getNavigationStyle(test) + "");
-                    /**PlayerRangeRenderer range = new PlayerRangeRenderer();
+                    PlayerRangeRenderer range = new PlayerRangeRenderer();
                     PlayerNPC npc = new PlayerNPC(range, test, sender.getName());
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
@@ -54,7 +44,7 @@ public final class Version_1_8_Class {
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
                     npc.getEntityInstance().setAi(ai);
                     npc.setInvulnerableTicks(0);
-                    npc.setMaxDamageCooldown(1);**/
+                    npc.setMaxDamageCooldown(1);
                 });
     }
 

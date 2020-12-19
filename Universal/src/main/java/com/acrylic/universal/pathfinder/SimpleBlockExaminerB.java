@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class SimpleBlockExaminerB implements BlockExaminer {
 
-    private final BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer();
     private static final float heightReq = 1.8f;
 
     @Override
@@ -37,11 +36,6 @@ public class SimpleBlockExaminerB implements BlockExaminer {
             default:
                 return false;
         }
-    }
-
-    public boolean isTraversable(@NotNull Block block, @NotNull BoundingBoxExaminer examiner) {
-        Material type = block.getType();
-        return BlockExaminer.isAir(type) || isClimbable(block) || !examiner.canExamine() || shouldNoClip(block);
     }
 
     @Override
@@ -85,14 +79,13 @@ public class SimpleBlockExaminerB implements BlockExaminer {
             boundingBoxExaminer.examine(location);
             Block block = location.getBlock();
             boolean canExamine = boundingBoxExaminer.canExamine();
-            boolean canPass = isTraversable(block, boundingBoxExaminer);
+            boolean canPass = !boundingBoxExaminer.canExamine() || isTraversable(block);
             if (i == 0) {
                 if (isLiquid(block))
                     isSwimming = true;
                 else if (isClimbable(block))
                     isClimbable = true;
-            }
-            else if (i == max || !canPass) {
+            } else if (i == max || !canPass) {
                 double highestY = (canExamine) ? boundingBoxExaminer.getMinY() : block.getY() + 1;
                 boolean canFit = (highestY - baseY) >= heightReq;
                 if (!canFit)
@@ -109,28 +102,12 @@ public class SimpleBlockExaminerB implements BlockExaminer {
 
     @Override
     public NavigationStyle getNavigationStyle(@NotNull Block block) {
-
-        Block up = block.getRelative(BlockFace.UP);
-        if (isTraversable(up) && isTraversable(block)) {
-            if (isLiquid(block))
-                return isLiquid(up) ? NavigationStyle.SWIM : NavigationStyle.CASUAL_SWIM;
-            else if (isClimbable(block))
-                return NavigationStyle.CLIMB;
-            else if (block.getRelative(BlockFace.DOWN).getType().isSolid())
-                return NavigationStyle.WALK;
-        }
-        return NavigationStyle.NONE;
+        return getNavigationStyle(block.getLocation());
     }
 
     @Override
     public boolean canPassThrough(@NotNull Block block) {
         return isTraversable(block.getRelative(BlockFace.UP)) && isTraversable(block);
     }
-
-    @Override
-    public BoundingBoxExaminer getBoundingBoxExaminer() {
-        return boundingBoxExaminer;
-    }
-
 
 }

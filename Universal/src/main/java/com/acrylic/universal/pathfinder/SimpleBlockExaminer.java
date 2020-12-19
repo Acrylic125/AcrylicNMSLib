@@ -10,8 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class SimpleBlockExaminer implements BlockExaminer {
 
-    private final BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer();
-
     @Override
     public boolean shouldNoClip(@NotNull Block block) {
         switch (block.getType()) {
@@ -76,11 +74,5 @@ public class SimpleBlockExaminer implements BlockExaminer {
     public boolean canPassThrough(@NotNull Block block) {
         return isTraversable(block.getRelative(BlockFace.UP)) && isTraversable(block);
     }
-
-    @Override
-    public BoundingBoxExaminer getBoundingBoxExaminer() {
-        return boundingBoxExaminer;
-    }
-
 
 }
