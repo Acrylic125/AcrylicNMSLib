@@ -1,6 +1,5 @@
 package com.acrylic.universal.renderer;
 
-import com.acrylic.universal.packets.PacketSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,7 +13,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class PlayerRangeRenderer
-        implements EntityRenderer, RangedPacketRenderer, PacketRendererCache {
+        implements InitializerLocationalRenderer, RangedPacketRenderer, RendererCache {
 
     private final List<UUID> stored = new ArrayList<>();
     private float range = 30;
@@ -31,6 +30,11 @@ public class PlayerRangeRenderer
     }
 
     @Override
+    public boolean canInitialize(@NotNull Player player) {
+        return !stored.contains(player.getUniqueId()) && isPlayerWithinRange(player);
+    }
+
+    @Override
     public boolean hasInitialized(@NotNull UUID uuid) {
         return stored.contains(uuid);
     }
@@ -44,6 +48,7 @@ public class PlayerRangeRenderer
                 each.remove();
                 Player player = Bukkit.getPlayer(uuid);
                 if (player != null) {
+                    Bukkit.broadcastMessage("Terminate");
                     terminate(player);
                 }
             }
@@ -68,10 +73,9 @@ public class PlayerRangeRenderer
     @Override
     public void checkInitialization() {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            UUID id = onlinePlayer.getUniqueId();
-            if (!stored.contains(id) && isPlayerWithinRange(onlinePlayer)) {
-                stored.add(id);
-                initialize(onlinePlayer);
+            if (canInitialize(onlinePlayer)) {
+                render(onlinePlayer);
+                Bukkit.broadcastMessage("Int");
             }
         }
     }
@@ -82,20 +86,20 @@ public class PlayerRangeRenderer
     }
 
     @Override
-    public void send(PacketSender packetSender) {
-        for (UUID uuid : stored) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (isPlayerOnline(player))
-                packetSender.send(player);
+    public void render(@NotNull Player player) {
+        synchronized (stored) {
+            stored.add(player.getUniqueId());
+            initialize(player);
+            Bukkit.broadcastMessage("Rendered");
         }
     }
 
     @Override
-    public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
-        for (UUID uuid : stored) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (isPlayerOnline(player))
-                packetSender.sendWithAction(player, sendWithAction);
+    public void unrender(@NotNull Player player) {
+        synchronized (stored) {
+            stored.remove(player.getUniqueId());
+            terminate(player);
+            Bukkit.broadcastMessage("Unrendered");
         }
     }
 
@@ -129,5 +133,14 @@ public class PlayerRangeRenderer
     @SuppressWarnings("all")
     public boolean isPlayerWithinRange(@Nullable Player player) {
         return location != null && isPlayerOnline(player) && (System.currentTimeMillis() - player.getLastPlayed()) >= 3000 && location.distanceSquared(player.getLocation()) <= getSquaredRange();
+    }
+
+    @Override
+    public void handle(@NotNull Consumer<Player> action) {
+        for (UUID uuid : stored) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (isPlayerOnline(player))
+                action.accept(player);
+        }
     }
 }

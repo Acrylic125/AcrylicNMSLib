@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.packets;
 
+import com.acrylic.universal.renderer.Renderer;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
@@ -89,6 +90,21 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
         Packet<?>[] packets = getPackets();
         for (Player player : players)
             sendPacket(player, packets);
+    }
+
+    @Override
+    public void sendWithAction(@NotNull Renderer renderer, @NotNull Consumer<Player> sendWithAction) {
+        Packet<?>[] packets = getPackets();
+        renderer.handle(player -> {
+            sendPacket(player, packets);
+            sendWithAction.accept(player);
+        });
+    }
+
+    @Override
+    public void send(@NotNull Renderer renderer) {
+        Packet<?>[] packets = getPackets();
+        renderer.handle(player -> sendPacket(player, packets));
     }
 
     public static PlayerConnection getPlayerConnection(@NotNull Player player) {

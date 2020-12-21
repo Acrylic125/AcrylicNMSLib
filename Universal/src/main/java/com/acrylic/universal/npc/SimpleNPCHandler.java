@@ -10,7 +10,6 @@ import java.util.WeakHashMap;
 public class SimpleNPCHandler implements NPCHandler {
 
     private final SimpleNPCSkinMap npcSkinMap = new SimpleNPCSkinMap();
-    private final Map<Integer, PlayerNPCEntity> NPCs = new WeakHashMap<>();
     private final List<NPCTabRemoverEntry> entries = new LinkedList<>();
 
     public SimpleNPCHandler() {
@@ -33,11 +32,6 @@ public class SimpleNPCHandler implements NPCHandler {
     @Override
     public SimpleNPCSkinMap getSkinMap() {
         return npcSkinMap;
-    }
-
-    @Override
-    public Map<Integer, PlayerNPCEntity> getNPCs() {
-        return NPCs;
     }
 
     @Override

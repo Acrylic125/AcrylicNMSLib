@@ -1,8 +1,6 @@
 package com.acrylic.universal.misc;
 
-import com.acrylic.universal.loaders.CustomEntity;
 import lombok.Getter;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,5 +1,7 @@
 package com.acrylic.version_1_8;
 
+import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.entityai.FollowerAI;
@@ -10,6 +12,7 @@ import com.acrylic.universal.renderer.PlayerRangeRenderer;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -46,15 +49,20 @@ public final class Version_1_8_Class {
                     npc.setSkin(sender.getName());
                     npc.addToWorld();
                     npc.setGamemode(Gamemode.SURVIVAL);
-                    npc.setupShowPackets();
                     npc.setSprinting(true);
                     FollowerAI<PlayerNPC> ai = new FollowerAI<>(npc);
                     //ai.setEntityQuitter(new SimpleEntityPathQuitter<>(ai));
                     ai.setPathfinder(new NPCEntityPathfinder<>(ai).setSpeed(0.6f));
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
                     npc.getEntityInstance().setAi(ai);
-                    npc.setInvulnerableTicks(1);
-                    npc.setMaxDamageCooldown(20);
+                }).arguments(new AbstractCommandBuilder[] {
+                        CommandBuilder.create("reload")
+                                .filter(AbstractCommandExecuted::isPlayer)
+                        .handle(commandExecuted -> {
+                            Player sender = (Player) commandExecuted.getSender();
+                            UniversalNMS.getGlobalEntityMap().reloadEntities(sender);
+                            Bukkit.broadcastMessage("Reloaded");
+                        })
                 });
     }
 

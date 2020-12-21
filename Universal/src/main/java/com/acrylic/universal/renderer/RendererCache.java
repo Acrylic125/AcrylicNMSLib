@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.UUID;
 
-public interface PacketRendererCache {
+public interface RendererCache {
 
     List<UUID> getCached();
 

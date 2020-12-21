@@ -1,5 +1,8 @@
 package com.acrylic.universal.npc;
 
+import com.acrylic.universal.NMSUtils;
+import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.entityanimations.EntityAnimator;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,12 +13,10 @@ public interface NPCHandler {
 
     NPCSkinMap<?> getSkinMap();
 
-    Map<Integer, PlayerNPCEntity> getNPCs();
-
     List<NPCTabRemoverEntry> getNPCTabRemoverEntries();
 
     default void removeNPC(int id) {
-        getNPCs().remove(id);
+        UniversalNMS.getGlobalEntityMap().removeEntityAnimator(id);
     }
 
     default void removeNPC(@NotNull PlayerNPCEntity npc) {
@@ -23,11 +24,12 @@ public interface NPCHandler {
     }
 
     default void addNPC(@NotNull PlayerNPCEntity npc) {
-        getNPCs().put(npc.getBukkitEntity().getEntityId(), npc);
+        UniversalNMS.getGlobalEntityMap().addEntityAnimator(npc);
     }
 
     default PlayerNPCEntity getNPC(int id) {
-        return getNPCs().get(id);
+        EntityAnimator entityAnimator = UniversalNMS.getGlobalEntityMap().getEntityAnimator(id);
+        return (entityAnimator instanceof PlayerNPCEntity) ? (PlayerNPCEntity) entityAnimator : null;
     }
 
     default PlayerNPCEntity getNPC(@NotNull Entity entity) {

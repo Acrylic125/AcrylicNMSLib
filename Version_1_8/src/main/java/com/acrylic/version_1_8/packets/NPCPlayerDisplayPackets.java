@@ -57,7 +57,7 @@ public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implemen
         if (nmsEntityAnimator instanceof com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) {
             EntityLiving entity = ((com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) nmsEntityAnimator).getNMSEntity();
             if (entity instanceof EntityPlayer)
-                setupDisplayPackets((EntityPlayer) entity, nmsEntityAnimator.getEquipmentPackets());
+                setupDisplayPackets((EntityPlayer) entity, nmsEntityAnimator.getEntityInstance().getEquipmentPackets());
         } else
             throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
     }

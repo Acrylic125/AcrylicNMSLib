@@ -59,7 +59,7 @@ public class LivingEntityDisplayPackets
     public void setupDisplayPackets(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
         if (nmsEntityAnimator instanceof com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) {
             EntityLiving entity = ((com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) nmsEntityAnimator).getNMSEntity();
-            setupDisplayPackets(entity, nmsEntityAnimator.getEquipmentPackets());
+            setupDisplayPackets(entity, nmsEntityAnimator.getEntityInstance().getEquipmentPackets());
         } else
             throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
     }

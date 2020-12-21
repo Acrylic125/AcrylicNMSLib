@@ -1,38 +1,17 @@
 package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
-import com.acrylic.universal.enums.EntityAnimationEnum;
-import com.acrylic.universal.renderer.EntityRenderer;
-import com.acrylic.version_1_8.packets.EntityAnimationPackets;
+import com.acrylic.universal.renderer.InitializerLocationalRenderer;
 import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
-import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
 import net.minecraft.server.v1_8_R3.EntityLiving;
-import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class NMSLivingEntityAnimator
         extends NMSEntityAnimator
         implements com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator {
 
-    private EntityEquipmentPackets equipmentPackets;
-    private final EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
-
-    public NMSLivingEntityAnimator(@NotNull EntityRenderer entityRenderer) {
-        super(entityRenderer);
-    }
-
-    public NMSLivingEntityAnimator(@NotNull EntityRenderer entityRenderer, @NotNull LivingEntityDisplayPackets livingEntityDisplayPackets) {
-        super(entityRenderer, livingEntityDisplayPackets);
-    }
-
-    @Override
-    public int getMaxDamageCooldown() {
-        return getNMSEntity().maxNoDamageTicks;
-    }
-
-    @Override
-    public void setMaxDamageCooldown(int ticks) {
-        getNMSEntity().maxNoDamageTicks = ticks;
+    public NMSLivingEntityAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer) {
+        super(initializerLocationalRenderer);
     }
 
     @Override
@@ -60,25 +39,13 @@ public abstract class NMSLivingEntityAnimator
 
     @Override
     public void setEquipment(AbstractEntityEquipmentBuilder entityEquipment) {
-        if (equipmentPackets == null)
-            this.equipmentPackets = new EntityEquipmentPackets();
-        this.equipmentPackets.adapt(entityEquipment);
+        EntityEquipmentPackets entityEquipmentPackets = (EntityEquipmentPackets) getEntityInstance().getEquipmentPackets();
+        if (entityEquipmentPackets == null)
+            entityEquipmentPackets = new EntityEquipmentPackets();
+        entityEquipmentPackets.adapt(entityEquipment);
+        getEntityInstance().setEntityEquipmentPackets(entityEquipmentPackets);
         entityEquipment.apply(getBukkitEntity());
-    }
-
-    @Override
-    public EntityEquipmentPackets getEquipmentPackets() {
-        return equipmentPackets;
-    }
-
-    @Override
-    public EntityAnimationPackets getAnimationPackets() {
-        return entityAnimationPackets;
-    }
-
-    @Override
-    public void damageEffect(@NotNull LivingEntity attacker) {
-        animate(EntityAnimationEnum.HURT);
+        getEntityInstance().getEquipmentPackets().send(getRenderer());
     }
 
     @Override

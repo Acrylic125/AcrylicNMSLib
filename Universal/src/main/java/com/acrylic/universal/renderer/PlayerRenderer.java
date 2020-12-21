@@ -1,12 +1,11 @@
 package com.acrylic.universal.renderer;
 
-import com.acrylic.universal.packets.PacketSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class PlayerRenderer implements PacketRenderer {
+public class PlayerRenderer implements Renderer {
 
     private final Player player;
 
@@ -15,12 +14,7 @@ public class PlayerRenderer implements PacketRenderer {
     }
 
     @Override
-    public void send(PacketSender packetSender) {
-        packetSender.send(player);
-    }
-
-    @Override
-    public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> consumer) {
-        packetSender.sendWithAction(player, consumer);
+    public void handle(@NotNull Consumer<Player> action) {
+        action.accept(player);
     }
 }

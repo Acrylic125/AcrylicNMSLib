@@ -1,7 +1,10 @@
 package com.acrylic.universal.emtityanimator;
 
+import com.acrylic.universal.interfaces.Deletable;
+import com.acrylic.universal.packets.EntityDestroyPacket;
+import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.packets.TeleportPacket;
-import com.acrylic.universal.renderer.InitializerPacketRenderer;
+import com.acrylic.universal.renderer.InitializerLocationalRenderer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,16 +15,31 @@ import org.jetbrains.annotations.NotNull;
  * @see com.acrylic.universal.entityai.pathfinder.EntityPathfinder
  * @see com.acrylic.universal.entityai.strategy.EntityStrategy
  */
-public interface EntityInstance {
+public interface EntityInstance
+        extends WorldEntity, Deletable {
+
+    void setFireTicks(int ticks);
+
+    int getFireTicks();
+
+    int getTicksLived();
 
     void tickingEntity();
 
     @NotNull
     NMSEntityAnimator getAnimatior();
 
-    default void show() {
-        InitializerPacketRenderer renderer = getAnimatior().getRenderer();
-        renderer.send(getAnimatior().getDisplayPackets());
-    }
+    @NotNull
+    TeleportPacket getTeleportPacket();
+
+    @NotNull
+    EntityDestroyPacket getDestroyPacket();
+
+    @NotNull
+    LivingEntityDisplayPackets getDisplayPackets();
+
+    void setupShowPackets();
+
+    void render();
 
 }

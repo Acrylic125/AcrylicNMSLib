@@ -1,6 +1,5 @@
 package com.acrylic.universal.renderer;
 
-import com.acrylic.universal.packets.PacketSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +16,9 @@ import java.util.function.Consumer;
  *
  * @see com.acrylic.universal.emtityanimator.NMSEntityAnimator
  */
-public interface InitializerPacketRenderer extends PacketRenderer {
+public interface InitializerRenderer extends Renderer {
+
+    boolean canInitialize(@NotNull Player player);
 
     boolean hasInitialized(@NotNull UUID uuid);
 
@@ -43,6 +44,10 @@ public interface InitializerPacketRenderer extends PacketRenderer {
      * The initial packets.
      */
     void initialize(@NotNull Player player);
+
+    void render(@NotNull Player player);
+
+    void unrender(@NotNull Player player);
 
     default void check() {
         checkTermination();

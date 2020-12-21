@@ -1,15 +1,16 @@
 package com.acrylic.version_1_8.npc;
 
-import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
+import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.emtityanimator.PlayerNPCEntityInstance;
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.npc.NPCTabRemoverEntry;
+import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.LivingEntityInstance;
+import com.acrylic.version_1_8.packets.*;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PlayerInteractManager;
-import net.minecraft.server.v1_8_R3.WorldServer;
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,13 +19,26 @@ public class PlayerEntityInstance
         extends EntityPlayer
         implements PlayerNPCEntityInstance, LivingEntityInstance {
 
+    private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
+    private final LivingEntityDisplayPackets displayPackets = new NPCPlayerDisplayPackets();
+    private final TeleportPacket teleportPacket = new TeleportPacket();
+    private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
+    private final EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
+    private EntityEquipmentPackets equipmentPackets;
+
     private EntityAI<PlayerNPC> entityAI;
-    private PlayerNPC playerNPC;
+    private final PlayerNPC playerNPC;
     private long respawnCooldown = -1;
     private long respawnTime = 0;
+    private boolean wasOnFire = false;
 
-    public PlayerEntityInstance(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
+    public PlayerEntityInstance(PlayerNPC playerNPC, MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
         super(minecraftserver, worldserver, gameprofile, playerinteractmanager);
+        removeFromTabPacket.apply(this, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
+        this.playerNPC = playerNPC;
+        entityDestroyPacket.apply(getBukkitEntity());
+        setupShowPackets();
+        setupTermination();
     }
 
     @Override
@@ -36,6 +50,41 @@ public class PlayerEntityInstance
 
     public void setAi(@NotNull EntityAI<PlayerNPC> ai) {
         this.entityAI = ai;
+    }
+
+    @Override
+    public int getMaxDamageCooldown() {
+        return maxNoDamageTicks;
+    }
+
+    @Override
+    public void setMaxDamageCooldown(int ticks) {
+        maxNoDamageTicks = ticks;
+    }
+
+    @Override
+    public boolean isNoClip() {
+        return noclip;
+    }
+
+    @Override
+    public void setNoClip(boolean b) {
+        noclip = b;
+    }
+
+    @Override
+    public void setEntityEquipmentPackets(@Nullable EntityEquipmentPackets entityEquipmentPackets) {
+        this.equipmentPackets = entityEquipmentPackets;
+    }
+
+    @Override
+    public EntityEquipmentPackets getEquipmentPackets() {
+        return equipmentPackets;
+    }
+
+    @Override
+    public EntityAnimationPackets getAnimationPackets() {
+        return entityAnimationPackets;
     }
 
     @SuppressWarnings("unchecked")
@@ -58,30 +107,34 @@ public class PlayerEntityInstance
         return this.entityAI;
     }
 
-    public void setAnimator(@Nullable PlayerNPC animator) {
-        this.playerNPC = animator;
-    }
-
-    @Override
-    public void setAnimator(@Nullable NMSLivingEntityAnimator animator) {
-        if (animator == null) {
-            this.playerNPC = null;
-            return;
-        }
-        if (animator instanceof PlayerNPC)
-           this.playerNPC = (PlayerNPC) animator;
-        else
-            throw new IllegalStateException("THe Animator specified must be of " + PlayerNPC.class.getName() + ".");
-    }
-
     @Override
     public EntityPlayer getNMSEntity() {
         return this;
     }
 
     @Override
+    public void setFireTicks(int ticks) {
+        fireTicks = ticks;
+    }
+
+    @Override
+    public int getFireTicks() {
+        return fireTicks;
+    }
+
+    @Override
     public int getTicksLived() {
         return ticksLived;
+    }
+
+    @Override
+    public int getInvulnerableTicks() {
+        return invulnerableTicks;
+    }
+
+    @Override
+    public void setInvulnerableTicks(int ticks) {
+        invulnerableTicks = ticks;
     }
 
     @Override
@@ -95,6 +148,24 @@ public class PlayerEntityInstance
         return playerNPC;
     }
 
+    @NotNull
+    @Override
+    public TeleportPacket getTeleportPacket() {
+        return teleportPacket;
+    }
+
+    @NotNull
+    @Override
+    public EntityDestroyPacket getDestroyPacket() {
+        return entityDestroyPacket;
+    }
+
+    @NotNull
+    @Override
+    public LivingEntityDisplayPackets getDisplayPackets() {
+        return displayPackets;
+    }
+
     @Override
     public void t_() {
         super.t_();
@@ -102,6 +173,22 @@ public class PlayerEntityInstance
             tickingEntity();
             updateGravity();
             render();
+            handleFire();
+        }
+    }
+
+    private void handleFire() {
+        if (fireTicks > 0) {
+            if (!wasOnFire)
+                playerNPC.setOnFire(true);
+            wasOnFire = true;
+            fireTicks--;
+            if (ticksLived % 20 == 0)
+                damageEntity(DamageSource.BURN, 0.5f);
+        } else {
+            if (wasOnFire)
+                playerNPC.setOnFire(false);
+            wasOnFire = false;
         }
     }
 
@@ -147,5 +234,29 @@ public class PlayerEntityInstance
     }
 
 
+    @Override
+    public void removeFromWorld() {
+        world.removeEntity(this);
+    }
 
+    @Override
+    public void addToWorld() {
+        NetworkManager com = new NetworkManager(EnumProtocolDirection.CLIENTBOUND);
+        PlayerConnection playerConnection = new PlayerConnection(NMSBukkitConverter.getMCServer(), com, this);
+        com.a(playerConnection);
+        getWorld().addEntity(this);
+    }
+
+    @Override
+    public void setupShowPackets() {
+        getAnimatior().getRenderer().setInitializationAction(player -> {
+            com.acrylic.universal.packets.LivingEntityDisplayPackets displayPackets = getDisplayPackets();
+            displayPackets.setupDisplayPackets(getAnimatior());
+            UniversalNMS.getNpcHandler()
+                    .getNPCTabRemoverEntries()
+                    .add(new NPCTabRemoverEntry(player, removeFromTabPacket));
+            displayPackets.send(player);
+            Bukkit.broadcastMessage("Display!");
+        });
+    }
 }

@@ -11,10 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface PlayerNPCEntity extends NMSLivingEntityAnimator {
 
-    int getInvulnerableTicks();
-
-    void setInvulnerableTicks(int ticks);
-
     void setGravity(boolean b);
 
     boolean isUsingGravity();

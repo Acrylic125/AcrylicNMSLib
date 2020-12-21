@@ -19,6 +19,7 @@ public final class AcrylicNMS extends JavaPlugin {
     public void onEnable() {
         load();
         registerTestCommand();
+        UniversalNMS.getGlobalEntityMap().setup();
     }
 
     @Override

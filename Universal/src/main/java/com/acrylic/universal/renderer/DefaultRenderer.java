@@ -1,21 +1,17 @@
 package com.acrylic.universal.renderer;
 
-import com.acrylic.universal.packets.PacketSender;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public final class DefaultRenderer implements PacketRenderer {
+public final class DefaultRenderer implements Renderer {
 
     @Override
-    public void send(PacketSender packetSender) {
-        packetSender.sendAll();
+    public void handle(@NotNull Consumer<Player> action) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            action.accept(onlinePlayer);
+        }
     }
-
-    @Override
-    public void sendWithAction(PacketSender packetSender, @NotNull Consumer<Player> sendWithAction) {
-        packetSender.sendAll(sendWithAction);
-    }
-
 }

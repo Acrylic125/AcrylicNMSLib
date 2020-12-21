@@ -4,10 +4,8 @@ import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.enums.Gamemode;
-import com.acrylic.universal.exceptions.NoRendererException;
-import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.npc.PlayerNPCEntity;
-import com.acrylic.universal.renderer.EntityRenderer;
+import com.acrylic.universal.renderer.InitializerLocationalRenderer;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
@@ -29,21 +27,17 @@ public class PlayerNPC
         implements PlayerNPCEntity {
 
     private final PlayerEntityInstance entityPlayer;
-    private final NPCPlayerInfoPacket removeFromTabPacket = new NPCPlayerInfoPacket();
     private boolean gravity = true;
 
-    public PlayerNPC(@NotNull EntityRenderer entityRenderer, @NotNull Location location, @Nullable String name) {
-        this(entityRenderer, NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
+    public PlayerNPC(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location, @Nullable String name) {
+        this(initializerLocationalRenderer, NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
     }
 
-    private PlayerNPC(@NotNull EntityRenderer entityRenderer, @NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
-        super(entityRenderer, new NPCPlayerDisplayPackets());
-        entityPlayer = new PlayerEntityInstance(server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
+    private PlayerNPC(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
+        super(initializerLocationalRenderer);
+        entityPlayer = new PlayerEntityInstance(this, server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        entityPlayer.setAnimator(this);
-        removeFromTabPacket.apply(entityPlayer, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         UniversalNMS.getNpcHandler().addNPC(this);
-        getDestroyPacket().delete(entityPlayer);
     }
 
     @Override
@@ -78,16 +72,6 @@ public class PlayerNPC
     }
 
     @Override
-    public int getInvulnerableTicks() {
-        return entityPlayer.invulnerableTicks;
-    }
-
-    @Override
-    public void setInvulnerableTicks(int ticks) {
-        entityPlayer.invulnerableTicks = ticks;
-    }
-
-    @Override
     public void setGravity(boolean b) {
         this.gravity = b;
     }
@@ -104,11 +88,11 @@ public class PlayerNPC
 
     @Override
     public void updateHeadPose(float angle) {
-        LivingEntityDisplayPackets packets = getDisplayPackets();
+        LivingEntityDisplayPackets packets = entityPlayer.getDisplayPackets();
         if (packets instanceof NPCPlayerDisplayPackets) {
             EntityHeadRotationPacket headRotationPacket = ((NPCPlayerDisplayPackets) packets).getHeadRotationPacket();
             headRotationPacket.apply(entityPlayer, angle);
-            sendPacketsViaRenderer(headRotationPacket);
+            headRotationPacket.send(getRenderer());
         }
     }
 
@@ -154,16 +138,16 @@ public class PlayerNPC
         gameProfile.getProperties().put("textures", new Property("textures", texture, signature));
     }
 
-    @Override
+    /**@Override
     public void addToWorld(@NotNull WorldServer worldServer) {
         NetworkManager com = new NetworkManager(EnumProtocolDirection.CLIENTBOUND);
         PlayerConnection playerConnection = new PlayerConnection(NMSBukkitConverter.getMCServer(), com, entityPlayer);
         com.a(playerConnection);
         /** PlayerList playerList = ((CraftServer) Bukkit.getServer()).getHandle();
         * playerList.players.add(entityPlayer);
-        * playerList.a(entityPlayer, worldServer);**/
-        super.addToWorld(worldServer);
-    }
+        * playerList.a(entityPlayer, worldServer);
+        super.addToWorld();
+    }**/
 
     @Override
     public void delete() {
@@ -175,12 +159,4 @@ public class PlayerNPC
         return entityPlayer;
     }
 
-    @Override
-    public void setupShowPackets() throws NoRendererException {
-        super.setupShowPackets(player -> {
-            UniversalNMS.getNpcHandler()
-                    .getNPCTabRemoverEntries()
-                    .add(new NPCTabRemoverEntry(player, removeFromTabPacket));
-        });
-    }
 }

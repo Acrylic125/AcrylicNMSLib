@@ -3,6 +3,7 @@ package com.acrylic.version_1_8.entityanimator;
 import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.loaders.CustomEntity;
+import com.acrylic.universal.packets.*;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.World;
@@ -40,6 +41,41 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
         this.entityAI = ai;
     }
 
+    @Override
+    public int getMaxDamageCooldown() {
+        return 0;
+    }
+
+    @Override
+    public void setMaxDamageCooldown(int ticks) {
+
+    }
+
+    @Override
+    public boolean isNoClip() {
+        return false;
+    }
+
+    @Override
+    public void setNoClip(boolean b) {
+
+    }
+
+    @Override
+    public void setEntityEquipmentPackets(@Nullable EntityEquipmentPackets entityEquipmentPackets) {
+
+    }
+
+    @Override
+    public EntityEquipmentPackets getEquipmentPackets() {
+        return null;
+    }
+
+    @Override
+    public EntityAnimationPackets getAnimationPackets() {
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void setAI(@Nullable EntityAI<?> ai) {
@@ -60,23 +96,6 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
         return this.entityAI;
     }
 
-    public void setAnimator(@Nullable NMSArmorStandAnimator animator) {
-        this.armorStandAnimator = animator;
-    }
-
-    @Override
-    public void setAnimator(@Nullable NMSLivingEntityAnimator animator) {
-        if (animator == null) {
-            this.armorStandAnimator = null;
-            return;
-        }
-        if (animator instanceof NMSArmorStandAnimator)
-           this.armorStandAnimator = (NMSArmorStandAnimator) animator;
-        else
-            throw new IllegalStateException("THe Animator specified must be of " + NMSArmorStandAnimator.class.getName() + ".");
-    }
-
-
     @Override
     public EntityArmorStand getNMSEntity() {
         return this;
@@ -86,6 +105,34 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     @Override
     public NMSArmorStandAnimator getAnimatior() {
         return armorStandAnimator;
+    }
+
+    @NotNull
+    @Override
+    public TeleportPacket getTeleportPacket() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public EntityDestroyPacket getDestroyPacket() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public LivingEntityDisplayPackets getDisplayPackets() {
+        return null;
+    }
+
+    @Override
+    public void setFireTicks(int ticks) {
+        fireTicks = ticks;
+    }
+
+    @Override
+    public int getFireTicks() {
+        return fireTicks;
     }
 
     @Override
@@ -98,4 +145,18 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
         super.t_();
     }
 
+    @Override
+    public void removeFromWorld() {
+
+    }
+
+    @Override
+    public void addToWorld() {
+
+    }
+
+    @Override
+    public void delete() {
+
+    }
 }

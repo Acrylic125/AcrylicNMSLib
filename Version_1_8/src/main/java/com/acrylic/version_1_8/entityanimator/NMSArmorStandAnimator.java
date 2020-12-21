@@ -2,7 +2,7 @@ package com.acrylic.version_1_8.entityanimator;
 
 import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.universal.entityanimations.entities.AbstractArmorStandAnimator;
-import com.acrylic.universal.renderer.EntityRenderer;
+import com.acrylic.universal.renderer.InitializerLocationalRenderer;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.Vector3f;
@@ -15,19 +15,18 @@ public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements Ab
 
     private final ArmorStandEntityInstance nmsEntity;
 
-    public NMSArmorStandAnimator(@NotNull EntityRenderer entityRenderer, @NotNull ArmorStandEntityInstance armorStand) {
-        super(entityRenderer);
+    public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull ArmorStandEntityInstance armorStand) {
+        super(initializerLocationalRenderer);
         this.nmsEntity = armorStand;
-        getDestroyPacket().delete(nmsEntity);
     }
 
-    public NMSArmorStandAnimator(@NotNull EntityRenderer entityRenderer, @NotNull ArmorStandEntityInstance armorStand, @NotNull Location location) {
-        this(entityRenderer, armorStand);
+    public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull ArmorStandEntityInstance armorStand, @NotNull Location location) {
+        this(initializerLocationalRenderer, armorStand);
         nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
     }
 
-    public NMSArmorStandAnimator(@NotNull EntityRenderer entityRenderer, @NotNull Location location) {
-        this(entityRenderer, new ArmorStandEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
+    public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location) {
+        this(initializerLocationalRenderer, new ArmorStandEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
     }
 
     private Vector3f toVector3f(@NotNull EulerAngle eulerAngle) {

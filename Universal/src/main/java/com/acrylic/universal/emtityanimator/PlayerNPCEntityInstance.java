@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public interface PlayerNPCEntityInstance extends LivingEntityInstance, RespawnableInstance {
 
+    int getInvulnerableTicks();
+
+    void setInvulnerableTicks(int ticks);
+
     default void updateGravity() {
         PlayerNPCEntity playerNPCEntity = getAnimatior();
         if (playerNPCEntity.isUsingGravity() && !playerNPCEntity.isNoClip()) {
