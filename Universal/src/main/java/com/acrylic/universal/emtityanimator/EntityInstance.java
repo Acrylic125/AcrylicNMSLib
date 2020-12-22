@@ -1,6 +1,7 @@
 package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.interfaces.Deletable;
 import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
@@ -40,7 +41,12 @@ public interface EntityInstance
 
     void setupShowPackets();
 
-    void render();
+    default void render() {
+        if (getTicksLived() % 20 == 0)
+            forceRender();
+    }
+
+    void forceRender();
 
     @Override
     default void delete() {

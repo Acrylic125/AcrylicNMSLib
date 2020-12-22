@@ -6,6 +6,7 @@ import com.acrylic.universal.entityai.strategy.EntityFollowingStrategy;
 import com.acrylic.universal.events.AbstractEventBuilder;
 import com.acrylic.universal.events.EventBuilder;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -91,7 +92,6 @@ public class GlobalNMSEntityMap implements EntityMap<NMSEntityAnimator> {
             if (ai != null)
                 ai.aiUnloadCheck(player);
         }
-        if (renderer.canInitialize(player))
-            renderer.render(player);
+        renderer.unrender(player);
     }
 }

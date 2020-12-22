@@ -1,6 +1,7 @@
 package com.acrylic.version_1_8;
 
 import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.animations.rotational.HandRotationAnimation;
 import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
@@ -10,7 +11,10 @@ import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.renderer.PlayerRangeRenderer;
+import com.acrylic.universal.threads.Scheduler;
+import com.acrylic.universal.threads.TaskType;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
+import com.acrylic.version_1_8.entityanimator.NMSArmorStandAnimator;
 import com.acrylic.version_1_8.items.ItemBuilder;
 import com.acrylic.version_1_8.npc.PlayerNPC;
 import org.bukkit.Bukkit;
@@ -30,6 +34,7 @@ public final class Version_1_8_Class {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
+
                     /**Location to = test.clone().add(10, 0, 10);
                     sender.sendBlockChange(to.clone().add(0, 1, 0), Material.DIAMOND_BLOCK, (byte) 0);
                     for (Location computedLocation : PathGenerator.A_STAR_GENERATOR.traverseAndCompute(test, to)) {

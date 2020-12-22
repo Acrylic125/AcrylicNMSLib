@@ -35,12 +35,9 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     public GiantEntityInstance(@NotNull NMSGiantAnimator giantAnimator, @NotNull World world) {
         super(world);
         this.giantAnimator = giantAnimator;
-    }
-
-    @Override
-    public void tickingEntity() {
-        if (this.entityAI != null && giantAnimator != null)
-            this.entityAI.update();
+        entityDestroyPacket.apply(getBukkitEntity());
+        setupShowPackets();
+        setupTermination();
     }
 
     public void setAi(@NotNull EntityAI<NMSGiantAnimator> ai) {
@@ -114,7 +111,10 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     @Override
     public void t_() {
         super.t_();
-        tickingEntity();
+        if (!isDead()) {
+            tickingEntity();
+            render();
+        }
     }
 
 }

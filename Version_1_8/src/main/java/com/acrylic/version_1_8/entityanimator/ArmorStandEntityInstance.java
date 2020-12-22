@@ -35,17 +35,14 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull World world) {
         super(world);
         this.armorStandAnimator = armorStandAnimator;
+        entityDestroyPacket.apply(getBukkitEntity());
+        setupShowPackets();
+        setupTermination();
     }
 
     public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
         this.armorStandAnimator = armorStandAnimator;
-    }
-
-    @Override
-    public void tickingEntity() {
-        if (this.entityAI != null && armorStandAnimator != null)
-            this.entityAI.update();
     }
 
     public void setAi(@NotNull EntityAI<NMSArmorStandAnimator> ai) {
@@ -119,6 +116,10 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     @Override
     public void t_() {
         super.t_();
+        if (!isDead()) {
+            tickingEntity();
+            render();
+        }
     }
 
     @Override

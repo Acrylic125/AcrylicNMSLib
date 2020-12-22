@@ -42,13 +42,6 @@ public class PlayerEntityInstance
         setupTermination();
     }
 
-    @Override
-    public void tickingEntity() {
-        if (this.entityAI != null && playerNPC != null) {
-            this.entityAI.update();
-        }
-    }
-
     public void setAi(@NotNull EntityAI<PlayerNPC> ai) {
         this.entityAI = ai;
     }

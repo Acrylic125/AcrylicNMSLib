@@ -5,6 +5,7 @@ import com.acrylic.version_1_8.entityanimator.ArmorStandEntityInstance;
 import com.acrylic.version_1_8.entityanimator.GiantEntityInstance;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.EntityTypes;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;

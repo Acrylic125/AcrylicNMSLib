@@ -3,6 +3,7 @@ package com.acrylic.universal.emtityanimator;
 import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.TeleportPacket;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ public interface NMSEntityAnimator extends EntityAnimator, NMSEntity, WorldEntit
         if (!destroyPacket.hasProcessedPacket())
             destroyPacket.apply(getBukkitEntity());
         removeFromWorld();
+        getRenderer().unrenderAll();
     }
 
     @Override

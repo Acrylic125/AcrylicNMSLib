@@ -12,6 +12,13 @@ import org.jetbrains.annotations.Nullable;
 public interface LivingEntityInstance
         extends EntityInstance, DamageableEntityInstance {
 
+    @Override
+    default void tickingEntity() {
+        EntityAI<?> entityAI = getAI();
+        if (entityAI != null)
+            entityAI.update();
+    }
+
     int getMaxDamageCooldown();
 
     void setMaxDamageCooldown(int ticks);
@@ -60,12 +67,10 @@ public interface LivingEntityInstance
     }
 
     @Override
-    default void render() {
-        if (getTicksLived() % 20 == 0) {
-            InitializerLocationalRenderer initializerLocationalRenderer = getAnimatior().getRenderer();
-            initializerLocationalRenderer.setLocation(getAnimatior().getLocation());
-            initializerLocationalRenderer.check();
-        }
+    default void forceRender() {
+        InitializerLocationalRenderer initializerLocationalRenderer = getAnimatior().getRenderer();
+        initializerLocationalRenderer.setLocation(getAnimatior().getLocation());
+        initializerLocationalRenderer.check();
     }
 
 }
