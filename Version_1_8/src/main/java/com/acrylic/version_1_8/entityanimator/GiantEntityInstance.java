@@ -1,11 +1,13 @@
 package com.acrylic.version_1_8.entityanimator;
 
-import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.loaders.CustomEntity;
-import com.acrylic.universal.packets.*;
+import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
-import net.minecraft.server.v1_8_R3.EntityArmorStand;
+import com.acrylic.version_1_8.packets.EntityAnimationPackets;
+import com.acrylic.version_1_8.packets.EntityDestroyPacket;
+import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
+import com.acrylic.version_1_8.packets.TeleportPacket;
 import net.minecraft.server.v1_8_R3.EntityGiantZombie;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.entity.EntityType;
@@ -15,17 +17,24 @@ import org.jetbrains.annotations.Nullable;
 @CustomEntity(name = "GiantInstance",
         entityType = EntityType.GIANT,
         entityTypeNMSClass = EntityGiantZombie.class)
-public class GiantEntityInstance extends EntityGiantZombie implements LivingEntityInstance {
+public class GiantEntityInstance extends EntityGiantZombie implements LivingEntityInstance_1_8 {
+
+    private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
+    private final LivingEntityDisplayPackets displayPackets = new LivingEntityDisplayPackets();
+    private final TeleportPacket teleportPacket = new TeleportPacket();
+    private final EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
+    private EntityEquipmentPackets equipmentPackets;
 
     private EntityAI<NMSGiantAnimator> entityAI;
-    private NMSGiantAnimator giantAnimator;
+    private final NMSGiantAnimator giantAnimator;
 
-    public GiantEntityInstance(org.bukkit.World world) {
-        this(NMSBukkitConverter.convertToNMSWorld(world));
+    public GiantEntityInstance(@NotNull NMSGiantAnimator giantAnimator, @NotNull org.bukkit.World world) {
+        this(giantAnimator, NMSBukkitConverter.convertToNMSWorld(world));
     }
 
-    public GiantEntityInstance(World world) {
+    public GiantEntityInstance(@NotNull NMSGiantAnimator giantAnimator, @NotNull World world) {
         super(world);
+        this.giantAnimator = giantAnimator;
     }
 
     @Override
@@ -39,38 +48,18 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     }
 
     @Override
-    public int getMaxDamageCooldown() {
-        return 0;
-    }
-
-    @Override
-    public void setMaxDamageCooldown(int ticks) {
-
-    }
-
-    @Override
-    public boolean isNoClip() {
-        return false;
-    }
-
-    @Override
-    public void setNoClip(boolean b) {
-
-    }
-
-    @Override
     public void setEntityEquipmentPackets(@Nullable EntityEquipmentPackets entityEquipmentPackets) {
-
+        this.equipmentPackets = entityEquipmentPackets;
     }
 
     @Override
     public EntityEquipmentPackets getEquipmentPackets() {
-        return null;
+        return equipmentPackets;
     }
 
     @Override
     public EntityAnimationPackets getAnimationPackets() {
-        return null;
+        return entityAnimationPackets;
     }
 
     @SuppressWarnings("unchecked")
@@ -107,34 +96,19 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     @NotNull
     @Override
     public TeleportPacket getTeleportPacket() {
-        return null;
+        return teleportPacket;
     }
 
     @NotNull
     @Override
     public EntityDestroyPacket getDestroyPacket() {
-        return null;
+        return entityDestroyPacket;
     }
 
     @NotNull
     @Override
     public LivingEntityDisplayPackets getDisplayPackets() {
-        return null;
-    }
-
-    @Override
-    public void setFireTicks(int ticks) {
-        fireTicks = ticks;
-    }
-
-    @Override
-    public int getFireTicks() {
-        return fireTicks;
-    }
-
-    @Override
-    public int getTicksLived() {
-        return ticksLived;
+        return displayPackets;
     }
 
     @Override
@@ -143,18 +117,4 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
         tickingEntity();
     }
 
-    @Override
-    public void removeFromWorld() {
-
-    }
-
-    @Override
-    public void addToWorld() {
-
-    }
-
-    @Override
-    public void delete() {
-
-    }
 }

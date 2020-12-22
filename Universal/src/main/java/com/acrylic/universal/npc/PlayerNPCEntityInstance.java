@@ -1,5 +1,7 @@
-package com.acrylic.universal.emtityanimator;
+package com.acrylic.universal.npc;
 
+import com.acrylic.universal.emtityanimator.LivingEntityInstance;
+import com.acrylic.universal.emtityanimator.RespawnableInstance;
 import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;

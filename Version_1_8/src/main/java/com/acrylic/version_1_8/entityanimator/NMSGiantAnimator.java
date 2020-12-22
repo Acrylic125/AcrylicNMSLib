@@ -14,18 +14,10 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
 
     private final GiantEntityInstance nmsEntity;
 
-    public NMSGiantAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull GiantEntityInstance giantZombie) {
-        super(initializerLocationalRenderer);
-        this.nmsEntity = giantZombie;
-    }
-
-    public NMSGiantAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull GiantEntityInstance giantZombie, @NotNull Location location) {
-        this(initializerLocationalRenderer, giantZombie);
-        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
-    }
-
     public NMSGiantAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location) {
-        this(initializerLocationalRenderer, new GiantEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
+        super(initializerLocationalRenderer);
+        this.nmsEntity = new GiantEntityInstance(this, NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
+        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
     }
 
     @Override

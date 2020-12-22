@@ -1,23 +1,25 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.emtityanimator.PlayerNPCEntityInstance;
+import com.acrylic.universal.emtityanimator.RespawnStrategy;
+import com.acrylic.universal.npc.PlayerNPCEntityInstance;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
-import com.acrylic.version_1_8.entityanimator.LivingEntityInstance;
+import com.acrylic.version_1_8.entityanimator.LivingEntityInstance_1_8;
 import com.acrylic.version_1_8.packets.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerEntityInstance
         extends EntityPlayer
-        implements PlayerNPCEntityInstance, LivingEntityInstance {
+        implements PlayerNPCEntityInstance, LivingEntityInstance_1_8 {
 
     private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
     private final LivingEntityDisplayPackets displayPackets = new NPCPlayerDisplayPackets();
@@ -28,8 +30,7 @@ public class PlayerEntityInstance
 
     private EntityAI<PlayerNPC> entityAI;
     private final PlayerNPC playerNPC;
-    private long respawnCooldown = -1;
-    private long respawnTime = 0;
+    private RespawnStrategy respawnStrategy;
     private boolean wasOnFire = false;
 
     public PlayerEntityInstance(PlayerNPC playerNPC, MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
@@ -60,16 +61,6 @@ public class PlayerEntityInstance
     @Override
     public void setMaxDamageCooldown(int ticks) {
         maxNoDamageTicks = ticks;
-    }
-
-    @Override
-    public boolean isNoClip() {
-        return noclip;
-    }
-
-    @Override
-    public void setNoClip(boolean b) {
-        noclip = b;
     }
 
     @Override
@@ -110,21 +101,6 @@ public class PlayerEntityInstance
     @Override
     public EntityPlayer getNMSEntity() {
         return this;
-    }
-
-    @Override
-    public void setFireTicks(int ticks) {
-        fireTicks = ticks;
-    }
-
-    @Override
-    public int getFireTicks() {
-        return fireTicks;
-    }
-
-    @Override
-    public int getTicksLived() {
-        return ticksLived;
     }
 
     @Override
@@ -169,12 +145,32 @@ public class PlayerEntityInstance
     @Override
     public void t_() {
         super.t_();
-        if (!handleRespawn()) {
+        if (isDead()) {
+            checkRespawn(this);
+        } else {
             tickingEntity();
             updateGravity();
             render();
             handleFire();
         }
+    }
+
+    @Override
+    public void die(DamageSource damagesource) {
+        handleDeath(this);
+        EntityEquipment equipment = getBukkitEntity().getEquipment();
+        ItemStack weapon = equipment.getItemInHand(),
+                helmet = equipment.getHelmet(),
+                chestplate = equipment.getChestplate(),
+                leggings = equipment.getLeggings(),
+                boots = equipment.getBoots();
+        super.die(damagesource);
+        setFireTicks(0);
+        equipment.setItemInHand(weapon);
+        equipment.setHelmet(helmet);
+        equipment.setChestplate(chestplate);
+        equipment.setLeggings(leggings);
+        equipment.setBoots(boots);
     }
 
     private void handleFire() {
@@ -193,50 +189,21 @@ public class PlayerEntityInstance
     }
 
     @Override
-    public void setDead(boolean b) {
-        dead = b;
+    public void setRespawnStrategy(@NotNull RespawnStrategy respawnStrategy) {
+        this.respawnStrategy = respawnStrategy;
     }
 
+    @Nullable
     @Override
-    public boolean isDead() {
-        return dead || getHealth() <= 0;
-    }
-
-    @Override
-    public void setRespawnCooldown(long cooldown) {
-        respawnCooldown = cooldown;
-    }
-
-    @Override
-    public long getRespawnCooldown() {
-        return respawnCooldown;
-    }
-
-    @Override
-    public void setRespawnTime(long respawnTime) {
-        this.respawnTime = respawnTime;
-    }
-
-    @Override
-    public long getRespawnTime() {
-        return respawnTime;
+    public RespawnStrategy getRespawnStrategy() {
+        return respawnStrategy;
     }
 
     @Override
     public void respawn() {
+        dead = false;
         setHealth(getMaxHealth());
-    }
-
-    @Override
-    public void delete() {
-        if (playerNPC != null)
-            playerNPC.delete();
-    }
-
-
-    @Override
-    public void removeFromWorld() {
-        world.removeEntity(this);
+        getAnimatior().getRenderer().unrenderAll();
     }
 
     @Override
@@ -256,7 +223,6 @@ public class PlayerEntityInstance
                     .getNPCTabRemoverEntries()
                     .add(new NPCTabRemoverEntry(player, removeFromTabPacket));
             displayPackets.send(player);
-            Bukkit.broadcastMessage("Display!");
         });
     }
 }

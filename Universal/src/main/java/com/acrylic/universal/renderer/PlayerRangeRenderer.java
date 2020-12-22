@@ -48,7 +48,6 @@ public class PlayerRangeRenderer
                 each.remove();
                 Player player = Bukkit.getPlayer(uuid);
                 if (player != null) {
-                    Bukkit.broadcastMessage("Terminate");
                     terminate(player);
                 }
             }
@@ -75,7 +74,6 @@ public class PlayerRangeRenderer
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (canInitialize(onlinePlayer)) {
                 render(onlinePlayer);
-                Bukkit.broadcastMessage("Int");
             }
         }
     }
@@ -90,7 +88,6 @@ public class PlayerRangeRenderer
         synchronized (stored) {
             stored.add(player.getUniqueId());
             initialize(player);
-            Bukkit.broadcastMessage("Rendered");
         }
     }
 
@@ -99,7 +96,18 @@ public class PlayerRangeRenderer
         synchronized (stored) {
             stored.remove(player.getUniqueId());
             terminate(player);
-            Bukkit.broadcastMessage("Unrendered");
+        }
+    }
+
+    @Override
+    public void unrenderAll() {
+        synchronized (stored) {
+            stored.forEach(uuid -> {
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null)
+                    terminate(player);
+            });
+            stored.clear();
         }
     }
 

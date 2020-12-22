@@ -4,6 +4,9 @@ import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityai.strategy.EntityFollowingStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FollowerAI<T extends LivingEntityAnimator>
@@ -58,6 +61,18 @@ public class FollowerAI<T extends LivingEntityAnimator>
             followingStrategy.update();
         if (quitter != null)
             quitter.update();
+    }
+
+    @Override
+    public void cleanAI() {
+        followingStrategy.setTarget(null);
+        entityPathfinder.setTargetLocation((Location) null);
+    }
+
+    @Override
+    public void aiUnloadCheck(@NotNull Player player) {
+        if (followingStrategy != null && followingStrategy.getTarget() != null && followingStrategy.getTarget().equals(player))
+            cleanAI();
     }
 
 }

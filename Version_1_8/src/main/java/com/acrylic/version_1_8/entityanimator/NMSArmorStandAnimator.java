@@ -15,18 +15,10 @@ public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements Ab
 
     private final ArmorStandEntityInstance nmsEntity;
 
-    public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull ArmorStandEntityInstance armorStand) {
-        super(initializerLocationalRenderer);
-        this.nmsEntity = armorStand;
-    }
-
-    public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull ArmorStandEntityInstance armorStand, @NotNull Location location) {
-        this(initializerLocationalRenderer, armorStand);
-        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
-    }
-
     public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location) {
-        this(initializerLocationalRenderer, new ArmorStandEntityInstance(NMSBukkitConverter.convertToNMSWorld(location.getWorld())), location);
+        super(initializerLocationalRenderer);
+        this.nmsEntity = new ArmorStandEntityInstance(this, NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
+        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
     }
 
     private Vector3f toVector3f(@NotNull EulerAngle eulerAngle) {

@@ -4,6 +4,7 @@ import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
+import com.acrylic.universal.emtityanimator.*;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
@@ -16,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 public final class Version_1_8_Class {
@@ -49,19 +51,21 @@ public final class Version_1_8_Class {
                     npc.setSkin(sender.getName());
                     npc.addToWorld();
                     npc.setGamemode(Gamemode.SURVIVAL);
-                    npc.setSprinting(true);
                     FollowerAI<PlayerNPC> ai = new FollowerAI<>(npc);
                     //ai.setEntityQuitter(new SimpleEntityPathQuitter<>(ai));
                     ai.setPathfinder(new NPCEntityPathfinder<>(ai).setSpeed(0.6f));
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
                     npc.getEntityInstance().setAi(ai);
                 }).arguments(new AbstractCommandBuilder[] {
-                        CommandBuilder.create("reload")
+                        CommandBuilder.create("killall")
                                 .filter(AbstractCommandExecuted::isPlayer)
                         .handle(commandExecuted -> {
                             Player sender = (Player) commandExecuted.getSender();
-                            UniversalNMS.getGlobalEntityMap().reloadEntities(sender);
-                            Bukkit.broadcastMessage("Reloaded");
+                            for (NMSEntityAnimator value : UniversalNMS.getGlobalEntityMap().getMap().values()) {
+                                if (value instanceof NMSLivingEntityAnimator) {
+                                    ((LivingEntity) value.getBukkitEntity()).setHealth(0);
+                                }
+                            }
                         })
                 });
     }

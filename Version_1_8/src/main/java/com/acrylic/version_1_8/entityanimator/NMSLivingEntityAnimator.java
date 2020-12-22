@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
 import com.acrylic.version_1_8.packets.EntityEquipmentPackets;
@@ -51,6 +52,6 @@ public abstract class NMSLivingEntityAnimator
     @Override
     public void delete() {
         super.delete();
-        getNMSEntity().die();
+        UniversalNMS.getGlobalEntityMap().removeEntityAnimator(this);
     }
 }

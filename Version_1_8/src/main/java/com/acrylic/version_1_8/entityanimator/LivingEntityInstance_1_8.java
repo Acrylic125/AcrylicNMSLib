@@ -1,12 +1,29 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.emtityanimator.LivingEntityInstance;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public interface LivingEntityInstance
-        extends com.acrylic.universal.emtityanimator.LivingEntityInstance, EntityInstance {
+public interface LivingEntityInstance_1_8
+        extends LivingEntityInstance, EntityInstance_1_8 {
+
+    @Override
+    default int getMaxDamageCooldown() {
+        return getNMSEntity().maxNoDamageTicks;
+    }
+
+    @Override
+    default void setMaxDamageCooldown(int ticks) {
+        getNMSEntity().maxNoDamageTicks = ticks;
+    }
+
+    @Override
+    default boolean isDead() {
+        EntityLiving entity = getNMSEntity();
+        return entity.dead || entity.getHealth() <= 0;
+    }
 
     @Override
     EntityLiving getNMSEntity();
@@ -64,4 +81,30 @@ public interface LivingEntityInstance
     default void damageEntity(float damage) {
         getNMSEntity().damageEntity(DamageSource.GENERIC, damage);
     }
+
+    @Override
+    default void setFireTicks(int ticks) {
+        getNMSEntity().fireTicks = ticks;
+    }
+
+    @Override
+    default int getFireTicks() {
+        return getNMSEntity().fireTicks;
+    }
+
+    @Override
+    default int getTicksLived() {
+        return getNMSEntity().ticksLived;
+    }
+
+    @Override
+    default boolean isNoClip() {
+        return getNMSEntity().noclip;
+    }
+
+    @Override
+    default void setNoClip(boolean b) {
+        getNMSEntity().noclip = b;
+    }
+
 }

@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface DamageableEntityInstance {
 
+    boolean isDead();
+
     void healEntity(double amount);
 
     void healEntity();

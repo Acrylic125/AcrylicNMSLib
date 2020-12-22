@@ -1,49 +1,33 @@
 package com.acrylic.universal.emtityanimator;
 
-import com.acrylic.universal.interfaces.Deletable;
-import org.bukkit.Bukkit;
+import com.acrylic.universal.threads.Scheduler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface RespawnableInstance extends Deletable {
+import java.util.Objects;
 
-    void setDead(boolean b);
+public interface RespawnableInstance {
 
-    boolean isDead();
-
-    default boolean shouldRespawn() {
-        return getRespawnCooldown() >= 0;
+    default boolean isUsingRespawnStrategy() {
+        return getRespawnStrategy() != null;
     }
 
-    default boolean canRespawn() {
-        return System.currentTimeMillis() > getRespawnTime();
+    default void checkRespawn(@NotNull LivingEntityInstance livingEntityInstance) {
+        if (livingEntityInstance.isDead() && isUsingRespawnStrategy() && Objects.requireNonNull(getRespawnStrategy()).canRespawn())
+            getRespawnStrategy().respawn(this);
     }
 
-    /**
-     * @return Should handle respawning.
-     */
-    default boolean handleRespawn() {
-        if (isDead()) {
-            if (!shouldRespawn())
-                delete();
-            else if (canRespawn()) {
-                setDead(false);
-                setRespawnTime(System.currentTimeMillis() + getRespawnCooldown());
-                respawn();
-            }
-            return true;
-        }
-        return false;
+    default void handleDeath(@NotNull EntityInstance entityInstance) {
+        if (!isUsingRespawnStrategy())
+            Scheduler.sync().runDelayedTask(50).handle(task -> entityInstance.delete()).build();
+        else
+            Objects.requireNonNull(getRespawnStrategy()).resetRespawnTime();
     }
 
-    void setRespawnCooldown(long cooldown);
+    void setRespawnStrategy(@NotNull RespawnStrategy respawnStrategy);
 
-    /**
-     * @return Returns -1 if the entity should not respawn.
-     */
-    long getRespawnCooldown();
-
-    void setRespawnTime(long respawnTime);
-
-    long getRespawnTime();
+    @Nullable
+    RespawnStrategy getRespawnStrategy();
 
     void respawn();
 

@@ -49,6 +49,8 @@ public interface InitializerRenderer extends Renderer {
 
     void unrender(@NotNull Player player);
 
+    void unrenderAll();
+
     default void check() {
         checkTermination();
         checkInitialization();

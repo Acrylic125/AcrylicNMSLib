@@ -1,10 +1,13 @@
 package com.acrylic.version_1_8.entityanimator;
 
-import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.loaders.CustomEntity;
-import com.acrylic.universal.packets.*;
+import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
+import com.acrylic.version_1_8.packets.EntityAnimationPackets;
+import com.acrylic.version_1_8.packets.EntityDestroyPacket;
+import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
+import com.acrylic.version_1_8.packets.TeleportPacket;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.entity.EntityType;
@@ -14,21 +17,29 @@ import org.jetbrains.annotations.Nullable;
 @CustomEntity(name = "ArmorStandInstance",
         entityType = EntityType.ARMOR_STAND,
         entityTypeNMSClass = EntityArmorStand.class)
-public class ArmorStandEntityInstance extends EntityArmorStand implements LivingEntityInstance {
+public class ArmorStandEntityInstance extends EntityArmorStand implements LivingEntityInstance_1_8 {
 
+    private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
+    private final LivingEntityDisplayPackets displayPackets = new LivingEntityDisplayPackets();
+    private final TeleportPacket teleportPacket = new TeleportPacket();
+    private final EntityAnimationPackets entityAnimationPackets = new EntityAnimationPackets();
+    private EntityEquipmentPackets equipmentPackets;
+
+    private final NMSArmorStandAnimator armorStandAnimator;
     private EntityAI<NMSArmorStandAnimator> entityAI;
-    private NMSArmorStandAnimator armorStandAnimator;
 
-    public ArmorStandEntityInstance(org.bukkit.World world) {
-        this(NMSBukkitConverter.convertToNMSWorld(world));
+    public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull org.bukkit.World world) {
+        this(armorStandAnimator, NMSBukkitConverter.convertToNMSWorld(world));
     }
 
-    public ArmorStandEntityInstance(World world) {
+    public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull World world) {
         super(world);
+        this.armorStandAnimator = armorStandAnimator;
     }
 
-    public ArmorStandEntityInstance(World world, double d0, double d1, double d2) {
+    public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
+        this.armorStandAnimator = armorStandAnimator;
     }
 
     @Override
@@ -42,38 +53,18 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     }
 
     @Override
-    public int getMaxDamageCooldown() {
-        return 0;
-    }
-
-    @Override
-    public void setMaxDamageCooldown(int ticks) {
-
-    }
-
-    @Override
-    public boolean isNoClip() {
-        return false;
-    }
-
-    @Override
-    public void setNoClip(boolean b) {
-
-    }
-
-    @Override
     public void setEntityEquipmentPackets(@Nullable EntityEquipmentPackets entityEquipmentPackets) {
-
+        this.equipmentPackets = entityEquipmentPackets;
     }
 
     @Override
     public EntityEquipmentPackets getEquipmentPackets() {
-        return null;
+        return equipmentPackets;
     }
 
     @Override
     public EntityAnimationPackets getAnimationPackets() {
-        return null;
+        return entityAnimationPackets;
     }
 
     @SuppressWarnings("unchecked")
@@ -110,34 +101,19 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     @NotNull
     @Override
     public TeleportPacket getTeleportPacket() {
-        return null;
+        return teleportPacket;
     }
 
     @NotNull
     @Override
     public EntityDestroyPacket getDestroyPacket() {
-        return null;
+        return entityDestroyPacket;
     }
 
     @NotNull
     @Override
     public LivingEntityDisplayPackets getDisplayPackets() {
-        return null;
-    }
-
-    @Override
-    public void setFireTicks(int ticks) {
-        fireTicks = ticks;
-    }
-
-    @Override
-    public int getFireTicks() {
-        return fireTicks;
-    }
-
-    @Override
-    public int getTicksLived() {
-        return ticksLived;
+        return displayPackets;
     }
 
     @Override
@@ -146,17 +122,8 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     }
 
     @Override
-    public void removeFromWorld() {
-
+    public boolean isDead() {
+        return dead;
     }
 
-    @Override
-    public void addToWorld() {
-
-    }
-
-    @Override
-    public void delete() {
-
-    }
 }

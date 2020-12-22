@@ -1,10 +1,10 @@
 package com.acrylic.universal.emtityanimator;
 
+import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.interfaces.Deletable;
 import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.packets.TeleportPacket;
-import com.acrylic.universal.renderer.InitializerLocationalRenderer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -41,5 +41,10 @@ public interface EntityInstance
     void setupShowPackets();
 
     void render();
+
+    @Override
+    default void delete() {
+        getAnimatior().delete();
+    }
 
 }

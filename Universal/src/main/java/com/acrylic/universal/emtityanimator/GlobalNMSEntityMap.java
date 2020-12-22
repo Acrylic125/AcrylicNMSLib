@@ -1,21 +1,23 @@
 package com.acrylic.universal.emtityanimator;
 
+import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.FollowerAI;
+import com.acrylic.universal.entityai.strategy.EntityFollowingStrategy;
 import com.acrylic.universal.events.AbstractEventBuilder;
 import com.acrylic.universal.events.EventBuilder;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public class GlobalNMSEntityMap implements EntityMap<NMSEntityAnimator> {
 
-    private final Map<Integer, NMSEntityAnimator> map = new WeakHashMap<>();
+    private final Map<Integer, NMSEntityAnimator> map = new HashMap<>();
 
     @Override
     public Map<Integer, NMSEntityAnimator> getMap() {
@@ -56,26 +58,40 @@ public class GlobalNMSEntityMap implements EntityMap<NMSEntityAnimator> {
     @Override
     public void loadEntities(@NotNull Player player) {
         for (NMSEntityAnimator entityAnimator : map.values()) {
-            InitializerLocationalRenderer renderer = entityAnimator.getRenderer();
-            if (renderer.canInitialize(player))
-                renderer.render(player);
+             load(player, entityAnimator);
         }
     }
 
     @Override
     public void reloadEntities(@NotNull Player player) {
         for (NMSEntityAnimator entityAnimator : map.values()) {
-            InitializerLocationalRenderer renderer = entityAnimator.getRenderer();
-            renderer.unrender(player);
-            if (renderer.canInitialize(player)) {
-                renderer.render(player);
-            }
+            unload(player, entityAnimator);
+            load(player, entityAnimator);
         }
     }
 
     @Override
     public void clearEntities(@NotNull Player player) {
-        for (NMSEntityAnimator entityAnimator : map.values())
-            entityAnimator.getRenderer().unrender(player);
+        for (NMSEntityAnimator entityAnimator : map.values()) {
+            unload(player, entityAnimator);
+        }
+    }
+
+    private void load(@NotNull Player player, @NotNull NMSEntityAnimator entityAnimator) {
+        InitializerLocationalRenderer renderer = entityAnimator.getRenderer();
+        if (renderer.canInitialize(player))
+            renderer.render(player);
+    }
+
+    private void unload(@NotNull Player player, @NotNull NMSEntityAnimator entityAnimator) {
+        InitializerLocationalRenderer renderer = entityAnimator.getRenderer();
+        EntityInstance entityInstance = entityAnimator.getEntityInstance();
+        if (entityInstance instanceof LivingEntityInstance) {
+            EntityAI<?> ai = ((LivingEntityInstance) entityInstance).getAI();
+            if (ai != null)
+                ai.aiUnloadCheck(player);
+        }
+        if (renderer.canInitialize(player))
+            renderer.render(player);
     }
 }
