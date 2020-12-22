@@ -55,7 +55,7 @@ public class SimpleBlockExaminerB implements BlockExaminer {
     }
 
     private BoundingBoxExaminer getNewBBExaminer(@NotNull Location location) {
-        return NMSBridge.getBridge().getUtils().getBlockExaminer(location);
+        return NMSBridge.getBridge().getBlockExaminer(location);
     }
 
     public NavigationStyle getNavigationStyle(@NotNull Location location) {

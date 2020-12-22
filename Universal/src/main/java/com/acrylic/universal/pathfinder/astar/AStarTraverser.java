@@ -112,7 +112,7 @@ public final class AStarTraverser extends PathTraverser {
         int i = 0; //Iterations
         AStarNode computed = null;
         AStarNode closest;
-        BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer();
+        BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getBlockExaminer();
         do {
             closest = getClosestNode();
             if (closest == null) {
@@ -156,7 +156,7 @@ public final class AStarTraverser extends PathTraverser {
            computedLocations = new Location[computed.getIndex() + 1];
            do {
                Location loc = computed.getLocation();
-               BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getUtils().getBlockExaminer(loc.getBlock().getRelative(BlockFace.DOWN).getLocation());
+               BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getBlockExaminer(loc.getBlock().getRelative(BlockFace.DOWN).getLocation());
                if (boundingBoxExaminer.canExamine())
                    loc.setY(boundingBoxExaminer.getMaxY());
                computedLocations[computed.getIndex()] = loc;
