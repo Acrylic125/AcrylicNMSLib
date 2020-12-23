@@ -6,11 +6,9 @@ import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.PathFace;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
-import org.bukkit.Bukkit;
+import com.acrylic.universal.util.BukkitHashCode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,37 +43,19 @@ public final class AStarTraverser extends PathTraverser {
     }
 
     /** HELPER METHODS **/
-    private int computeHash(double a, int hash) {
-        long b = Double.doubleToLongBits(a);
-        return (int) (19 * hash + (b ^ b >>> 32));
-    }
-
-    /**
-     * This is used as an identifier.
-     *
-     * It is adapted from the {@link Location} hashcode.
-     */
-    private int getID(@NotNull Location location) {
-        int hash = 3;
-        hash = computeHash(location.getX(), hash);
-        hash = computeHash(location.getY(), hash);
-        hash = computeHash(location.getZ(), hash);
-        return hash;
-    }
-
     private void removeNodeFrom(@NotNull Map<Integer, AStarNode> map, @NotNull AStarNode node) {
-        map.remove(getID(node.getLocation()));
+        map.remove(BukkitHashCode.getHashCode(node.getLocation()));
     }
 
     @NotNull
     private AStarNode addNodeTo(@NotNull Map<Integer, AStarNode> map, @NotNull AStarNode node) {
-        map.put(getID(node.getLocation()), node);
+        map.put(BukkitHashCode.getHashCode(node.getLocation()), node);
         return node;
     }
 
     @Nullable
     private AStarNode getNodeFrom(@NotNull Map<Integer, AStarNode> map, @NotNull Location location) {
-        return map.get(getID(location));
+        return map.get(BukkitHashCode.getHashCode(location));
     }
     /** END OF HELPERS **/
 
@@ -112,7 +92,7 @@ public final class AStarTraverser extends PathTraverser {
         int i = 0; //Iterations
         AStarNode computed = null;
         AStarNode closest;
-        BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getBlockExaminer();
+        BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getNewBlockExaminer();
         do {
             closest = getClosestNode();
             if (closest == null) {
@@ -156,7 +136,7 @@ public final class AStarTraverser extends PathTraverser {
            computedLocations = new Location[computed.getIndex() + 1];
            do {
                Location loc = computed.getLocation();
-               BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getBlockExaminer(loc.getBlock().getRelative(BlockFace.DOWN).getLocation());
+               BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getNewBlockExaminer(loc.getBlock().getRelative(BlockFace.DOWN).getLocation());
                if (boundingBoxExaminer.canExamine())
                    loc.setY(boundingBoxExaminer.getMaxY());
                computedLocations[computed.getIndex()] = loc;

@@ -1,6 +1,6 @@
 package com.acrylic.version_1_8.packets;
 
-import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
+import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.exceptions.IncompatibleVersion;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
@@ -57,11 +57,8 @@ public class LivingEntityDisplayPackets
 
     @Override
     public void setupDisplayPackets(@NotNull NMSLivingEntityAnimator nmsEntityAnimator) {
-        if (nmsEntityAnimator instanceof com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) {
-            EntityLiving entity = ((com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator) nmsEntityAnimator).getNMSEntity();
-            setupDisplayPackets(entity, nmsEntityAnimator.getEntityInstance().getEquipmentPackets());
-        } else
-            throw new IncompatibleVersion(nmsEntityAnimator.getClass(), getClass());
+        EntityLiving entity = (EntityLiving) nmsEntityAnimator.getNMSEntity();
+        setupDisplayPackets(entity, nmsEntityAnimator.getEntityInstance().getEquipmentPackets());
     }
 
     @Override

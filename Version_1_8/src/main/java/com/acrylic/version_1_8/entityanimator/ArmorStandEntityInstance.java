@@ -8,16 +8,23 @@ import com.acrylic.version_1_8.packets.EntityAnimationPackets;
 import com.acrylic.version_1_8.packets.EntityDestroyPacket;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
 import com.acrylic.version_1_8.packets.TeleportPacket;
+import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
+import net.minecraft.server.v1_8_R3.Vector3f;
 import net.minecraft.server.v1_8_R3.World;
+import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @CustomEntity(name = "ArmorStandInstance",
         entityType = EntityType.ARMOR_STAND,
         entityTypeNMSClass = EntityArmorStand.class)
-public class ArmorStandEntityInstance extends EntityArmorStand implements LivingEntityInstance_1_8 {
+public class ArmorStandEntityInstance
+        extends EntityArmorStand
+        implements LivingEntityInstance_1_8, com.acrylic.universal.entityinstances.instances.ArmorStandEntityInstance {
 
     private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
     private final LivingEntityDisplayPackets displayPackets = new LivingEntityDisplayPackets();
@@ -28,16 +35,15 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     private final NMSArmorStandAnimator armorStandAnimator;
     private EntityAI<NMSArmorStandAnimator> entityAI;
 
-    public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull org.bukkit.World world) {
-        this(armorStandAnimator, NMSBukkitConverter.convertToNMSWorld(world));
+    public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull Location location) {
+        this(armorStandAnimator, NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
+        initialize(location);
     }
 
     public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull World world) {
         super(world);
         this.armorStandAnimator = armorStandAnimator;
         entityDestroyPacket.apply(getBukkitEntity());
-        setupShowPackets();
-        setupTermination();
     }
 
     public ArmorStandEntityInstance(@NotNull NMSArmorStandAnimator armorStandAnimator, @NotNull World world, double d0, double d1, double d2) {
@@ -91,7 +97,7 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
 
     @NotNull
     @Override
-    public NMSArmorStandAnimator getAnimatior() {
+    public NMSArmorStandAnimator getAnimator() {
         return armorStandAnimator;
     }
 
@@ -125,6 +131,40 @@ public class ArmorStandEntityInstance extends EntityArmorStand implements Living
     @Override
     public boolean isDead() {
         return dead;
+    }
+
+    private Vector3f toVector3f(@NotNull EulerAngle eulerAngle) {
+        return new Vector3f((float) Math.toDegrees(eulerAngle.getX()), (float) Math.toDegrees(eulerAngle.getY()), (float) Math.toDegrees(eulerAngle.getZ()));
+    }
+
+    @Override
+    public void setMarker(boolean b) {
+        ((ArmorStand) getBukkitEntity()).setMarker(b);
+    }
+
+    @Override
+    public void setHeadRotation(@NotNull EulerAngle angle) {
+        super.setHeadPose(toVector3f(angle));
+    }
+
+    @Override
+    public void setLeftArmRotation(@NotNull EulerAngle angle) {
+        super.setLeftArmPose(toVector3f(angle));
+    }
+
+    @Override
+    public void setRightArmRotation(@NotNull EulerAngle angle) {
+        super.setRightArmPose(toVector3f(angle));
+    }
+
+    @Override
+    public void setLeftLegRotation(@NotNull EulerAngle angle) {
+        super.setLeftLegPose(toVector3f(angle));
+    }
+
+    @Override
+    public void setRightLegRotation(@NotNull EulerAngle angle) {
+        super.setRightLegPose(toVector3f(angle));
     }
 
 }

@@ -1,32 +1,29 @@
-package com.acrylic.version_1_8.entityanimator;
+package com.acrylic.universal.emtityanimator;
 
-import com.acrylic.universal.emtityanimator.LivingEntityInstance;
+import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityanimations.entities.AbstractArmorStandAnimator;
+import com.acrylic.universal.entityinstances.LivingEntityInstance;
+import com.acrylic.universal.entityinstances.instances.ArmorStandEntityInstance;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
-import com.acrylic.version_1_8.NMSBukkitConverter;
-import net.minecraft.server.v1_8_R3.EntityArmorStand;
-import net.minecraft.server.v1_8_R3.Vector3f;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 
-public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements AbstractArmorStandAnimator {
+public class NMSArmorStandAnimator
+        extends NMSLivingEntityAnimator
+        implements AbstractArmorStandAnimator {
 
     private final ArmorStandEntityInstance nmsEntity;
 
     public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location) {
         super(initializerLocationalRenderer);
-        this.nmsEntity = new ArmorStandEntityInstance(this, NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
-        nmsEntity.setLocation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
-    }
-
-    private Vector3f toVector3f(@NotNull EulerAngle eulerAngle) {
-        return new Vector3f((float) Math.toDegrees(eulerAngle.getX()), (float) Math.toDegrees(eulerAngle.getY()), (float) Math.toDegrees(eulerAngle.getZ()));
+        this.nmsEntity = NMSBridge.getBridge().getEntityFactory().getNewArmorStandEntityInstance(this, location);
     }
 
     @Override
-    public EntityArmorStand getNMSEntity() {
+    public Object getNMSEntity() {
         return nmsEntity;
     }
 
@@ -62,43 +59,43 @@ public class NMSArmorStandAnimator extends NMSLivingEntityAnimator implements Ab
 
     @Override
     public AbstractArmorStandAnimator rightArmPose(@NotNull EulerAngle eulerAngle) {
-        nmsEntity.setRightArmPose(toVector3f(eulerAngle));
+        nmsEntity.setRightArmRotation(eulerAngle);
         return this;
     }
 
     @Override
     public AbstractArmorStandAnimator leftArmPose(@NotNull EulerAngle eulerAngle) {
-        nmsEntity.setLeftArmPose(toVector3f(eulerAngle));
+        nmsEntity.setLeftArmRotation(eulerAngle);
         return this;
     }
 
     @Override
     public AbstractArmorStandAnimator rightLegPose(@NotNull EulerAngle eulerAngle) {
-        nmsEntity.setRightLegPose(toVector3f(eulerAngle));
+        nmsEntity.setRightLegRotation(eulerAngle);
         return this;
     }
 
     @Override
     public AbstractArmorStandAnimator leftLegPose(@NotNull EulerAngle eulerAngle) {
-        nmsEntity.setLeftLegPose(toVector3f(eulerAngle));
+        nmsEntity.setLeftLegRotation(eulerAngle);
         return this;
     }
 
     @Override
     public AbstractArmorStandAnimator headPose(@NotNull EulerAngle eulerAngle) {
-        nmsEntity.setHeadPose(toVector3f(eulerAngle));
+        nmsEntity.setHeadRotation(eulerAngle);
         return this;
     }
 
     @Override
     public AbstractArmorStandAnimator visible(boolean b) {
-        nmsEntity.setInvisible(!b);
+        nmsEntity.setVisible(b);
         return this;
     }
 
     @Override
     public ArmorStand getBukkitEntity() {
-        return (ArmorStand) getNMSEntity().getBukkitEntity();
+        return (ArmorStand) nmsEntity.getBukkitEntity();
     }
 
     @Override

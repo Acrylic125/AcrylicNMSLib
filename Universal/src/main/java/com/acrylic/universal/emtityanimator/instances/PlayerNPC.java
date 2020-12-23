@@ -1,42 +1,31 @@
-package com.acrylic.version_1_8.npc;
+package com.acrylic.universal.emtityanimator.instances;
 
+import com.acrylic.universal.NMSBridge;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
+import com.acrylic.universal.entityinstances.instances.PlayerNPCEntityInstance;
 import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.enums.Gamemode;
-import com.acrylic.universal.npc.PlayerNPCEntity;
+import com.acrylic.universal.npc.NPCDisplayPackets;
+import com.acrylic.universal.npc.SimpleNPCSkin;
+import com.acrylic.universal.packets.EntityHeadRotationPacket;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
-import com.acrylic.universal.text.ChatUtils;
-import com.acrylic.version_1_8.NMSBukkitConverter;
-import com.acrylic.version_1_8.entityanimator.NMSLivingEntityAnimator;
-import com.acrylic.version_1_8.packets.EntityHeadRotationPacket;
-import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
-import com.acrylic.version_1_8.packets.NPCPlayerDisplayPackets;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import net.minecraft.server.v1_8_R3.*;
+import com.acrylic.universal.threads.Scheduler;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
 public class PlayerNPC
-        extends NMSLivingEntityAnimator
-        implements PlayerNPCEntity {
+        extends NMSLivingEntityAnimator {
 
-    private final PlayerEntityInstance entityPlayer;
+    private final PlayerNPCEntityInstance entityPlayer;
     private boolean gravity = true;
 
     public PlayerNPC(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location, @Nullable String name) {
-        this(initializerLocationalRenderer, NMSBukkitConverter.getMCServer(), NMSBukkitConverter.convertToWorldServer(location.getWorld()), location, name);
-    }
-
-    private PlayerNPC(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull MinecraftServer server, @NotNull WorldServer worldServer, @NotNull Location location, @Nullable String name) {
         super(initializerLocationalRenderer);
-        entityPlayer = new PlayerEntityInstance(this, server, worldServer, new GameProfile(UUID.randomUUID(), (name == null) ? null : ChatUtils.get(name)), new PlayerInteractManager(worldServer));
-        entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        entityPlayer = NMSBridge.getBridge().getEntityFactory().getNewNPC(this, location, name);
         UniversalNMS.getNpcHandler().addNPC(this);
     }
 
@@ -62,80 +51,83 @@ public class PlayerNPC
     }
 
     @Override
-    public EntityLiving getNMSEntity() {
+    public Object getNMSEntity() {
         return entityPlayer;
     }
 
     @Override
-    public LivingEntity getBukkitEntity() {
-        return entityPlayer.getBukkitEntity();
+    public Player getBukkitEntity() {
+        return (Player) entityPlayer.getBukkitEntity();
     }
 
-    @Override
     public void setGravity(boolean b) {
         this.gravity = b;
     }
 
-    @Override
     public boolean isUsingGravity() {
         return gravity;
     }
 
-    @Override
     public void updateHeadPose() {
-        updateHeadPose(entityPlayer.yaw);
+        updateHeadPose(entityPlayer.getYaw());
     }
 
-    @Override
     public void updateHeadPose(float angle) {
-        LivingEntityDisplayPackets packets = entityPlayer.getDisplayPackets();
-        if (packets instanceof NPCPlayerDisplayPackets) {
-            EntityHeadRotationPacket headRotationPacket = ((NPCPlayerDisplayPackets) packets).getHeadRotationPacket();
-            headRotationPacket.apply(entityPlayer, angle);
-            headRotationPacket.send(getRenderer());
-        }
+        NPCDisplayPackets packets = (NPCDisplayPackets) entityPlayer.getDisplayPackets();
+        EntityHeadRotationPacket headRotationPacket = packets.getHeadRotationPacket();
+        headRotationPacket.apply(getBukkitEntity(), angle);
+        headRotationPacket.send(getRenderer());
     }
 
-    @Override
     public void attack(@NotNull LivingEntity victim) {
-        entityPlayer.attack(NMSBukkitConverter.convertToNMSEntity(victim));
+        entityPlayer.attack(victim);
         animate(EntityAnimationEnum.ARM_SWING);
     }
 
-    @Override
     public void setGamemode(@NotNull Gamemode gamemode) {
-        entityPlayer.playerInteractManager.b(WorldSettings.EnumGamemode.valueOf(gamemode.getIdentifier()));
+        entityPlayer.setGamemode(gamemode);
     }
 
-    @Override
     public void setSneaking(boolean flag) {
         entityPlayer.setSneaking(flag);
     }
 
-    @Override
     public void setSprinting(boolean flag) {
         entityPlayer.setSprinting(flag);
     }
 
-    @Override
     public void setVisible(boolean flag) {
-        entityPlayer.setInvisible(!flag);
+        entityPlayer.setVisible(flag);
     }
 
-    @Override
     public void setDataWatcher(int index, byte bitMask) {
-        entityPlayer.getDataWatcher().watch(index, bitMask);
+        entityPlayer.setDataWatcher(index, bitMask);
     }
 
-    @Override
     public byte getDataWatcherEntityAnimation() {
-        return entityPlayer.getDataWatcher().getByte(0);
+        return entityPlayer.getDataWatcherEntityAnimation();
     }
 
-    @Override
     public void setSkin(@NotNull String texture, @NotNull String signature) {
-        GameProfile gameProfile = entityPlayer.getProfile();
-        gameProfile.getProperties().put("textures", new Property("textures", texture, signature));
+        entityPlayer.setSkin(texture, signature);
+    }
+
+    public void setSkin(@NotNull String name) {
+        SimpleNPCSkin skin = UniversalNMS.getSkinMap().getSkin(name);
+        if (skin != null)
+            setSkin(skin.getTexture(), skin.getSignature());
+        else {
+            Scheduler.async()
+                    .handle(task -> {
+                        SimpleNPCSkin simpleNPCSkin = UniversalNMS.getSkinMap().getAndAddIfNotExist(name);
+                        setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());
+                    })
+                    .build();
+        }
+    }
+
+    public void setSkin(@NotNull SimpleNPCSkin simpleNPCSkin) {
+        setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());
     }
 
     /**@Override
@@ -155,8 +147,21 @@ public class PlayerNPC
     }
 
     @Override
-    public PlayerEntityInstance getEntityInstance() {
+    public PlayerNPCEntityInstance getEntityInstance() {
         return entityPlayer;
+    }
+
+    public void setBowFoodUse(boolean flag) {
+        setDataWatcherEntityAnimation((byte) 16, flag);
+    }
+
+    public void setOnFire(boolean flag) {
+        setDataWatcherEntityAnimation((byte) 0x01, flag);
+    }
+
+    public void setDataWatcherEntityAnimation(byte bitMask, boolean flag) {
+        byte dataWatcherEntityAnimation = getDataWatcherEntityAnimation();
+        setDataWatcher(0, (byte) ((flag) ? (dataWatcherEntityAnimation | bitMask) : (dataWatcherEntityAnimation & ~bitMask)));
     }
 
 }

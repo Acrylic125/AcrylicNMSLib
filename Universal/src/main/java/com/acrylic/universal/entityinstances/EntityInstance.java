@@ -1,12 +1,15 @@
-package com.acrylic.universal.emtityanimator;
+package com.acrylic.universal.entityinstances;
 
-import com.acrylic.universal.UniversalNMS;
+import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.interfaces.Deletable;
 import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.packets.TeleportPacket;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * EntityInstance are to be used for custom NMS entities
@@ -17,18 +20,43 @@ import org.jetbrains.annotations.NotNull;
  * @see com.acrylic.universal.entityai.strategy.EntityStrategy
  */
 public interface EntityInstance
-        extends WorldEntity, Deletable {
+        extends WorldEntity, Deletable, TickingEntityInstance {
 
-    void setFireTicks(int ticks);
+    void initialize(@NotNull Location location);
 
-    int getFireTicks();
+    Entity getBukkitEntity();
 
-    int getTicksLived();
+    void setMCAI(boolean ai);
 
-    void tickingEntity();
+    void setAI(EntityAI<?> ai);
+
+    @Nullable
+    EntityAI<?> getAI();
+
+    boolean isUsingMCAI();
+
+    void setNameVisible(boolean b);
+
+    void setName(@NotNull String name);
+
+    void setVisible(boolean b);
+
+    boolean isNoClip();
+
+    void setNoClip(boolean b);
+
+    float getYaw();
+
+    void setYaw(float yaw);
+
+    float getPitch();
+
+    void setPitch(float pitch);
+
+    void setVelocity(double x, double y, double z);
 
     @NotNull
-    NMSEntityAnimator getAnimatior();
+    NMSEntityAnimator getAnimator();
 
     @NotNull
     TeleportPacket getTeleportPacket();
@@ -38,6 +66,8 @@ public interface EntityInstance
 
     @NotNull
     LivingEntityDisplayPackets getDisplayPackets();
+
+    void setupTermination();
 
     void setupShowPackets();
 
@@ -50,7 +80,7 @@ public interface EntityInstance
 
     @Override
     default void delete() {
-        getAnimatior().delete();
+        getAnimator().delete();
     }
 
 }

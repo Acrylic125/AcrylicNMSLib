@@ -1,6 +1,6 @@
 package com.acrylic.universal.packets;
 
-import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
+import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,12 +1,11 @@
 package com.acrylic.universal.emtityanimator;
 
 import com.acrylic.universal.entityai.EntityAI;
-import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.strategy.EntityFollowingStrategy;
+import com.acrylic.universal.entityinstances.EntityInstance;
+import com.acrylic.universal.entityinstances.LivingEntityInstance;
 import com.acrylic.universal.events.AbstractEventBuilder;
 import com.acrylic.universal.events.EventBuilder;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;

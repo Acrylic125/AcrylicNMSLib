@@ -1,7 +1,5 @@
 package com.acrylic.universal.pathfinder;
 
-import com.acrylic.universal.misc.BoundingBoxExaminer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface BlockExaminer {
 
-    SimpleBlockExaminerB SIMPLE_BLOCK_EXAMINER_B = new SimpleBlockExaminerB();
+    SimpleBlockExaminer SIMPLE_BLOCK_EXAMINER = new SimpleBlockExaminer();
 
     enum NavigationStyle {
         CASUAL_SWIM, SWIM, WALK, CLIMB, NONE;

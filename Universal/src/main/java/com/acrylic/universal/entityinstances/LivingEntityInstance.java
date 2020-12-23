@@ -1,5 +1,6 @@
-package com.acrylic.universal.emtityanimator;
+package com.acrylic.universal.entityinstances;
 
+import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.packets.EntityAnimationPackets;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
@@ -19,14 +20,6 @@ public interface LivingEntityInstance
             entityAI.update();
     }
 
-    int getMaxDamageCooldown();
-
-    void setMaxDamageCooldown(int ticks);
-
-    boolean isNoClip();
-
-    void setNoClip(boolean b);
-
     void setEntityEquipmentPackets(@Nullable EntityEquipmentPackets entityEquipmentPackets);
 
     EntityEquipmentPackets getEquipmentPackets();
@@ -34,12 +27,12 @@ public interface LivingEntityInstance
     EntityAnimationPackets getAnimationPackets();
 
     default void healEntity(double amount) {
-        LivingEntity entity = getAnimatior().getBukkitEntity();
+        LivingEntity entity = getAnimator().getBukkitEntity();
         entity.setHealth(Math.max(amount + entity.getHealth(), entity.getMaxHealth()));
     }
 
     default void healEntity() {
-        healEntity(getAnimatior().getBukkitEntity().getMaxHealth());
+        healEntity(getAnimator().getBukkitEntity().getMaxHealth());
     }
 
     void setAI(@Nullable EntityAI<?> ai);
@@ -49,27 +42,27 @@ public interface LivingEntityInstance
 
     @NotNull
     @Override
-    NMSLivingEntityAnimator getAnimatior();
+    NMSLivingEntityAnimator getAnimator();
 
     default void setupTermination() {
-        getAnimatior().getRenderer().setTerminationAction(player -> {
+        getAnimator().getRenderer().setTerminationAction(player -> {
             getDestroyPacket().send(player);
         });
     }
 
     @Override
     default void setupShowPackets() {
-        getAnimatior().getRenderer().setInitializationAction(player -> {
+        getAnimator().getRenderer().setInitializationAction(player -> {
             LivingEntityDisplayPackets displayPackets = getDisplayPackets();
-            displayPackets.setupDisplayPackets(getAnimatior());
+            displayPackets.setupDisplayPackets(getAnimator());
             displayPackets.send(player);
         });
     }
 
     @Override
     default void forceRender() {
-        InitializerLocationalRenderer initializerLocationalRenderer = getAnimatior().getRenderer();
-        initializerLocationalRenderer.setLocation(getAnimatior().getLocation());
+        InitializerLocationalRenderer initializerLocationalRenderer = getAnimator().getRenderer();
+        initializerLocationalRenderer.setLocation(getAnimator().getLocation());
         initializerLocationalRenderer.check();
     }
 

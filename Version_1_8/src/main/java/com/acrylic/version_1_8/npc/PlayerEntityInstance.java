@@ -1,16 +1,20 @@
 package com.acrylic.version_1_8.npc;
 
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.emtityanimator.RespawnStrategy;
-import com.acrylic.universal.npc.PlayerNPCEntityInstance;
+import com.acrylic.universal.entityinstances.RespawnStrategy;
+import com.acrylic.universal.entityinstances.instances.PlayerNPCEntityInstance;
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.npc.NPCTabRemoverEntry;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.LivingEntityInstance_1_8;
 import com.acrylic.version_1_8.packets.*;
+import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -33,13 +37,12 @@ public class PlayerEntityInstance
     private RespawnStrategy respawnStrategy;
     private boolean wasOnFire = false;
 
-    public PlayerEntityInstance(PlayerNPC playerNPC, MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
+    public PlayerEntityInstance(Location location, PlayerNPC playerNPC, MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
         super(minecraftserver, worldserver, gameprofile, playerinteractmanager);
         removeFromTabPacket.apply(this, NPCPlayerInfoPacket.EnumPlayerInfoAction.REMOVE_PLAYER);
         this.playerNPC = playerNPC;
         entityDestroyPacket.apply(getBukkitEntity());
-        setupShowPackets();
-        setupTermination();
+        initialize(location);
     }
 
     public void setAi(@NotNull EntityAI<PlayerNPC> ai) {
@@ -97,6 +100,26 @@ public class PlayerEntityInstance
     }
 
     @Override
+    public void setGamemode(@NotNull Gamemode gamemode) {
+        playerInteractManager.b(WorldSettings.EnumGamemode.valueOf(gamemode.getIdentifier()));
+    }
+
+    @Override
+    public byte getDataWatcherEntityAnimation() {
+        return getDataWatcher().getByte(0);
+    }
+
+    @Override
+    public void setDataWatcher(int index, byte bitMask) {
+        getDataWatcher().watch(index, bitMask);
+    }
+
+    @Override
+    public void setSkin(@NotNull String texture, @NotNull String signature) {
+        getProfile().getProperties().put("textures", new Property("textures", texture, signature));
+    }
+
+    @Override
     public int getInvulnerableTicks() {
         return invulnerableTicks;
     }
@@ -113,7 +136,7 @@ public class PlayerEntityInstance
 
     @NotNull
     @Override
-    public PlayerNPC getAnimatior() {
+    public PlayerNPC getAnimator() {
         return playerNPC;
     }
 
@@ -196,7 +219,7 @@ public class PlayerEntityInstance
     public void respawn() {
         dead = false;
         setHealth(getMaxHealth());
-        getAnimatior().getRenderer().unrenderAll();
+        this.getAnimator().getRenderer().unrenderAll();
     }
 
     @Override
@@ -209,9 +232,9 @@ public class PlayerEntityInstance
 
     @Override
     public void setupShowPackets() {
-        getAnimatior().getRenderer().setInitializationAction(player -> {
+        this.getAnimator().getRenderer().setInitializationAction(player -> {
             com.acrylic.universal.packets.LivingEntityDisplayPackets displayPackets = getDisplayPackets();
-            displayPackets.setupDisplayPackets(getAnimatior());
+            displayPackets.setupDisplayPackets(this.getAnimator());
             UniversalNMS.getNpcHandler()
                     .getNPCTabRemoverEntries()
                     .add(new NPCTabRemoverEntry(player, removeFromTabPacket));

@@ -1,11 +1,11 @@
 package com.acrylic.universal.entityai.strategy;
 
+import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
 import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.npc.PlayerNPCEntity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class NPCAttackerStrategy<T extends PlayerNPCEntity>
+public class NPCAttackerStrategy<T extends PlayerNPC>
         extends SimpleFollowerStrategy<T>
         implements EntityAttackingStrategy<T> {
 

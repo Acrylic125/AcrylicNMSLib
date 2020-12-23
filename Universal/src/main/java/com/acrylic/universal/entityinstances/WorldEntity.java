@@ -1,4 +1,4 @@
-package com.acrylic.universal.emtityanimator;
+package com.acrylic.universal.entityinstances;
 
 public interface WorldEntity {
 

@@ -1,6 +1,6 @@
 package com.acrylic.universal.entityai.quitterstrategy;
 
-import com.acrylic.universal.emtityanimator.NMSLivingEntityAnimator;
+import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityai.FollowerAI;
 import org.jetbrains.annotations.NotNull;
 

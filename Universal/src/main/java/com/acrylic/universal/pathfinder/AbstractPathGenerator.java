@@ -8,7 +8,7 @@ public abstract class AbstractPathGenerator implements PathGenerator {
     private int lookUpThreshold = 150;
     private int searchDown = 2;
     private int searchUp = 1;
-    private BlockExaminer blockExaminer = BlockExaminer.SIMPLE_BLOCK_EXAMINER_B;
+    private BlockExaminer blockExaminer = BlockExaminer.SIMPLE_BLOCK_EXAMINER;
 
     @Override
     public PathGenerator setLookUpThreshold(int lookUpThreshold) {

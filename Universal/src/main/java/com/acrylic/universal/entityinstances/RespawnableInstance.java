@@ -1,4 +1,4 @@
-package com.acrylic.universal.emtityanimator;
+package com.acrylic.universal.entityinstances;
 
 import com.acrylic.universal.threads.Scheduler;
 import org.jetbrains.annotations.NotNull;

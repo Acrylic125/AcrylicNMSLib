@@ -1,14 +1,14 @@
 package com.acrylic.universal.entityai.pathfinder;
 
+import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityai.quitterstrategy.NoClipEntityPathQuitter;
-import com.acrylic.universal.npc.PlayerNPCEntity;
 import com.acrylic.universal.pathfinder.BlockExaminer;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class NPCEntityPathfinder<T extends PlayerNPCEntity>
+public class NPCEntityPathfinder<T extends PlayerNPC>
         extends AbstractSimpleEntityPathfinder<T> {
 
     public NPCEntityPathfinder(@NotNull FollowerAI<T> ai) {

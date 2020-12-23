@@ -7,16 +7,12 @@ import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
-import com.acrylic.universal.emtityanimator.NMSEntity;
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
 import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.exceptions.IncompatibleVersion;
 import com.acrylic.universal.json.AbstractJSON;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.universal.utils.LocationConverter;
-import com.acrylic.universal.utils.TeleportationUtils;
-import com.acrylic.universal.versionstore.exceptions.WrongVersionException;
-import com.acrylic.version_1_8.EntityRegistry;
 import com.acrylic.version_1_8.NMSBridge_1_8;
 import com.acrylic.version_1_8.Version_1_8_Class;
 import org.bukkit.Bukkit;
@@ -106,12 +102,12 @@ public final class AcrylicNMS extends JavaPlugin {
                                             ArrayList<NMSEntityAnimator> nmsEntityArrayList = nmsEntities.getPageList(page);
                                             if (nmsEntityArrayList != null) {
                                                 NMSBridge bridge = NMSBridge.getBridge();
-                                                AbstractJSON json = bridge.getJSON();
+                                                AbstractJSON json = bridge.getNewJSON();
                                                 for (NMSEntityAnimator nmsEntity : nmsEntityArrayList) {
                                                     Entity entity = nmsEntity.getBukkitEntity();
                                                     Location location = entity.getLocation();
                                                     json.append(
-                                                            bridge.getJSONComponent("&e&l" + entity.getEntityId() + "&r&f " + entity.getName() + "\n")
+                                                            bridge.getNewJSONComponent("&e&l" + entity.getEntityId() + "&r&f " + entity.getName() + "\n")
                                                                     .subText(
                                                                             entity.getName(),
                                                                             "&7Location: &f" + LocationConverter.DEFAULT.convertWithWorld(location),

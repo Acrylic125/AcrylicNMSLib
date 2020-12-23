@@ -22,6 +22,11 @@ public class EntityHeadRotationPacket
         apply(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 
+    @Override
+    public void apply(@NotNull Entity entity, float angle) {
+        apply(NMSBukkitConverter.convertToNMSEntity(entity), angle);
+    }
+
     public void apply(net.minecraft.server.v1_8_R3.Entity entity) {
         apply(entity, entity.getBukkitEntity().getLocation().getYaw());
     }

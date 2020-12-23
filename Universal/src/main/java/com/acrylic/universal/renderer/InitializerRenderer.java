@@ -1,5 +1,6 @@
 package com.acrylic.universal.renderer;
 
+import com.acrylic.universal.entityinstances.EntityInstance;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ import java.util.function.Consumer;
  * This packet renderer allows for packet handling upon
  * the initial packet call for the player.
  *
- * This is used for {@link com.acrylic.universal.emtityanimator.EntityInstance}
+ * This is used for {@link EntityInstance}
  * to first send the spawning packets then any subsequent packets like teleporting
  * to those who have already received these packets.
  *

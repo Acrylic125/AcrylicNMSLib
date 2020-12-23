@@ -1,6 +1,7 @@
 package com.acrylic.universal;
 
 import com.acrylic.universal.factory.EntityFactory;
+import com.acrylic.universal.factory.PacketFactory;
 import com.acrylic.universal.json.AbstractJSON;
 import com.acrylic.universal.json.AbstractJSONComponent;
 import com.acrylic.universal.loaders.EntityRegistry;
@@ -35,29 +36,32 @@ public abstract class NMSBridge {
     public abstract EntityFactory getEntityFactory();
 
     @NotNull
-    public abstract BoundingBoxExaminer getBlockExaminer();
+    public abstract PacketFactory getPacketFactory();
 
     @NotNull
-    public BoundingBoxExaminer getBlockExaminer(@NotNull Location location) {
-        BoundingBoxExaminer examiner = getBlockExaminer();
+    public abstract BoundingBoxExaminer getNewBlockExaminer();
+
+    @NotNull
+    public BoundingBoxExaminer getNewBlockExaminer(@NotNull Location location) {
+        BoundingBoxExaminer examiner = getNewBlockExaminer();
         examiner.examine(location);
         return examiner;
     }
 
     @Nullable
-    public abstract AbstractNBTItem getNBTItem(@Nullable ItemStack item);
+    public abstract AbstractNBTItem getNewNBTItem(@Nullable ItemStack item);
 
     @Nullable
-    public abstract AbstractNBTEntity getNBTEntity(@Nullable Entity entity);
+    public abstract AbstractNBTEntity getNewNBTEntity(@Nullable Entity entity);
 
     @Nullable
-    public abstract AbstractNBTTileEntity getNBTTileEntity(@Nullable Block block);
+    public abstract AbstractNBTTileEntity getNewNBTTileEntity(@Nullable Block block);
 
     @NotNull
-    public abstract AbstractJSON getJSON();
+    public abstract AbstractJSON getNewJSON();
 
     @NotNull
-    public abstract AbstractJSONComponent getJSONComponent(@Nullable String string);
+    public abstract AbstractJSONComponent getNewJSONComponent(@Nullable String string);
 
 
 }

@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
+import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.loaders.CustomEntity;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
@@ -8,8 +9,10 @@ import com.acrylic.version_1_8.packets.EntityAnimationPackets;
 import com.acrylic.version_1_8.packets.EntityDestroyPacket;
 import com.acrylic.version_1_8.packets.LivingEntityDisplayPackets;
 import com.acrylic.version_1_8.packets.TeleportPacket;
+import com.acrylic.universal.emtityanimator.instances.NMSGiantAnimator;
 import net.minecraft.server.v1_8_R3.EntityGiantZombie;
 import net.minecraft.server.v1_8_R3.World;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +20,8 @@ import org.jetbrains.annotations.Nullable;
 @CustomEntity(name = "GiantInstance",
         entityType = EntityType.GIANT,
         entityTypeNMSClass = EntityGiantZombie.class)
-public class GiantEntityInstance extends EntityGiantZombie implements LivingEntityInstance_1_8 {
+public class GiantEntityInstance extends EntityGiantZombie
+        implements LivingEntityInstance_1_8, com.acrylic.universal.entityinstances.instances.GiantEntityInstance {
 
     private final EntityDestroyPacket entityDestroyPacket = new EntityDestroyPacket();
     private final LivingEntityDisplayPackets displayPackets = new LivingEntityDisplayPackets();
@@ -28,16 +32,15 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
     private EntityAI<NMSGiantAnimator> entityAI;
     private final NMSGiantAnimator giantAnimator;
 
-    public GiantEntityInstance(@NotNull NMSGiantAnimator giantAnimator, @NotNull org.bukkit.World world) {
-        this(giantAnimator, NMSBukkitConverter.convertToNMSWorld(world));
+    public GiantEntityInstance(@NotNull NMSGiantAnimator giantAnimator, @NotNull Location location) {
+        this(giantAnimator, NMSBukkitConverter.convertToNMSWorld(location.getWorld()));
+        initialize(location);
     }
 
     public GiantEntityInstance(@NotNull NMSGiantAnimator giantAnimator, @NotNull World world) {
         super(world);
         this.giantAnimator = giantAnimator;
         entityDestroyPacket.apply(getBukkitEntity());
-        setupShowPackets();
-        setupTermination();
     }
 
     public void setAi(@NotNull EntityAI<NMSGiantAnimator> ai) {
@@ -86,7 +89,7 @@ public class GiantEntityInstance extends EntityGiantZombie implements LivingEnti
 
     @NotNull
     @Override
-    public NMSGiantAnimator getAnimatior() {
+    public NMSGiantAnimator getAnimator() {
         return giantAnimator;
     }
 
