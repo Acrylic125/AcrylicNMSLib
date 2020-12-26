@@ -63,5 +63,4 @@ public abstract class NMSBridge {
     @NotNull
     public abstract AbstractJSONComponent getNewJSONComponent(@Nullable String string);
 
-
 }

@@ -12,12 +12,6 @@ public class RGBParticles
     @Override
     public void build() {
         checkConditions();
-
-
-        //
-        //                (particletype.equals(EnumParticle.REDSTONE)) ? ((usingRGB) ? new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) this.location.getX(), (float) this.location.getY(), (float) this.location.getZ(), this.red, this.green, this.blue, 1,  0) :
-        //                        new PacketPlayOutWorldParticles(EnumParticle.REDSTONE, true, (float) this.location.getX(), (float) this.location.getY(), (float) this.location.getZ(), this.offsetX, this.offsetY, this.offsetZ, 0,  this.amount, 0)) :
-        //
         this.packet = new PacketPlayOutWorldParticles(particleType,
                         false, this.location[0], this.location[1], this.location[2],
                         this.rgb.getRed(), this.rgb.getGreen(), rgb.getBlue(),

@@ -33,7 +33,7 @@ public interface Particles extends PacketSender {
 
     default void checkConditions() {
         if (getLocation() == null || getParticleType() == null)
-            throw new InsufficientParticlePropertiesException();
+            throw new IllegalArgumentException("Particles must have a location and particle effect defined.");
     }
 
 }

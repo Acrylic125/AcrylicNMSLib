@@ -1,6 +1,9 @@
 package com.acrylic.universal.factory;
 
 import com.acrylic.universal.packets.*;
+import com.acrylic.universal.particles.ItemParticles;
+import com.acrylic.universal.particles.Particles;
+import com.acrylic.universal.particles.RGBParticles;
 import org.jetbrains.annotations.NotNull;
 
 public interface PacketFactory {
@@ -28,5 +31,14 @@ public interface PacketFactory {
 
     @NotNull
     TeleportPacket getNewTeleportPacket();
+
+    @NotNull
+    Particles getNewParticles();
+
+    @NotNull
+    ItemParticles getNewItemParticles();
+
+    @NotNull
+    RGBParticles getNewRGBParticles();
 
 }

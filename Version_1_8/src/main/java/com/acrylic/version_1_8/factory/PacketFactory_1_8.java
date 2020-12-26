@@ -2,6 +2,9 @@ package com.acrylic.version_1_8.factory;
 
 import com.acrylic.universal.factory.PacketFactory;
 import com.acrylic.universal.packets.*;
+import com.acrylic.universal.particles.ItemParticles;
+import com.acrylic.universal.particles.Particles;
+import com.acrylic.universal.particles.RGBParticles;
 import org.jetbrains.annotations.NotNull;
 
 public class PacketFactory_1_8 implements PacketFactory {
@@ -52,5 +55,23 @@ public class PacketFactory_1_8 implements PacketFactory {
     @Override
     public TeleportPacket getNewTeleportPacket() {
         return new com.acrylic.version_1_8.packets.TeleportPacket();
+    }
+
+    @NotNull
+    @Override
+    public Particles getNewParticles() {
+        return new com.acrylic.version_1_8.particles.Particles();
+    }
+
+    @NotNull
+    @Override
+    public ItemParticles getNewItemParticles() {
+        return new com.acrylic.version_1_8.particles.ItemParticles();
+    }
+
+    @NotNull
+    @Override
+    public RGBParticles getNewRGBParticles() {
+        return new com.acrylic.version_1_8.particles.RGBParticles();
     }
 }

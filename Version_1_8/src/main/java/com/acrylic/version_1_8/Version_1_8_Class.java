@@ -7,26 +7,17 @@ import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
-import com.acrylic.universal.emtityanimator.instances.NMSGiantAnimator;
 import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
-import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
-import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
-import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
-import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.renderer.PlayerRangeRenderer;
 import com.acrylic.universal.threads.Scheduler;
 import com.acrylic.universal.threads.TaskType;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
-import com.acrylic.version_1_8.packets.BlockCrackPacket;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-
-import java.util.HashSet;
 
 public final class Version_1_8_Class {
 
@@ -36,6 +27,7 @@ public final class Version_1_8_Class {
                 .filter(AbstractCommandExecuted::isPlayer)
                 .setTimerActive(true)
                 .handle(commandExecuted -> {
+
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
 
