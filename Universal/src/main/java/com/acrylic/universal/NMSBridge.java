@@ -1,5 +1,6 @@
 package com.acrylic.universal;
 
+import com.acrylic.universal.factory.AnalyzerFactory;
 import com.acrylic.universal.factory.EntityFactory;
 import com.acrylic.universal.factory.PacketFactory;
 import com.acrylic.universal.json.AbstractJSON;
@@ -39,9 +40,14 @@ public abstract class NMSBridge {
     public abstract PacketFactory getPacketFactory();
 
     @NotNull
+    public abstract AnalyzerFactory getAnalyzerFactory();
+
+    @NotNull
+    @Deprecated
     public abstract BoundingBoxExaminer getNewBlockExaminer();
 
     @NotNull
+    @Deprecated
     public BoundingBoxExaminer getNewBlockExaminer(@NotNull Location location) {
         BoundingBoxExaminer examiner = getNewBlockExaminer();
         examiner.examine(location);

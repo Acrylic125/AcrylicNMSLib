@@ -1,6 +1,7 @@
 package com.acrylic.version_1_8.particles;
 
 import com.acrylic.version_1_8.packets.PacketSender;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
@@ -64,6 +65,11 @@ public class Particles
     @Override
     public float[] getLocation() {
         return location;
+    }
+
+    @Override
+    public Particles particleType(@NotNull EnumWrappers.Particle particle) {
+        return particleType(EnumParticle.a(particle.getId()));
     }
 
     public Particles particleType(EnumParticle particleType) {

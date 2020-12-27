@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public interface PacketFactory {
 
     @NotNull
-    BlockCrackPacket getNewBlockCrackpacket();
+    BlockCrackPacket getNewBlockCrackPacket();
 
     @NotNull
     EntityAnimationPackets getNewEntityAnimationPackets();
@@ -40,5 +40,8 @@ public interface PacketFactory {
 
     @NotNull
     RGBParticles getNewRGBParticles();
+
+    @NotNull
+    SoundPacket getSoundPacket();
 
 }

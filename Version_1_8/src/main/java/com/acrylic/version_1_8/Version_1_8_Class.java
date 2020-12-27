@@ -1,5 +1,6 @@
 package com.acrylic.version_1_8;
 
+import com.acrylic.universal.NMSBridge;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.animations.rotational.HandRotationAnimation;
 import com.acrylic.universal.command.AbstractCommandBuilder;
@@ -8,6 +9,7 @@ import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
 import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
+import com.acrylic.universal.packets.SoundPacket;
 import com.acrylic.universal.renderer.PlayerRangeRenderer;
 import com.acrylic.universal.threads.Scheduler;
 import com.acrylic.universal.threads.TaskType;
@@ -21,6 +23,7 @@ import org.bukkit.entity.Player;
 
 public final class Version_1_8_Class {
 
+
     public static CommandBuilder getArgumentComponent() {
         return CommandBuilder
                 .create("1.8")
@@ -30,7 +33,9 @@ public final class Version_1_8_Class {
 
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
-
+                    SoundPacket soundPacket = NMSBridge.getBridge().getPacketFactory().getSoundPacket();
+                    soundPacket.applyBreakSound(test.getBlock());
+                    soundPacket.send(sender);
                     /**Location to = test.clone().add(10, 0, 10);
                     sender.sendBlockChange(to.clone().add(0, 1, 0), Material.DIAMOND_BLOCK, (byte) 0);
                     for (Location computedLocation : PathGenerator.A_STAR_GENERATOR.traverseAndCompute(test, to)) {

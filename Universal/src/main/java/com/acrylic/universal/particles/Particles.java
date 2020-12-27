@@ -1,6 +1,7 @@
 package com.acrylic.universal.particles;
 
 import com.acrylic.universal.packets.PacketSender;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,8 @@ public interface Particles extends PacketSender {
     int getAmount();
 
     float[] getLocation();
+
+    Particles particleType(@NotNull EnumWrappers.Particle particle);
 
     Particles speed(float speed);
 

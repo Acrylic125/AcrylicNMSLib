@@ -1,6 +1,7 @@
 package com.acrylic.version_1_8;
 
 import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.factory.AnalyzerFactory;
 import com.acrylic.universal.factory.EntityFactory;
 import com.acrylic.universal.factory.PacketFactory;
 import com.acrylic.universal.json.AbstractJSON;
@@ -12,6 +13,7 @@ import com.acrylic.universal.misc.BoundingBoxExaminer;
 import com.acrylic.universal.nbt.AbstractNBTEntity;
 import com.acrylic.universal.nbt.AbstractNBTItem;
 import com.acrylic.universal.nbt.AbstractNBTTileEntity;
+import com.acrylic.version_1_8.factory.AnalyzerFactory_1_8;
 import com.acrylic.version_1_8.factory.EntityFactory_1_8;
 import com.acrylic.version_1_8.factory.PacketFactory_1_8;
 import com.acrylic.version_1_8.nbt.NBTEntity;
@@ -28,6 +30,7 @@ public final class NMSBridge_1_8 extends NMSBridge {
     private final EntityRegistry entityRegistry = new com.acrylic.version_1_8.EntityRegistry();
     private final EntityFactory entityFactory = new EntityFactory_1_8();
     private final PacketFactory packetFactory = new PacketFactory_1_8();
+    private final AnalyzerFactory analyzerFactory = new AnalyzerFactory_1_8();
 
     public NMSBridge_1_8() {
         super();
@@ -49,6 +52,12 @@ public final class NMSBridge_1_8 extends NMSBridge {
     @Override
     public PacketFactory getPacketFactory() {
         return packetFactory;
+    }
+
+    @NotNull
+    @Override
+    public AnalyzerFactory getAnalyzerFactory() {
+        return analyzerFactory;
     }
 
     @NotNull

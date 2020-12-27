@@ -11,7 +11,7 @@ public class PacketFactory_1_8 implements PacketFactory {
 
     @NotNull
     @Override
-    public BlockCrackPacket getNewBlockCrackpacket() {
+    public BlockCrackPacket getNewBlockCrackPacket() {
         return new com.acrylic.version_1_8.packets.BlockCrackPacket();
     }
 
@@ -73,5 +73,11 @@ public class PacketFactory_1_8 implements PacketFactory {
     @Override
     public RGBParticles getNewRGBParticles() {
         return new com.acrylic.version_1_8.particles.RGBParticles();
+    }
+
+    @NotNull
+    @Override
+    public SoundPacket getSoundPacket() {
+        return new com.acrylic.version_1_8.packets.SoundPacket();
     }
 }
