@@ -10,6 +10,8 @@ import com.acrylic.universal.misc.BoundingBoxExaminer;
 import com.acrylic.universal.nbt.AbstractNBTEntity;
 import com.acrylic.universal.nbt.AbstractNBTItem;
 import com.acrylic.universal.nbt.AbstractNBTTileEntity;
+import com.acrylic.universal.text.ActionBarSender;
+import com.acrylic.universal.text.TitleSender;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -68,5 +70,11 @@ public abstract class NMSBridge {
 
     @NotNull
     public abstract AbstractJSONComponent getNewJSONComponent(@Nullable String string);
+
+    @NotNull
+    public abstract TitleSender getNewTitle();
+
+    @NotNull
+    public abstract ActionBarSender getNewActionBar();
 
 }

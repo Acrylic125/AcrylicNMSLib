@@ -26,9 +26,10 @@ public class NBTItem extends AbstractNBTItem {
         } else {
             this.nmsItem = NMSBukkitConverter.convertToNMSItem(item);
             NBTTagCompound nbtTagCompound = nmsItem.getTag();
-            if (nbtTagCompound == null)
+            if (nbtTagCompound == null) {
                 nbtTagCompound = new NBTTagCompound();
-            nmsItem.save(nbtTagCompound);
+                nmsItem.save(nbtTagCompound);
+            }
             this.compound = new NBTCompound(nbtTagCompound);
         }
     }

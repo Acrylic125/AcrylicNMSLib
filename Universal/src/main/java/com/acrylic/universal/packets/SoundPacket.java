@@ -2,6 +2,7 @@ package com.acrylic.universal.packets;
 
 import com.acrylic.universal.NMSBridge;
 import com.acrylic.universal.analyzers.BlockAnalyzer;
+import math.ProbabilityKt;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public interface SoundPacket extends SinglePacketSender {
     }
 
     default void applyBreakSound(@NotNull Block block) {
-        applyBreakSound(block, 1);
+        applyBreakSound(block, 1f, ProbabilityKt.getRandom(0.8f, 0.9f));
     }
 
     default void applyStepSound(@NotNull Block block, float volume, float pitch) {

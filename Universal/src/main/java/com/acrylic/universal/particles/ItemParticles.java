@@ -6,4 +6,6 @@ public interface ItemParticles extends Particles {
 
     void item(ItemStack item);
 
+    boolean isValidItem();
+
 }

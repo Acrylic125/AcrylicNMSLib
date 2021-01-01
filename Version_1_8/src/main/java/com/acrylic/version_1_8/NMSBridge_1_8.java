@@ -13,12 +13,16 @@ import com.acrylic.universal.misc.BoundingBoxExaminer;
 import com.acrylic.universal.nbt.AbstractNBTEntity;
 import com.acrylic.universal.nbt.AbstractNBTItem;
 import com.acrylic.universal.nbt.AbstractNBTTileEntity;
+import com.acrylic.universal.text.ActionBarSender;
+import com.acrylic.universal.text.TitleSender;
 import com.acrylic.version_1_8.factory.AnalyzerFactory_1_8;
 import com.acrylic.version_1_8.factory.EntityFactory_1_8;
 import com.acrylic.version_1_8.factory.PacketFactory_1_8;
 import com.acrylic.version_1_8.nbt.NBTEntity;
 import com.acrylic.version_1_8.nbt.NBTItem;
 import com.acrylic.version_1_8.nbt.NBTTileEntity;
+import com.acrylic.version_1_8.text.ActionBar;
+import com.acrylic.version_1_8.text.Title;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -94,5 +98,17 @@ public final class NMSBridge_1_8 extends NMSBridge {
     @Override
     public AbstractJSONComponent getNewJSONComponent(@Nullable String string) {
         return JSONComponent.of(string);
+    }
+
+    @NotNull
+    @Override
+    public TitleSender getNewTitle() {
+        return new Title();
+    }
+
+    @NotNull
+    @Override
+    public ActionBarSender getNewActionBar() {
+        return new ActionBar();
     }
 }

@@ -11,12 +11,22 @@ public class ItemParticles
 
     private int itemId = 0;
     private int data = 0;
+    private boolean isValidItem = false;
 
     @Override
     public void item(ItemStack item) {
         net.minecraft.server.v1_8_R3.ItemStack itemStack = NMSBukkitConverter.convertToNMSItem(item);
-        itemId = Item.getId(itemStack.getItem());
-        data = itemStack.getData();
+        if (itemStack != null) {
+            itemId = Item.getId(itemStack.getItem());
+            data = itemStack.getData();
+            isValidItem = true;
+        } else
+            isValidItem = false;
+    }
+
+    @Override
+    public boolean isValidItem() {
+        return isValidItem;
     }
 
     @Override

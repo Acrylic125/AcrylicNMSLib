@@ -1,6 +1,7 @@
-name: Version_1_8
+name: AcrylicNMS
 version: ${project.version}
 main: com.acrylic.acrylicnms.AcrylicNMS
 api-version: 1.16
+depend: [ProtocolLib, Acrylic]
 authors: [ Acrylic ]
 description: 1.8 Module.

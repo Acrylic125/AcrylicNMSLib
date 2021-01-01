@@ -1,9 +1,9 @@
 package com.acrylic.universal.entityai.strategy;
 
-import com.acrylic.math.ProbabilityKt;
 import com.acrylic.universal.entityai.FollowerAI;
 import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
+import math.ProbabilityKt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
