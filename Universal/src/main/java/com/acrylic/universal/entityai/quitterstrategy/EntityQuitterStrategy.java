@@ -17,7 +17,7 @@ public interface EntityQuitterStrategy<T extends LivingEntityAnimator>
     long getGiveUpTimeDuration();
 
     default void resetGiveUpTime() {
-        setLastTimed(System.currentTimeMillis() + getGiveUpTimeDuration());
+        addTimeToNow(getGiveUpTimeDuration());
     }
 
     default boolean isGoingToGiveUp() {
@@ -25,7 +25,7 @@ public interface EntityQuitterStrategy<T extends LivingEntityAnimator>
     }
 
     default boolean isReadyToGiveUp() {
-        return isGoingToGiveUp() && System.currentTimeMillis() >= getLastTimed();
+        return isGoingToGiveUp() && System.currentTimeMillis() >= getTime();
     }
 
 }

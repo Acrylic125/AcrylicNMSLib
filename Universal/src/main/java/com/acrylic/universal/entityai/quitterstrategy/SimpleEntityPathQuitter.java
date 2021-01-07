@@ -30,12 +30,12 @@ public class SimpleEntityPathQuitter<T extends LivingEntityAnimator>
     }
 
     @Override
-    public long getLastTimed() {
+    public long getTime() {
         return giveUpTime;
     }
 
     @Override
-    public void setLastTimed(long l) {
+    public void setTime(long l) {
         this.giveUpTime = l;
     }
 

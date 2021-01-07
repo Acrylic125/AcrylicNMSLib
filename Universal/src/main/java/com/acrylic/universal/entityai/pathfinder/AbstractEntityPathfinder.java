@@ -92,12 +92,12 @@ public abstract class AbstractEntityPathfinder<T extends LivingEntityAnimator>
     }
 
     @Override
-    public long getLastTimed() {
+    public long getTime() {
         return pathingTime;
     }
 
     @Override
-    public void setLastTimed(long l) {
+    public void setTime(long l) {
         this.pathingTime = l;
     }
 

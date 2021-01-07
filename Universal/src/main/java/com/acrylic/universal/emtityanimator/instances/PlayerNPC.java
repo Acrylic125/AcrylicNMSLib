@@ -118,6 +118,7 @@ public class PlayerNPC
             setSkin(skin.getTexture(), skin.getSignature());
         else {
             Scheduler.async()
+                    .runTask()
                     .handle(task -> {
                         SimpleNPCSkin simpleNPCSkin = UniversalNMS.getSkinMap().getAndAddIfNotExist(name);
                         setSkin(simpleNPCSkin.getTexture(), simpleNPCSkin.getSignature());

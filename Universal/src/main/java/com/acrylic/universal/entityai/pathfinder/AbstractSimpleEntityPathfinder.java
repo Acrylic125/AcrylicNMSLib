@@ -31,7 +31,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
     }
 
     private boolean shouldSwitchPathing() {
-        return System.currentTimeMillis() > getLastTimed();
+        return System.currentTimeMillis() > getTime();
     }
 
     public boolean hasTarget(@NotNull T entityAnimator) {
@@ -55,7 +55,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
     @Override
     public synchronized void resetTraversing(@NotNull T entityAnimator) {
         generateLocations(entityAnimator);
-        setLastTimed(System.currentTimeMillis() + getMaximumTraverseTime());
+        addTimeToNow(getMaximumTraverseTime());
         traversingIndex = 0;
         setPathingPhase(PathingPhase.TRAVERSING);
     }
@@ -82,7 +82,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
              * Traversing is performance heavy therefore it is done in async
              * to preserve performance.
              */
-            Scheduler.async().handle(task -> {
+            Scheduler.async().runTask().handle(task -> {
                 resetTraversing(entityAnimator);
             }).build();
         } else {

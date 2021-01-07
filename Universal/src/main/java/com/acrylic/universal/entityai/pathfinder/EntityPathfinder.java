@@ -22,7 +22,7 @@ public interface EntityPathfinder<T extends LivingEntityAnimator>
 
     default void resetResting() {
         setPathingPhase(PathingPhase.RESTING);
-        setLastTimed(System.currentTimeMillis() + getRestTimeDuration());
+        addTimeToNow(getRestTimeDuration());
     }
 
     void setPathingPhase(@NotNull PathingPhase phase);
