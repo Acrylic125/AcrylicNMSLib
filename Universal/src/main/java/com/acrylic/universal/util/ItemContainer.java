@@ -1,6 +1,6 @@
 package com.acrylic.universal.util;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.items.ItemUtils;
 import com.acrylic.universal.nbt.AbstractNBTItem;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +12,7 @@ public class ItemContainer {
     private final AbstractNBTItem nbtItem;
 
     public ItemContainer(@Nullable ItemStack item) {
-        this(item, (ItemUtils.isAir(item)) ? null : NMSBridge.getBridge().getNewNBTItem(item));
+        this(item, (ItemUtils.isAir(item)) ? null : NMSAbstractFactory.getAbstractFactory().getNewNBTItem(item));
     }
 
     public ItemContainer(@Nullable ItemStack item, @Nullable AbstractNBTItem nbtItem) {

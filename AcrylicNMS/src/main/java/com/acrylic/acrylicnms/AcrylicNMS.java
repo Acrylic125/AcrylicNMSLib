@@ -1,7 +1,7 @@
 package com.acrylic.acrylicnms;
 
 import com.acrylic.paginatedcollection.PaginatedArrayList;
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.command.AbstractCommandBuilder;
@@ -13,7 +13,7 @@ import com.acrylic.universal.exceptions.IncompatibleVersion;
 import com.acrylic.universal.json.AbstractJSON;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.universal.utils.LocationConverter;
-import com.acrylic.version_1_8.NMSBridge_1_8;
+import com.acrylic.version_1_8.NMSAbstractFactory_1_8;
 import com.acrylic.version_1_8.Version_1_8_Class;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -101,7 +101,7 @@ public final class AcrylicNMS extends JavaPlugin {
                                         if (nmsEntities.size() > 0) {
                                             ArrayList<NMSEntityAnimator> nmsEntityArrayList = nmsEntities.getPageList(page);
                                             if (nmsEntityArrayList != null) {
-                                                NMSBridge bridge = NMSBridge.getBridge();
+                                                NMSAbstractFactory bridge = NMSAbstractFactory.getAbstractFactory();
                                                 AbstractJSON json = bridge.getNewJSON();
                                                 for (NMSEntityAnimator nmsEntity : nmsEntityArrayList) {
                                                     Entity entity = nmsEntity.getBukkitEntity();
@@ -129,10 +129,10 @@ public final class AcrylicNMS extends JavaPlugin {
     }
 
     private void load() {
-        short version = Universal.getVersionStore().getVersion();
+        short version = Universal.getAcrylicPlugin().getVersionStore().getVersion();
         switch (version) {
             case 8:
-                new NMSBridge_1_8();
+                new NMSAbstractFactory_1_8();
                 return;
             default:
                 Bukkit.getPluginManager().disablePlugin(this);

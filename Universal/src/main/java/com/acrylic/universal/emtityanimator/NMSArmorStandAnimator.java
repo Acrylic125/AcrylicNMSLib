@@ -1,6 +1,6 @@
 package com.acrylic.universal.emtityanimator;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.entityanimations.entities.AbstractArmorStandAnimator;
 import com.acrylic.universal.entityinstances.LivingEntityInstance;
@@ -19,7 +19,7 @@ public class NMSArmorStandAnimator
 
     public NMSArmorStandAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location) {
         super(initializerLocationalRenderer);
-        this.nmsEntity = NMSBridge.getBridge().getEntityFactory().getNewArmorStandEntityInstance(this, location);
+        this.nmsEntity = NMSAbstractFactory.getAbstractFactory().getEntityFactory().getNewArmorStandEntityInstance(this, location);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.acrylic.universal.emtityanimator.instances;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.entityanimations.entities.AbstractGiantAnimator;
 import com.acrylic.universal.entityinstances.instances.GiantEntityInstance;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
@@ -15,7 +15,7 @@ public class NMSGiantAnimator extends NMSLivingEntityAnimator implements Abstrac
 
     public NMSGiantAnimator(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location) {
         super(initializerLocationalRenderer);
-        this.nmsEntity = NMSBridge.getBridge().getEntityFactory().getNewGiantEntityInstance(this, location);
+        this.nmsEntity = NMSAbstractFactory.getAbstractFactory().getEntityFactory().getNewGiantEntityInstance(this, location);
     }
 
     @Override

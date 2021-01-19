@@ -1,6 +1,6 @@
 package com.acrylic.universal.pathfinder;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.misc.BoundingBoxExaminer;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -54,7 +54,7 @@ public class SimpleBlockExaminer implements BlockExaminer {
     }
 
     private BoundingBoxExaminer getNewBBExaminer(@NotNull Location location) {
-        return NMSBridge.getBridge().getAnalyzerFactory().getNewBoundingBoxExaminer(location);
+        return NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBoundingBoxExaminer(location);
     }
 
     public NavigationStyle getNavigationStyle(@NotNull Location location) {

@@ -1,6 +1,6 @@
 package com.acrylic.universal.pathfinder.astar;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.misc.BoundingBoxExaminer;
 import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.PathFace;
@@ -92,7 +92,7 @@ public final class AStarTraverser extends PathTraverser {
         int i = 0; //Iterations
         AStarNode computed = null;
         AStarNode closest;
-        BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getAnalyzerFactory().getNewBoundingBoxExaminer();
+        BoundingBoxExaminer boundingBoxExaminer = NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBoundingBoxExaminer();
         do {
             closest = getClosestNode();
             if (closest == null) {
@@ -136,7 +136,7 @@ public final class AStarTraverser extends PathTraverser {
            computedLocations = new Location[computed.getIndex() + 1];
            do {
                Location loc = computed.getLocation();
-               BoundingBoxExaminer boundingBoxExaminer = NMSBridge.getBridge().getAnalyzerFactory().getNewBoundingBoxExaminer(loc.getBlock().getRelative(BlockFace.DOWN).getLocation());
+               BoundingBoxExaminer boundingBoxExaminer = NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBoundingBoxExaminer(loc.getBlock().getRelative(BlockFace.DOWN).getLocation());
                if (boundingBoxExaminer.canExamine())
                    loc.setY(boundingBoxExaminer.getMaxY());
                computedLocations[computed.getIndex()] = loc;

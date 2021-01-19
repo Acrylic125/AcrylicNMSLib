@@ -1,6 +1,6 @@
 package com.acrylic.version_1_8.analyzers;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.misc.BoundingBoxExaminer;
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import org.bukkit.block.Block;
@@ -34,7 +34,7 @@ public class BlockAnalyzer
     @Override
     public BoundingBoxExaminer getBoundingBox() {
         if (boundingBoxExaminer == null)
-            boundingBoxExaminer = NMSBridge.getBridge().getAnalyzerFactory().getNewBoundingBoxExaminer(block.getLocation());
+            boundingBoxExaminer = NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBoundingBoxExaminer(block.getLocation());
         return boundingBoxExaminer;
     }
 

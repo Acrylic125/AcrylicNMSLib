@@ -1,6 +1,6 @@
 package com.acrylic.version_1_8;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.factory.AnalyzerFactory;
 import com.acrylic.universal.factory.EntityFactory;
 import com.acrylic.universal.factory.PacketFactory;
@@ -29,14 +29,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class NMSBridge_1_8 extends NMSBridge {
+public final class NMSAbstractFactory_1_8 extends NMSAbstractFactory {
 
     private final EntityRegistry entityRegistry = new com.acrylic.version_1_8.EntityRegistry();
     private final EntityFactory entityFactory = new EntityFactory_1_8();
     private final PacketFactory packetFactory = new PacketFactory_1_8();
     private final AnalyzerFactory analyzerFactory = new AnalyzerFactory_1_8();
 
-    public NMSBridge_1_8() {
+    public NMSAbstractFactory_1_8() {
         super();
     }
 

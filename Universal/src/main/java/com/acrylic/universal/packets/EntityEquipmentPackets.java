@@ -29,7 +29,7 @@ public interface EntityEquipmentPackets extends PacketSender {
                 .setLeggings(abstractEntityEquipmentBuilder.getLeggings())
                 .setBoots(abstractEntityEquipmentBuilder.getBoots())
                 .setItemInHand(abstractEntityEquipmentBuilder.getItemInHand());
-        if (!Universal.getVersionStore().isLegacyVersion()) {
+        if (!Universal.getAcrylicPlugin().getVersionStore().isLegacyVersion()) {
             setItemInOffhand(abstractEntityEquipmentBuilder.getItemInOffHand());
         }
     }

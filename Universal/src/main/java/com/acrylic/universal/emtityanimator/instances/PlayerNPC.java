@@ -1,6 +1,6 @@
 package com.acrylic.universal.emtityanimator.instances;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.entityanimations.equipment.AbstractEntityEquipmentBuilder;
 import com.acrylic.universal.entityinstances.instances.PlayerNPCEntityInstance;
@@ -25,7 +25,7 @@ public class PlayerNPC
 
     public PlayerNPC(@NotNull InitializerLocationalRenderer initializerLocationalRenderer, @NotNull Location location, @Nullable String name) {
         super(initializerLocationalRenderer);
-        entityPlayer = NMSBridge.getBridge().getEntityFactory().getNewNPC(this, location, name);
+        entityPlayer = NMSAbstractFactory.getAbstractFactory().getEntityFactory().getNewNPC(this, location, name);
         UniversalNMS.getNpcHandler().addNPC(this);
     }
 

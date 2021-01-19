@@ -1,6 +1,6 @@
 package com.acrylic.universal.packets;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.analyzers.BlockAnalyzer;
 import math.ProbabilityKt;
 import org.bukkit.Location;
@@ -20,7 +20,7 @@ public interface SoundPacket extends SinglePacketSender {
     void apply(@NotNull String soundString, @NotNull Location location, float volume, float pitch);
 
     default void applyBreakSound(@NotNull Block block, float volume, float pitch) {
-        BlockAnalyzer blockAnalyzer = NMSBridge.getBridge().getAnalyzerFactory().getNewBlockAnalyzer(block);
+        BlockAnalyzer blockAnalyzer = NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBlockAnalyzer(block);
         apply(blockAnalyzer.getBreakSound(), block.getLocation(), volume, pitch);
     }
 
@@ -33,7 +33,7 @@ public interface SoundPacket extends SinglePacketSender {
     }
 
     default void applyStepSound(@NotNull Block block, float volume, float pitch) {
-        BlockAnalyzer blockAnalyzer = NMSBridge.getBridge().getAnalyzerFactory().getNewBlockAnalyzer(block);
+        BlockAnalyzer blockAnalyzer = NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBlockAnalyzer(block);
         apply(blockAnalyzer.getStepSound(), block.getLocation(), volume, pitch);
     }
 
@@ -46,7 +46,7 @@ public interface SoundPacket extends SinglePacketSender {
     }
 
     default void applyPlaceSound(@NotNull Block block, float volume, float pitch) {
-        BlockAnalyzer blockAnalyzer = NMSBridge.getBridge().getAnalyzerFactory().getNewBlockAnalyzer(block);
+        BlockAnalyzer blockAnalyzer = NMSAbstractFactory.getAbstractFactory().getAnalyzerFactory().getNewBlockAnalyzer(block);
         apply(blockAnalyzer.getPlaceSound(), block.getLocation(), volume, pitch);
     }
 

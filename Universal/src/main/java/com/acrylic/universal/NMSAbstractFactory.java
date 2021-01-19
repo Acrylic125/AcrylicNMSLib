@@ -19,17 +19,22 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class NMSBridge {
+public abstract class NMSAbstractFactory {
 
-    private static NMSBridge BRIDGE;
+    private static NMSAbstractFactory ABSTRACT_FACTORY;
 
-    public static NMSBridge getBridge() {
-        return BRIDGE;
+    @Deprecated
+    public static NMSAbstractFactory getBridge() {
+        return ABSTRACT_FACTORY;
+    }
+
+    public static NMSAbstractFactory getAbstractFactory() {
+        return ABSTRACT_FACTORY;
     }
 
     //Instantiate bridge.
-    public NMSBridge() {
-        BRIDGE = this;
+    public NMSAbstractFactory() {
+        ABSTRACT_FACTORY = this;
     }
 
     @NotNull

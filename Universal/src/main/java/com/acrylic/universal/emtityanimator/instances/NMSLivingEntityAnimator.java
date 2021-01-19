@@ -1,6 +1,6 @@
 package com.acrylic.universal.emtityanimator.instances;
 
-import com.acrylic.universal.NMSBridge;
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
@@ -26,7 +26,7 @@ public abstract class NMSLivingEntityAnimator
     public void setEquipment(AbstractEntityEquipmentBuilder entityEquipment) {
         EntityEquipmentPackets entityEquipmentPackets = getEntityInstance().getEquipmentPackets();
         if (entityEquipmentPackets == null)
-            entityEquipmentPackets = NMSBridge.getBridge().getPacketFactory().getNewEquipmentPackets();
+            entityEquipmentPackets = NMSAbstractFactory.getAbstractFactory().getPacketFactory().getNewEquipmentPackets();
         entityEquipmentPackets.adapt(entityEquipment);
         getEntityInstance().setEntityEquipmentPackets(entityEquipmentPackets);
         entityEquipment.apply(getBukkitEntity());

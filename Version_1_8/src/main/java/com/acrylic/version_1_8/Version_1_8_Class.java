@@ -31,6 +31,7 @@ public final class Version_1_8_Class {
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
 
+
                     /**
                     PlayerRangeRenderer range = new PlayerRangeRenderer();
                     NMSArmorStandAnimator nmsArmorStandAnimator = new NMSArmorStandAnimator(range, test);
