@@ -1,9 +1,11 @@
 package com.acrylic.universal.renderer;
 
 import com.acrylic.universal.entityinstances.EntityInstance;
+import com.comphenix.protocol.PacketType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -35,6 +37,10 @@ public interface InitializerRenderer extends Renderer {
      */
     void terminate(@NotNull Player player);
 
+    void terminate(@NotNull Collection<? extends Player> players);
+
+    void terminateWithCache(@NotNull RendererCache rendererCache);
+
     void setInitializationAction(@NotNull Consumer<Player> initializationAction);
 
     Consumer<Player> getInitializationAction();
@@ -46,9 +52,21 @@ public interface InitializerRenderer extends Renderer {
      */
     void initialize(@NotNull Player player);
 
+    void initialize(@NotNull Collection<? extends Player> players);
+
+    void initialize(@NotNull RendererCache rendererCache);
+
     void render(@NotNull Player player);
 
+    void render(@NotNull Collection<? extends Player> players);
+
+    void renderWithRendererCache(@NotNull RendererCache rendererCache);
+
     void unrender(@NotNull Player player);
+
+    void unrender(@NotNull Collection<? extends Player> players);
+
+    void unrenderWithRendererCache(@NotNull RendererCache rendererCache);
 
     void unrenderAll();
 

@@ -36,7 +36,8 @@ public class NBTItem extends AbstractNBTItem {
 
     @Override
     public ItemStack getItem() {
-        if (nmsItem == null) return getOriginalItem();
+        if (nmsItem == null)
+            return getOriginalItem();
         nmsItem.setTag(compound.getTagCompound());
         return NMSBukkitConverter.convertToBukkitItem(nmsItem);
     }

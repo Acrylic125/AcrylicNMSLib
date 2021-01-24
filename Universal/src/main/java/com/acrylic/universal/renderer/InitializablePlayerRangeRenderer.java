@@ -1,15 +1,13 @@
 package com.acrylic.universal.renderer;
 
+import com.comphenix.protocol.PacketType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class InitializablePlayerRangeRenderer
@@ -60,6 +58,21 @@ public class InitializablePlayerRangeRenderer
     }
 
     @Override
+    public void terminate(@NotNull Collection<? extends Player> players) {
+        for (Player player : players)
+            terminate(player);
+    }
+
+    @Override
+    public void terminateWithCache(@NotNull RendererCache rendererCache) {
+        for (UUID uuid : rendererCache.getCached()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (isPlayerOnline(player))
+                terminate(player);
+        }
+    }
+
+    @Override
     public void setInitializationAction(@NotNull Consumer<Player> initializationAction) {
         this.initializeAction = initializationAction;
     }
@@ -83,6 +96,21 @@ public class InitializablePlayerRangeRenderer
     }
 
     @Override
+    public void initialize(@NotNull Collection<? extends Player> players) {
+        for (Player player : players)
+            initialize(player);
+    }
+
+    @Override
+    public void initialize(@NotNull RendererCache rendererCache) {
+        for (UUID uuid : rendererCache.getCached()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (isPlayerOnline(player))
+                initialize(player);
+        }
+    }
+
+    @Override
     public void render(@NotNull Player player) {
         synchronized (stored) {
             stored.add(player.getUniqueId());
@@ -91,10 +119,40 @@ public class InitializablePlayerRangeRenderer
     }
 
     @Override
+    public void render(@NotNull Collection<? extends Player> players) {
+        for (Player player : players)
+            render(player);
+    }
+
+    @Override
+    public void renderWithRendererCache(@NotNull RendererCache rendererCache) {
+        for (UUID uuid : rendererCache.getCached()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (isPlayerOnline(player))
+                render(player);
+        }
+    }
+
+    @Override
     public void unrender(@NotNull Player player) {
         synchronized (stored) {
             stored.remove(player.getUniqueId());
             terminate(player);
+        }
+    }
+
+    @Override
+    public void unrender(@NotNull Collection<? extends Player> players) {
+        for (Player player : players)
+            unrender(player);
+    }
+
+    @Override
+    public void unrenderWithRendererCache(@NotNull RendererCache rendererCache) {
+        for (UUID uuid : rendererCache.getCached()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (isPlayerOnline(player))
+                unrender(player);
         }
     }
 
@@ -150,4 +208,6 @@ public class InitializablePlayerRangeRenderer
                 action.accept(player);
         }
     }
+
+
 }

@@ -2,6 +2,7 @@ package com.acrylic.version_1_8.packets;
 
 import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
