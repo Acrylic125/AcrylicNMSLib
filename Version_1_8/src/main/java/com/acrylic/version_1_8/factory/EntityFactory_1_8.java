@@ -1,6 +1,6 @@
 package com.acrylic.version_1_8.factory;
 
-import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
+import com.acrylic.universal.emtityanimator.instances.NMSArmorStandAnimator;
 import com.acrylic.universal.emtityanimator.instances.NMSGiantAnimator;
 import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
 import com.acrylic.universal.entityinstances.instances.ArmorStandEntityInstance;

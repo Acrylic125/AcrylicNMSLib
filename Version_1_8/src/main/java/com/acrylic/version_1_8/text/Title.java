@@ -87,4 +87,9 @@ public class Title extends PacketSender implements TitleSender {
     public Packet<?>[] getPackets() {
         return packets;
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packets != null;
+    }
 }

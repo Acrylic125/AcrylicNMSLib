@@ -41,6 +41,8 @@ public interface InitializerRenderer extends Renderer {
 
     void terminateWithCache(@NotNull RendererCache rendererCache);
 
+    void terminateAll();
+
     void setInitializationAction(@NotNull Consumer<Player> initializationAction);
 
     Consumer<Player> getInitializationAction();
@@ -54,7 +56,9 @@ public interface InitializerRenderer extends Renderer {
 
     void initialize(@NotNull Collection<? extends Player> players);
 
-    void initialize(@NotNull RendererCache rendererCache);
+    void initializeWithRendererCache(@NotNull RendererCache rendererCache);
+
+    void initializeAll();
 
     void render(@NotNull Player player);
 

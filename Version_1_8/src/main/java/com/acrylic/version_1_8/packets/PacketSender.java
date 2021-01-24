@@ -18,14 +18,21 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
     @Override
     public abstract Packet<?>[] getPackets();
 
+    protected void validatePacket() {
+        if (!hasInitialized())
+            throw new IllegalStateException("The packet, " + getClass() + " has not been initialized.");
+    }
+
     @Override
     public void sendWithAction(@NotNull Player player, @NotNull Consumer<Player> sendWithAction) {
+        validatePacket();
         send(player);
         sendWithAction.accept(player);
     }
 
     @Override
     public void sendWithAction(@NotNull Consumer<Player> sendWithAction, Player... players) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         for (Player player : players) {
             sendPacket(player, packets);
@@ -35,6 +42,7 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void sendWithAction(@NotNull Predicate<Player> condition, @NotNull Consumer<Player> sendWithAction) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         for (Player player : Bukkit.getOnlinePlayers())
             if (condition.test(player)) {
@@ -51,6 +59,7 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void sendWithAction(@NotNull Collection<? extends Player> players, @NotNull Consumer<Player> sendWithAction) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         for (Player player : players) {
             sendPacket(player, packets);
@@ -60,12 +69,14 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void send(@NotNull Player player) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         sendPacket(player, packets);
     }
 
     @Override
     public void send(Player... players) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         for (Player player : players)
             sendPacket(player, packets);
@@ -79,6 +90,7 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void send(@NotNull Predicate<Player> condition) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         for (Player player : Bukkit.getOnlinePlayers())
             if (condition.test(player))
@@ -87,6 +99,7 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void send(@NotNull Collection<? extends Player> players) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         for (Player player : players)
             sendPacket(player, packets);
@@ -94,6 +107,7 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void sendWithAction(@NotNull Renderer renderer, @NotNull Consumer<Player> sendWithAction) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         renderer.handle(player -> {
             sendPacket(player, packets);
@@ -103,6 +117,7 @@ public abstract class PacketSender implements com.acrylic.universal.packets.Pack
 
     @Override
     public void send(@NotNull Renderer renderer) {
+        validatePacket();
         Packet<?>[] packets = getPackets();
         renderer.handle(player -> sendPacket(player, packets));
     }

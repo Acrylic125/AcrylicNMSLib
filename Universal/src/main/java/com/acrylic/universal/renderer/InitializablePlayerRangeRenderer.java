@@ -1,6 +1,5 @@
 package com.acrylic.universal.renderer;
 
-import com.comphenix.protocol.PacketType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,11 +12,19 @@ import java.util.function.Consumer;
 public class InitializablePlayerRangeRenderer
         implements InitializerLocationalRenderer, RangedPacketRenderer, RendererCache {
 
-    private final List<UUID> stored = new ArrayList<>();
+    private final List<UUID> stored;
     private float range = 30;
     private Location location;
     private Consumer<Player> initializeAction;
     private Consumer<Player> terminationAction;
+
+    public InitializablePlayerRangeRenderer() {
+        this(new LinkedList<>());
+    }
+
+    public InitializablePlayerRangeRenderer(@NotNull List<UUID> stored) {
+        this.stored = stored;
+    }
 
     public Consumer<Player> getTerminationAction() {
         return terminationAction;
@@ -65,11 +72,12 @@ public class InitializablePlayerRangeRenderer
 
     @Override
     public void terminateWithCache(@NotNull RendererCache rendererCache) {
-        for (UUID uuid : rendererCache.getCached()) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (isPlayerOnline(player))
-                terminate(player);
-        }
+        iterateUUIDs(getCached(), this::terminate);
+    }
+
+    @Override
+    public void terminateAll() {
+        terminateWithCache(this);
     }
 
     @Override
@@ -102,12 +110,13 @@ public class InitializablePlayerRangeRenderer
     }
 
     @Override
-    public void initialize(@NotNull RendererCache rendererCache) {
-        for (UUID uuid : rendererCache.getCached()) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (isPlayerOnline(player))
-                initialize(player);
-        }
+    public void initializeWithRendererCache(@NotNull RendererCache rendererCache) {
+        iterateUUIDs(getCached(), this::initialize);
+    }
+
+    @Override
+    public void initializeAll() {
+        initializeWithRendererCache(this);
     }
 
     @Override
@@ -126,11 +135,7 @@ public class InitializablePlayerRangeRenderer
 
     @Override
     public void renderWithRendererCache(@NotNull RendererCache rendererCache) {
-        for (UUID uuid : rendererCache.getCached()) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (isPlayerOnline(player))
-                render(player);
-        }
+        iterateUUIDs(getCached(), this::render);
     }
 
     @Override
@@ -149,22 +154,13 @@ public class InitializablePlayerRangeRenderer
 
     @Override
     public void unrenderWithRendererCache(@NotNull RendererCache rendererCache) {
-        for (UUID uuid : rendererCache.getCached()) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (isPlayerOnline(player))
-                unrender(player);
-        }
+        iterateUUIDs(getCached(), this::unrender);
     }
 
     @Override
     public void unrenderAll() {
         synchronized (stored) {
-            stored.forEach(uuid -> {
-                Player player = Bukkit.getPlayer(uuid);
-                if (player != null)
-                    terminate(player);
-            });
-            stored.clear();
+            iterateUUIDs(stored, this::terminate);
         }
     }
 
@@ -202,12 +198,15 @@ public class InitializablePlayerRangeRenderer
 
     @Override
     public void handle(@NotNull Consumer<Player> action) {
-        for (UUID uuid : stored) {
+        iterateUUIDs(getCached(), action);
+    }
+
+    private void iterateUUIDs(@NotNull Collection<UUID> uuids, @NotNull Consumer<Player> action) {
+        for (UUID uuid : uuids) {
             Player player = Bukkit.getPlayer(uuid);
             if (isPlayerOnline(player))
                 action.accept(player);
         }
     }
-
 
 }

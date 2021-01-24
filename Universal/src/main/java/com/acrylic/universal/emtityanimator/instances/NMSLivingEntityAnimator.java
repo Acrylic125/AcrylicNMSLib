@@ -10,6 +10,7 @@ import com.acrylic.universal.enums.EntityAnimationEnum;
 import com.acrylic.universal.packets.EntityAnimationPackets;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
+import com.acrylic.universal.renderer.Renderer;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 

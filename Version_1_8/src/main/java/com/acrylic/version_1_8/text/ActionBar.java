@@ -37,4 +37,9 @@ public class ActionBar extends SinglePacketSender implements ActionBarSender {
     public PacketPlayOutChat getPacket() {
         return packet;
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }

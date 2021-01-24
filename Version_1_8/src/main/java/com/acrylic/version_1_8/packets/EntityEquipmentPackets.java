@@ -78,4 +78,9 @@ public class EntityEquipmentPackets
     public PacketPlayOutEntityEquipment[] getPackets() {
         return packets;
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packets != null;
+    }
 }

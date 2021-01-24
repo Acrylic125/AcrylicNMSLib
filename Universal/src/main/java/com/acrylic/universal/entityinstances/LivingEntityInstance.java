@@ -6,6 +6,7 @@ import com.acrylic.universal.packets.EntityAnimationPackets;
 import com.acrylic.universal.packets.EntityEquipmentPackets;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +53,7 @@ public interface LivingEntityInstance
 
     @Override
     default void setupShowPackets() {
-        getAnimator().getRenderer().setInitializationAction(player -> {
+         getAnimator().getRenderer().setInitializationAction(player -> {
             LivingEntityDisplayPackets displayPackets = getDisplayPackets();
             displayPackets.setupDisplayPackets(getAnimator());
             displayPackets.send(player);

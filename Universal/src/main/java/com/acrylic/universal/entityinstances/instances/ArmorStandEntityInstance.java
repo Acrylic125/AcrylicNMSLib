@@ -1,6 +1,6 @@
 package com.acrylic.universal.entityinstances.instances;
 
-import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
+import com.acrylic.universal.emtityanimator.instances.NMSArmorStandAnimator;
 import com.acrylic.universal.entityinstances.LivingEntityInstance;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;

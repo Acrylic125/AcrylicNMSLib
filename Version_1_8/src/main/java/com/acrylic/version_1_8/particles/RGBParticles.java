@@ -28,4 +28,9 @@ public class RGBParticles
     public void rgb(RGB rgb) {
         this.rgb = rgb;
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }

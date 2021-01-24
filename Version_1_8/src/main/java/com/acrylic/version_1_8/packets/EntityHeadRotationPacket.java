@@ -35,4 +35,9 @@ public class EntityHeadRotationPacket
         packet = new PacketPlayOutEntityHeadRotation(entity, NMSUtils.getByteAngle(angle));
     }
 
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
+
 }

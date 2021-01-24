@@ -1,6 +1,6 @@
 package com.acrylic.version_1_8.entityanimator;
 
-import com.acrylic.universal.emtityanimator.NMSArmorStandAnimator;
+import com.acrylic.universal.emtityanimator.instances.NMSArmorStandAnimator;
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.loaders.CustomEntity;
 import com.acrylic.universal.packets.EntityEquipmentPackets;

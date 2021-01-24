@@ -27,4 +27,9 @@ public class EntityDestroyPacket
     public void apply(@NotNull Entity entity) {
         packet = new PacketPlayOutEntityDestroy(entity.getEntityId());
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }

@@ -64,4 +64,8 @@ public class NPCPlayerDisplayPackets extends LivingEntityDisplayPackets implemen
         return headRotationPacket;
     }
 
+    @Override
+    public boolean hasInitialized() {
+        return packets != null;
+    }
 }

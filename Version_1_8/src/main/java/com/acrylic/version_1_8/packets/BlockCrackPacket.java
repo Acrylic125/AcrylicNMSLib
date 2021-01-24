@@ -21,4 +21,9 @@ public class BlockCrackPacket
         return packet;
     }
 
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
+
 }

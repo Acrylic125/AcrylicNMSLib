@@ -47,4 +47,10 @@ public class ItemParticles
                         itemId, data
                 );
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
+
 }

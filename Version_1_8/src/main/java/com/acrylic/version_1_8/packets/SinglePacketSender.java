@@ -21,6 +21,7 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
 
     @Override
     public void sendWithAction(@NotNull Consumer<Player> sendWithAction, Player... players) {
+        validatePacket();
         Packet<?> packets = getPacket();
         for (Player player : players) {
             sendPacket(player, packets);
@@ -30,6 +31,7 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
 
     @Override
     public void sendWithAction(@NotNull Predicate<Player> condition, @NotNull Consumer<Player> sendWithAction) {
+        validatePacket();
         Packet<?> packets = getPacket();
         for (Player player : Bukkit.getOnlinePlayers())
             if (condition.test(player)) {
@@ -40,6 +42,7 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
 
     @Override
     public void sendWithAction(@NotNull Collection<? extends Player> players, @NotNull Consumer<Player> sendWithAction) {
+        validatePacket();
         Packet<?> packets = getPacket();
         for (Player player : players) {
             sendPacket(player, packets);
@@ -49,11 +52,13 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
 
     @Override
     public void send(@NotNull Player player) {
+        validatePacket();
         PacketSender.sendPacket(player, getPacket());
     }
 
     @Override
     public void send(Player... players) {
+        validatePacket();
         Packet<?> packet = getPacket();
         for (Player player : Bukkit.getOnlinePlayers())
             PacketSender.sendPacket(player, packet);
@@ -61,6 +66,7 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
 
     @Override
     public void send(@NotNull Predicate<Player> condition) {
+        validatePacket();
         Packet<?> packet = getPacket();
         for (Player player : Bukkit.getOnlinePlayers())
             if (condition.test(player))
@@ -69,6 +75,7 @@ public abstract class SinglePacketSender extends PacketSender implements com.acr
 
     @Override
     public void send(@NotNull Collection<? extends Player> players) {
+        validatePacket();
         Packet<?> packet = getPacket();
         for (Player player : players)
             sendPacket(player, packet);

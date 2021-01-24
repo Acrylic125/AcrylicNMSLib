@@ -65,4 +65,9 @@ public class LivingEntityDisplayPackets
     public Packet<?>[] getPackets() {
         return packets;
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packets != null;
+    }
 }

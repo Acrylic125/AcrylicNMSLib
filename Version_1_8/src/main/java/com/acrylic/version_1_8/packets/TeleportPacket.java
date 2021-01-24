@@ -29,4 +29,9 @@ public class TeleportPacket
         packet = new PacketPlayOutEntityTeleport(NMSBukkitConverter.convertToNMSEntity(entity));
     }
 
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
+
 }

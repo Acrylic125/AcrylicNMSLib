@@ -112,4 +112,8 @@ public class Particles
         return new Packet[] { packet };
     }
 
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }

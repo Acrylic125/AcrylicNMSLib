@@ -15,4 +15,6 @@ public interface PacketSender extends Sender {
 
     void send(@NotNull Renderer renderer);
 
+    boolean hasInitialized();
+
 }

@@ -19,4 +19,9 @@ public class SoundPacket
     public PacketPlayOutNamedSoundEffect getPacket() {
         return packet;
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }

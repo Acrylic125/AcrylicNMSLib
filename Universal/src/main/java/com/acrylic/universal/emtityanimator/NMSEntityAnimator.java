@@ -1,12 +1,10 @@
 package com.acrylic.universal.emtityanimator;
 
-import com.acrylic.universal.emtityanimator.NMSEntity;
 import com.acrylic.universal.entityanimations.EntityAnimator;
 import com.acrylic.universal.entityinstances.WorldEntity;
 import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.TeleportPacket;
 import com.acrylic.universal.renderer.InitializerLocationalRenderer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;

@@ -26,4 +26,9 @@ public class NPCPlayerInfoPacket
     public void apply(@NotNull Player player, @NotNull EnumPlayerInfoAction action) {
         apply(NMSBukkitConverter.convertToNMSPlayer(player), action);
     }
+
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }

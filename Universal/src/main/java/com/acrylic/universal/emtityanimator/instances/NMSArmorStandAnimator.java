@@ -1,4 +1,4 @@
-package com.acrylic.universal.emtityanimator;
+package com.acrylic.universal.emtityanimator.instances;
 
 import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;

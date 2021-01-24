@@ -26,4 +26,8 @@ public class EntityMetaDataPacket extends SinglePacketSender implements com.acry
         return packet;
     }
 
+    @Override
+    public boolean hasInitialized() {
+        return packet != null;
+    }
 }
