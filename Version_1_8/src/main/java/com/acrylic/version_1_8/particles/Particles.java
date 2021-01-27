@@ -1,6 +1,6 @@
 package com.acrylic.version_1_8.particles;
 
-import com.acrylic.version_1_8.packets.PacketSender;
+import com.acrylic.version_1_8.packets.SinglePacketSender;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public class Particles
-        extends PacketSender
+        extends SinglePacketSender
         implements com.acrylic.universal.particles.Particles {
 
     protected EnumParticle particleType;
@@ -20,8 +20,9 @@ public class Particles
     protected float[] offset;
     protected PacketPlayOutWorldParticles packet;
 
+    @NotNull
     @Override
-    public void build() {
+    public Particles build() {
         checkConditions();
         this.packet = (offset == null) ?
                 new PacketPlayOutWorldParticles(particleType,
@@ -35,6 +36,7 @@ public class Particles
                         offset[0], offset[1], offset[2],
                         this.speed, this.amount
                 );
+        return this;
     }
 
     @Override
@@ -67,6 +69,7 @@ public class Particles
         return location;
     }
 
+    @NotNull
     @Override
     public Particles particleType(@NotNull EnumWrappers.Particle particle) {
         return particleType(EnumParticle.a(particle.getId()));
@@ -77,30 +80,35 @@ public class Particles
         return this;
     }
 
+    @NotNull
     @Override
     public Particles speed(float speed) {
         this.speed = speed;
         return this;
     }
 
+    @NotNull
     @Override
     public Particles amount(int amount) {
         this.amount = amount;
         return this;
     }
 
+    @NotNull
     @Override
     public Particles longDistance(boolean longDistance) {
         this.longDistance = longDistance;
         return this;
     }
 
+    @NotNull
     @Override
     public Particles location(@NotNull Location location) {
         this.location = new float[]{(float) location.getX(), (float) location.getY(), (float) location.getZ()};
         return this;
     }
 
+    @NotNull
     @Override
     public Particles offset(float x, float y, float z) {
         this.offset = new float[]{x, y, z};
@@ -108,12 +116,12 @@ public class Particles
     }
 
     @Override
-    public Packet<?>[] getPackets() {
-        return new Packet[] { packet };
+    public boolean hasInitialized() {
+        return packet != null;
     }
 
     @Override
-    public boolean hasInitialized() {
-        return packet != null;
+    public Packet<?> getPacket() {
+        return packet;
     }
 }

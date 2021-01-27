@@ -80,4 +80,10 @@ public class PacketFactory_1_8 implements PacketFactory {
     public SoundPacket getSoundPacket() {
         return new com.acrylic.version_1_8.packets.SoundPacket();
     }
+
+    @NotNull
+    @Override
+    public TablistHeaderFooterPacket getNewTablistHeaderFooterPacket() {
+        return new com.acrylic.version_1_8.packets.TablistHeaderFooterPacket();
+    }
 }

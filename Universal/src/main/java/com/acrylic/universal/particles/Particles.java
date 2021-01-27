@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Particles extends PacketSender {
 
-    void build();
+    @NotNull
+    Particles build();
 
     float[] offset();
 
@@ -22,16 +23,22 @@ public interface Particles extends PacketSender {
 
     float[] getLocation();
 
+    @NotNull
     Particles particleType(@NotNull EnumWrappers.Particle particle);
 
+    @NotNull
     Particles speed(float speed);
 
+    @NotNull
     Particles amount(int amount);
 
+    @NotNull
     Particles longDistance(boolean longDistance);
 
+    @NotNull
     Particles location(@NotNull Location location);
 
+    @NotNull
     Particles offset(float x, float y, float z);
 
     default void checkConditions() {

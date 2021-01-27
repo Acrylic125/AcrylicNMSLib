@@ -4,6 +4,7 @@ import com.acrylic.version_1_8.NMSBukkitConverter;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemParticles
         extends Particles
@@ -29,8 +30,9 @@ public class ItemParticles
         return isValidItem;
     }
 
+    @NotNull
     @Override
-    public void build() {
+    public Particles build() {
         checkConditions();
         this.packet = (offset == null) ?
                 new PacketPlayOutWorldParticles(particleType,
@@ -46,6 +48,7 @@ public class ItemParticles
                         this.speed, this.amount,
                         itemId, data
                 );
+        return this;
     }
 
     @Override

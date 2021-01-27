@@ -1,12 +1,11 @@
 package com.acrylic.version_1_8;
 
+import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.UniversalNMS;
-import com.acrylic.universal.animations.rotational.HandRotationAnimation;
 import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.AbstractCommandExecuted;
 import com.acrylic.universal.command.CommandBuilder;
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
-import com.acrylic.universal.emtityanimator.instances.NMSGiantAnimator;
 import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
 import com.acrylic.universal.entityai.FollowerAI;
@@ -14,15 +13,14 @@ import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
 import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.renderer.InitializablePlayerRangeRenderer;
-import com.acrylic.universal.threads.Scheduler;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
+import com.acrylic.version_1_8.packets.TablistHeaderFooterPacket;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public final class Version_1_8_Class {
 
@@ -34,15 +32,6 @@ public final class Version_1_8_Class {
                 .handle(commandExecuted -> {
                     Player sender = (Player) commandExecuted.getSender();
                     Location test = sender.getLocation();
-
-                    NMSGiantAnimator nmsGiantAnimator = new NMSGiantAnimator(new InitializablePlayerRangeRenderer(), test);
-                    nmsGiantAnimator.visible(false).upsideDown(true).setEquipment(new EntityEquipmentBuilder().setItemInHand(new ItemStack(Material.DIAMOND_BLOCK)));
-                    HandRotationAnimation handRotationAnimation = new HandRotationAnimation(nmsGiantAnimator);
-                    Scheduler.async().runRepeatingTask(1, 1)
-                            .handleThenBuild(() -> {
-                                nmsGiantAnimator.getEntityInstance().forceRender();
-                                handRotationAnimation.teleportMainEntity(test);
-                            });
 
                     /**
                     PlayerRangeRenderer range = new PlayerRangeRenderer();
@@ -70,7 +59,7 @@ public final class Version_1_8_Class {
                             handRotationAnimation.teleport(test);
                         }
                     }).build();**/
-                    /**PlayerNPC npc = new PlayerNPC(new InitializablePlayerRangeRenderer(), test, sender.getName());
+                    PlayerNPC npc = new PlayerNPC(new InitializablePlayerRangeRenderer(), test, sender.getName());
                     npc.setEquipment(new EntityEquipmentBuilder()
                             .setHelmet(ItemBuilder.of(Material.DIAMOND_HELMET).build())
                             .setChestplate(ItemBuilder.of(Material.DIAMOND_CHESTPLATE).build())
@@ -88,7 +77,7 @@ public final class Version_1_8_Class {
                     FollowerAI<PlayerNPC> ai = new FollowerAI<>(npc);
                     ai.setPathfinder(new NPCEntityPathfinder<>(ai).setSpeed(0.6f));
                     ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
-                    npc.getEntityInstance().setAI(ai);**/
+                    npc.getEntityInstance().setAI(ai);
                 }).arguments(new AbstractCommandBuilder[] {
                         CommandBuilder.create("killall")
                                 .filter(AbstractCommandExecuted::isPlayer)

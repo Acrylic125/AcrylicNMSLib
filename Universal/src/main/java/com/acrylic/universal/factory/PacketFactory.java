@@ -44,4 +44,7 @@ public interface PacketFactory {
     @NotNull
     SoundPacket getSoundPacket();
 
+    @NotNull
+    TablistHeaderFooterPacket getNewTablistHeaderFooterPacket();
+
 }

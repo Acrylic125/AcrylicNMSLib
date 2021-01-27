@@ -32,7 +32,9 @@ public abstract class NMSLivingEntityAnimator
         entityEquipmentPackets.adapt(entityEquipment);
         getEntityInstance().setEntityEquipmentPackets(entityEquipmentPackets);
         entityEquipment.apply(getBukkitEntity());
-        getEntityInstance().getEquipmentPackets().send(getRenderer());
+        EntityEquipmentPackets equipmentPackets = getEntityInstance().getEquipmentPackets();
+        if (equipmentPackets.hasInitialized())
+           equipmentPackets.send(getRenderer());
     }
 
     public void animate(EntityAnimationEnum... animation) {
