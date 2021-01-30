@@ -1,42 +1,39 @@
-package com.acrylic.universal.entityai.strategy;
+package com.acrylic.universal.entityai.searcher;
 
-import com.acrylic.universal.entityai.FollowerAI;
-import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
+import com.acrylic.universal.entityai.TargetableAI;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import math.ProbabilityKt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
-        implements EntityFollowingStrategy<T> {
+public class SimpleEntitySearcher<T extends LivingEntityAnimator>
+        implements EntitySearcher<T> {
 
-    private LivingEntity entityTarget;
     private float distance = 32;
     private float maxDistanceFromTarget = 32;
     private long searchForNewTargetTime = 0;
     private long searchForNewTargetCooldown = 0;
-    private final FollowerAI<T> ai;
+    private final TargetableAI<T> ai;
 
-    public SimpleFollowerStrategy(@NotNull FollowerAI<T> ai) {
+    public SimpleEntitySearcher(@NotNull TargetableAI<T> ai) {
         this.ai = ai;
-        ai.setFollowingStrategy(this);
     }
 
     @Override
-    public boolean shouldClearFollower(@Nullable LivingEntity entity) {
-        return entityTarget instanceof Player && !Bukkit.getOnlinePlayers().contains(entityTarget);
+    public boolean shouldClearFollower() {
+        return ai.getTarget() == null;
     }
 
     @Override
     public boolean canFollow(@NotNull LivingEntity entity) {
-        return entity instanceof Player && ((Player) entity).isOnline();
+        return entity != ai.getAnimator().getBukkitEntity(); //entity instanceof Player && ((Player) entity).isOnline();
     }
 
     @Override
@@ -70,9 +67,8 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     }
 
     @Override
-    public EntityFollowingStrategy<T> setNewTargetDistance(float targetDistance) {
+    public void setNewTargetDistance(float targetDistance) {
         this.distance = targetDistance;
-        return this;
     }
 
     @Override
@@ -81,9 +77,8 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     }
 
     @Override
-    public EntityFollowingStrategy<T> setDistanceFromTargetToSwitch(float distanceFromTargetToSwitch) {
+    public void setDistanceFromTargetToSwitch(float distanceFromTargetToSwitch) {
         this.maxDistanceFromTarget = distanceFromTargetToSwitch;
-        return this;
     }
 
     @Override
@@ -91,40 +86,26 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
         return maxDistanceFromTarget;
     }
 
-    @Override
-    public void setTarget(@Nullable LivingEntity entity) {
-        this.entityTarget = entity;
-    }
-
-    @Nullable
-    @Override
-    public LivingEntity getTarget() {
-        return entityTarget;
-    }
-
     @NotNull
     @Override
-    public FollowerAI<T> getAI() {
+    public TargetableAI<T> getAI() {
         return ai;
     }
 
     @Override
     public void update() {
-        LivingEntity target = getTarget();
-        EntityPathfinder<T> pathfinder = ai.getPathfinder();
-        if (pathfinder == null)
-            return;
-        if (shouldClearFollower(target)) {
-            setTarget(null);
-            pathfinder.setTargetLocation((Location) null);
+        Entity target = ai.getTarget();
+        if (shouldClearFollower()) {
+            ai.setTarget(null);
+            ai.setTargetLocation((Location) null);
             target = null;
         }
         if (target != null) {
             if (shouldSwitchTarget(target.getLocation())) {
-                setTarget(null);
+                ai.setTarget(null);
                 target = null;
             } else {
-                pathfinder.setTargetLocation(target);
+                ai.setTargetLocation(target.getLocation());
             }
         }
         if (shouldSearchForTarget() && target == null)
@@ -136,18 +117,19 @@ public class SimpleFollowerStrategy<T extends LivingEntityAnimator>
     }
 
     public void searchForTarget() {
+        setSearchForNewTargetTime(System.currentTimeMillis() + 2_000);
         T entityAnimator = getAnimator();
         LivingEntity target = null;
         List<LivingEntity> entities = getPossibleTargets(entityAnimator.getBukkitEntity().getLocation());
+        //Search for new target.
         int size = entities.size();
         if (size > 0) {
             setSearchForNewTargetTime(System.currentTimeMillis() + getSearchForNewTargetTimeCooldown());
             target = entities.get(ProbabilityKt.getRandom(0, size - 1));
-            setTarget(target);
+            ai.setTarget(target);
         }
         if (target != null) {
-            assert ai.getPathfinder() != null;
-            ai.getPathfinder().setTargetLocation(target);
+            ai.setTargetLocation(target);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.acrylic.universal.entityai.pathfinder;
 
 import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
-import com.acrylic.universal.entityai.FollowerAI;
+import com.acrylic.universal.entityai.LocationalAI;
 import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityai.quitterstrategy.NoClipEntityPathQuitter;
 import com.acrylic.universal.pathfinder.BlockExaminer;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class NPCEntityPathfinder<T extends PlayerNPC>
         extends AbstractSimpleEntityPathfinder<T> {
 
-    public NPCEntityPathfinder(@NotNull FollowerAI<T> ai) {
+    public NPCEntityPathfinder(@NotNull LocationalAI<T> ai) {
         super(ai);
     }
 
@@ -26,7 +26,7 @@ public class NPCEntityPathfinder<T extends PlayerNPC>
     }
 
     public void handleNoClip(@NotNull T entityAnimator, @NotNull Location currentLoc, @NotNull Location toLocation) {
-        EntityQuitterStrategy<T> quitterQuirk = getAI().getEntityQuitter();
+        EntityQuitterStrategy<T> quitterQuirk = getQuitterStrategy();
         if (quitterQuirk instanceof NoClipEntityPathQuitter && ((NoClipEntityPathQuitter<T>) quitterQuirk).isNoClipActive())
             return;
         BlockExaminer blockExaminer = getPathGenerator().getBlockExaminer();

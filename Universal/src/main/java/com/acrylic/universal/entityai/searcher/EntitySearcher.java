@@ -1,17 +1,18 @@
-package com.acrylic.universal.entityai.strategy;
+package com.acrylic.universal.entityai.searcher;
 
+import com.acrylic.universal.entityai.TargetableAI;
+import com.acrylic.universal.entityai.EntityStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface EntityFollowingStrategy<T extends LivingEntityAnimator>
+public interface EntitySearcher<T extends LivingEntityAnimator>
         extends EntityStrategy<T> {
 
-    boolean shouldClearFollower(@NotNull LivingEntity entity);
+    boolean shouldClearFollower();
 
     boolean canFollow(@NotNull LivingEntity entity);
 
@@ -29,7 +30,7 @@ public interface EntityFollowingStrategy<T extends LivingEntityAnimator>
 
     long getSearchForNewTargetTimeCooldown();
 
-    EntityFollowingStrategy<T> setNewTargetDistance(float targetDistance);
+    void setNewTargetDistance(float targetDistance);
 
     /**'
      * @return Specify -1 if you do not want the entity to
@@ -37,13 +38,11 @@ public interface EntityFollowingStrategy<T extends LivingEntityAnimator>
      */
     float getNewTargetDistance();
 
-    EntityFollowingStrategy<T> setDistanceFromTargetToSwitch(float distanceFromTargetToSwitch);
+    void setDistanceFromTargetToSwitch(float distanceFromTargetToSwitch);
 
     float getDistanceFromTargetToSwitch();
 
-    void setTarget(@Nullable LivingEntity entity);
-
-    @Nullable
-    LivingEntity getTarget();
-
+    @NotNull
+    @Override
+    TargetableAI<T> getAI();
 }

@@ -1,4 +1,4 @@
-package com.acrylic.universal.entityai.strategy;
+package com.acrylic.universal.entityai;
 
 import com.acrylic.universal.entityai.EntityAI;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;

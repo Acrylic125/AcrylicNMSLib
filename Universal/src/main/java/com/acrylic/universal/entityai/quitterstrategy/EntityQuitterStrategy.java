@@ -1,11 +1,16 @@
 package com.acrylic.universal.entityai.quitterstrategy;
 
-import com.acrylic.universal.entityai.strategy.EntityStrategy;
+import com.acrylic.universal.entityai.EntityStrategy;
+import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.interfaces.Timed;
+import org.jetbrains.annotations.NotNull;
 
 public interface EntityQuitterStrategy<T extends LivingEntityAnimator>
         extends EntityStrategy<T>, Timed {
+
+    @NotNull
+    EntityPathfinder<T> getPathfinder();
 
     void setGiveUpTimeDuration(long time);
 

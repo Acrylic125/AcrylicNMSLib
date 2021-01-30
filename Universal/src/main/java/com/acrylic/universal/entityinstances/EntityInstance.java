@@ -2,6 +2,7 @@ package com.acrylic.universal.entityinstances;
 
 import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
 import com.acrylic.universal.entityai.EntityAI;
+import com.acrylic.universal.entityai.EntityStrategy;
 import com.acrylic.universal.interfaces.Deletable;
 import com.acrylic.universal.packets.EntityDestroyPacket;
 import com.acrylic.universal.packets.LivingEntityDisplayPackets;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see com.acrylic.universal.entityai.EntityAI
  * @see com.acrylic.universal.entityai.pathfinder.EntityPathfinder
- * @see com.acrylic.universal.entityai.strategy.EntityStrategy
+ * @see EntityStrategy
  */
 public interface EntityInstance
         extends WorldEntity, Deletable, TickingEntityInstance {

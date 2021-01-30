@@ -1,23 +1,35 @@
 package com.acrylic.universal.entityai.pathfinder;
 
 import com.acrylic.universal.entityai.EntityAI;
-import com.acrylic.universal.entityai.FollowerAI;
+import com.acrylic.universal.entityai.LocationalAI;
 import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.threads.Scheduler;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnimator>
         extends AbstractEntityPathfinder<T> {
 
     private float traversingIndex = 0;
     private Location[] locations;
-    private final FollowerAI<T> ai;
+    private final LocationalAI<T> ai;
+    private EntityQuitterStrategy<T> quitterStrategy;
 
-    public AbstractSimpleEntityPathfinder(@NotNull FollowerAI<T> ai) {
+    public AbstractSimpleEntityPathfinder(@NotNull LocationalAI<T> ai) {
         this.ai = ai;
-        ai.setPathfinder(this);
+    }
+
+    @Nullable
+    @Override
+    public EntityQuitterStrategy<T> getQuitterStrategy() {
+        return quitterStrategy;
+    }
+
+    @Override
+    public void setQuitterStrategy(@Nullable EntityQuitterStrategy<T> strategy) {
+        this.quitterStrategy = strategy;
     }
 
     public void generateLocations(@NotNull T entityAnimator) {
@@ -45,7 +57,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     public void updateQuitter(@NotNull T entityAnimator, @NotNull EntityAI<T> ai) {
         Location target = getTargetLocation();
-        EntityQuitterStrategy<T> quitterQuirk = getAI().getEntityQuitter();
+        EntityQuitterStrategy<T> quitterQuirk = quitterStrategy;
         if (quitterQuirk != null) {
             if (target == null || target.distanceSquared(entityAnimator.getBukkitEntity().getLocation()) <= 9)
                 quitterQuirk.resetGiveUpTime();
@@ -62,6 +74,8 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     @Override
     public void update() {
+        if (quitterStrategy != null)
+            quitterStrategy.update();
         T entityAnimator = ai.getAnimator();
         updateQuitter(entityAnimator, ai);
         PathingPhase phase = getPathingPhase();
@@ -112,7 +126,7 @@ public abstract class AbstractSimpleEntityPathfinder<T extends LivingEntityAnima
 
     @NotNull
     @Override
-    public FollowerAI<T> getAI() {
+    public LocationalAI<T> getAI() {
         return ai;
     }
 

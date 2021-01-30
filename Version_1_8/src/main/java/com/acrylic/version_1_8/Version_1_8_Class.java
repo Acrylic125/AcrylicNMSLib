@@ -1,6 +1,5 @@
 package com.acrylic.version_1_8;
 
-import com.acrylic.universal.NMSAbstractFactory;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.command.AbstractCommandBuilder;
 import com.acrylic.universal.command.AbstractCommandExecuted;
@@ -9,13 +8,15 @@ import com.acrylic.universal.emtityanimator.NMSEntityAnimator;
 import com.acrylic.universal.emtityanimator.instances.NMSLivingEntityAnimator;
 import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
 import com.acrylic.universal.entityai.FollowerAI;
+import com.acrylic.universal.entityai.attack.NPCAttacker;
 import com.acrylic.universal.entityai.pathfinder.NPCEntityPathfinder;
-import com.acrylic.universal.entityai.strategy.NPCAttackerStrategy;
+import com.acrylic.universal.entityai.quitterstrategy.SimpleEntityPathQuitter;
+import com.acrylic.universal.entityai.searcher.GuardianEntitySearcher;
+import com.acrylic.universal.entityai.searcher.SimpleEntitySearcher;
 import com.acrylic.universal.enums.Gamemode;
 import com.acrylic.universal.renderer.InitializablePlayerRangeRenderer;
 import com.acrylic.version_1_8.entity.EntityEquipmentBuilder;
 import com.acrylic.version_1_8.items.ItemBuilder;
-import com.acrylic.version_1_8.packets.TablistHeaderFooterPacket;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -75,8 +76,11 @@ public final class Version_1_8_Class {
                     npc.addToWorld();
                     npc.setGamemode(Gamemode.SURVIVAL);
                     FollowerAI<PlayerNPC> ai = new FollowerAI<>(npc);
-                    ai.setPathfinder(new NPCEntityPathfinder<>(ai).setSpeed(0.6f));
-                    ai.setFollowingStrategy(new NPCAttackerStrategy<>(ai));
+                    NPCEntityPathfinder<PlayerNPC> pathfinder = new NPCEntityPathfinder<>(ai);
+                    pathfinder.setQuitterStrategy(new SimpleEntityPathQuitter<>(pathfinder));
+                    ai.setPathfinder(pathfinder.setSpeed(0.6f));
+                    ai.setSearcher(new GuardianEntitySearcher<>(ai));
+                    ai.setAttackerStrategy(new NPCAttacker(ai));
                     npc.getEntityInstance().setAI(ai);
                 }).arguments(new AbstractCommandBuilder[] {
                         CommandBuilder.create("killall")

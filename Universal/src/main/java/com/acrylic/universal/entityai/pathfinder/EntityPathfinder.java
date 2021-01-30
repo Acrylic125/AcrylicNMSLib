@@ -1,11 +1,12 @@
 package com.acrylic.universal.entityai.pathfinder;
 
-import com.acrylic.universal.entityai.strategy.EntityStrategy;
+import com.acrylic.universal.entityai.LocationalAI;
+import com.acrylic.universal.entityai.EntityStrategy;
+import com.acrylic.universal.entityai.quitterstrategy.EntityQuitterStrategy;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import com.acrylic.universal.interfaces.Timed;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,11 @@ public interface EntityPathfinder<T extends LivingEntityAnimator>
         TRAVERSING,
         LOOKING_FOR_PATH
     }
+
+    @Nullable
+    EntityQuitterStrategy<T> getQuitterStrategy();
+
+    void setQuitterStrategy(@Nullable EntityQuitterStrategy<T> strategy);
 
     void resetTraversing(@NotNull T entityAnimator);
 
@@ -58,9 +64,9 @@ public interface EntityPathfinder<T extends LivingEntityAnimator>
 
     long getRestTimeDuration();
 
-    default void setTargetLocation(@NotNull Entity entity) {
-        setTargetLocation(entity.getLocation());
-    }
+    @NotNull
+    @Override
+    LocationalAI<T> getAI();
 
     void setTargetLocation(@Nullable Location location);
 

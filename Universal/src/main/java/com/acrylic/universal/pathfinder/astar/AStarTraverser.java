@@ -6,7 +6,7 @@ import com.acrylic.universal.pathfinder.BlockExaminer;
 import com.acrylic.universal.pathfinder.PathFace;
 import com.acrylic.universal.pathfinder.PathGenerator;
 import com.acrylic.universal.pathfinder.PathTraverser;
-import com.acrylic.universal.util.BukkitHashCode;
+import com.acrylic.universal.utils.BukkitHashCode;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;

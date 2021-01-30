@@ -1,6 +1,6 @@
 package com.acrylic.universal.packets;
 
-import com.acrylic.universal.util.BukkitHashCode;
+import com.acrylic.universal.utils.BukkitHashCode;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 

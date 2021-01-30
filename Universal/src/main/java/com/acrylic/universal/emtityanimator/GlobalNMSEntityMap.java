@@ -87,7 +87,7 @@ public class GlobalNMSEntityMap implements EntityMap<NMSEntityAnimator> {
         InitializerLocationalRenderer renderer = entityAnimator.getRenderer();
         EntityInstance entityInstance = entityAnimator.getEntityInstance();
         if (entityInstance instanceof LivingEntityInstance) {
-            EntityAI<?> ai = ((LivingEntityInstance) entityInstance).getAI();
+            EntityAI<?> ai = entityInstance.getAI();
             if (ai != null)
                 ai.aiUnloadCheck(player);
         }

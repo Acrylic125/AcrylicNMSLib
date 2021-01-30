@@ -1,6 +1,6 @@
 package com.acrylic.universal.entityai.quitterstrategy;
 
-import com.acrylic.universal.entityai.FollowerAI;
+import com.acrylic.universal.entityai.LocationalAI;
 import com.acrylic.universal.entityai.pathfinder.EntityPathfinder;
 import com.acrylic.universal.entityanimations.LivingEntityAnimator;
 import org.bukkit.Location;
@@ -11,12 +11,17 @@ public class SimpleEntityPathQuitter<T extends LivingEntityAnimator>
 
     private long giveUpDuration = 10_000;
     private long giveUpTime;
-    private final FollowerAI<T> ai;
+    private final EntityPathfinder<T> pathfinder;
 
-    public SimpleEntityPathQuitter(FollowerAI<T> ai) {
-        this.ai = ai;
+    public SimpleEntityPathQuitter(EntityPathfinder<T> pathfinder) {
+        this.pathfinder = pathfinder;
         this.giveUpTime = System.currentTimeMillis() + giveUpDuration;
-        ai.setEntityQuitter(this);
+    }
+
+    @NotNull
+    @Override
+    public EntityPathfinder<T> getPathfinder() {
+        return pathfinder;
     }
 
     @Override
@@ -41,25 +46,24 @@ public class SimpleEntityPathQuitter<T extends LivingEntityAnimator>
 
     @Override
     public SimpleEntityPathQuitter<T> clone() {
-        SimpleEntityPathQuitter<T> entityPathQuitter = new SimpleEntityPathQuitter<T>(ai);
+        SimpleEntityPathQuitter<T> entityPathQuitter = new SimpleEntityPathQuitter<T>(pathfinder);
         entityPathQuitter.setGiveUpTimeDuration(giveUpDuration);
         return entityPathQuitter;
     }
 
     @NotNull
     @Override
-    public FollowerAI<T> getAI() {
-        return ai;
+    public LocationalAI<T> getAI() {
+        return pathfinder.getAI();
     }
 
     @Override
     public void update() {
-        if (isReadyToGiveUp() && ai != null) {
+        if (isReadyToGiveUp()) {
             resetGiveUpTime();
-            EntityPathfinder<T> pathfinder = ai.getPathfinder();
             Location target = pathfinder.getTargetLocation();
             if (target != null) {
-                ai.getAnimator().teleport(target);
+                pathfinder.getAnimator().teleport(target);
                 pathfinder.resetResting();
             }
         }
