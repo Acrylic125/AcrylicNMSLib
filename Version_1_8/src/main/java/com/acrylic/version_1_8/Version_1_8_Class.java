@@ -77,7 +77,7 @@ public final class Version_1_8_Class {
                     npc.setGamemode(Gamemode.SURVIVAL);
                     FollowerAI<PlayerNPC> ai = new FollowerAI<>(npc);
                     NPCEntityPathfinder<PlayerNPC> pathfinder = new NPCEntityPathfinder<>(ai);
-                    pathfinder.setQuitterStrategy(new SimpleEntityPathQuitter<>(pathfinder));
+                 //   pathfinder.setQuitterStrategy(new SimpleEntityPathQuitter<>(pathfinder));
                     ai.setPathfinder(pathfinder.setSpeed(0.6f));
                     ai.setSearcher(new GuardianEntitySearcher<>(ai));
                     ai.setAttackerStrategy(new NPCAttacker(ai));
