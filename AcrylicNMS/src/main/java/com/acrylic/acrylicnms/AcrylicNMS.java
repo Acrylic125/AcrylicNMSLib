@@ -2,6 +2,7 @@ package com.acrylic.acrylicnms;
 
 import com.acrylic.paginatedcollection.PaginatedArrayList;
 import com.acrylic.universal.NMSAbstractFactory;
+import com.acrylic.universal.NMSUtils;
 import com.acrylic.universal.Universal;
 import com.acrylic.universal.UniversalNMS;
 import com.acrylic.universal.command.AbstractCommandBuilder;
@@ -14,6 +15,7 @@ import com.acrylic.universal.json.AbstractJSON;
 import com.acrylic.universal.text.ChatUtils;
 import com.acrylic.universal.utils.LocationConverter;
 import com.acrylic.version_1_8.NMSAbstractFactory_1_8;
+import com.acrylic.version_1_8.NMSUtils_1_8;
 import com.acrylic.version_1_8.Version_1_8_Class;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -50,8 +52,21 @@ public final class AcrylicNMS extends JavaPlugin {
                                     "&f/acrylicnms entities"));
                 }).arguments(new AbstractCommandBuilder[] {
                         Version_1_8_Class.getArgumentComponent(),
-                        getEntitiesCMD()
+                        getEntitiesCMD(),
+                        getTest()
         }).register();
+    }
+
+    private AbstractCommandBuilder getTest() {
+        return CommandBuilder
+                .create("test")
+                .filter(AbstractCommandExecuted::isPlayer)
+                .handle(commandExecuted -> {
+                    Player player = (Player) commandExecuted.getSender();
+                    NMSUtils.getUtils().iterateEntities(player.getLocation(), 32, entity -> {
+                        Bukkit.broadcastMessage(entity.getName());
+                    });
+                });
     }
 
     private AbstractCommandBuilder getEntitiesCMD() {
@@ -132,6 +147,7 @@ public final class AcrylicNMS extends JavaPlugin {
         short version = Universal.getAcrylicPlugin().getVersionStore().getVersion();
         switch (version) {
             case 8:
+                new NMSUtils_1_8();
                 new NMSAbstractFactory_1_8();
                 return;
             default:

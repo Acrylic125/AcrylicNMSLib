@@ -32,7 +32,7 @@ public abstract class NMSAbstractFactory {
         return ABSTRACT_FACTORY;
     }
 
-    //Instantiate bridge.
+    //Instantiate factory.
     public NMSAbstractFactory() {
         ABSTRACT_FACTORY = this;
     }

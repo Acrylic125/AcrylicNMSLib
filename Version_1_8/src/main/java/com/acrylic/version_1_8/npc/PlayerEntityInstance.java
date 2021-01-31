@@ -11,15 +11,20 @@ import com.acrylic.version_1_8.NMSBukkitConverter;
 import com.acrylic.version_1_8.entityanimator.LivingEntityInstance_1_8;
 import com.acrylic.version_1_8.packets.*;
 import com.acrylic.universal.emtityanimator.instances.PlayerNPC;
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlayerEntityInstance
         extends EntityPlayer
@@ -160,7 +165,23 @@ public class PlayerEntityInstance
 
     @Override
     public void t_() {
-        super.t_();
+        if (super.locY < -64)
+            damageEntity(DamageSource.GENERIC, 7f);
+        if (this.joining) {
+            this.joining = false;
+        }
+
+        this.playerInteractManager.a();
+        --this.invulnerableTicks;
+        if (this.noDamageTicks > 0)
+            --this.noDamageTicks;
+
+        Entity entity = this.C();
+        if (entity != this) {
+            this.setLocation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
+            this.server.getPlayerList().d(this);
+        }
+        //super.t_();
         if (isDead()) {
             checkRespawn(this);
         } else {
